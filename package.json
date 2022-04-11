@@ -1,0 +1,47 @@
+{
+  "name": "magical-state",
+  "version": "1.0.0",
+  "description": "Library that manages the global state of a series of defined selectors",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://gitlab.lbd.org.es/proyectos-sig/magical-state.git"
+  },
+  "devDependencies": {
+    "@nx-js/observer-util": "^4.2.2",
+    "eslint": "^7.26.0"
+  },
+  "eslintConfig": {
+    "root": true,
+    "env": {
+      "node": true
+    },
+    "extends": [
+      "plugin:vue/essential",
+      "@vue/prettier"
+    ],
+    "rules": {},
+    "parserOptions": {
+      "parser": "babel-eslint"
+    },
+    "globals": {
+      "L": false,
+      "MV": false
+    }
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions"
+  ],
+  "keywords": [
+    "selector",
+    "state",
+    "observable",
+    "vue"
+  ],
+  "author": "Victor Lamas",
+  "license": "MIT"
+}
