@@ -1,92 +1,171 @@
 # magical-state
 
+![plot](./assets/logo.png)
 
+## Introduction
 
-## Getting started
-
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
-
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
-
-## Add your files
-
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/ee/gitlab-basics/add-file.html#add-a-file-using-the-command-line) or push an existing Git repository with the following command:
-
-```
-cd existing_repo
-git remote add origin https://gitlab.lbd.org.es/proyectos-sig/magical-state.git
-git branch -M main
-git push -uf origin main
-```
-
-## Integrate with your tools
-
-- [ ] [Set up project integrations](https://gitlab.lbd.org.es/proyectos-sig/magical-state/-/settings/integrations)
-
-## Collaborate with your team
-
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Automatically merge when pipeline succeeds](https://docs.gitlab.com/ee/user/project/merge_requests/merge_when_pipeline_succeeds.html)
-
-## Test and Deploy
-
-Use the built-in continuous integration in GitLab.
-
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/index.html)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing(SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
-
-***
-
-# Editing this README
-
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!).  Thank you to [makeareadme.com](https://www.makeareadme.com/) for this template.
-
-## Suggestions for a good README
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
-
-## Name
-Choose a self-explaining name for your project.
-
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
-
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
-
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
+This library manages the global state of a series of selectors that can be easily defined through configuration files.
 
 ## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
+
+Add the dependency for your proyect into `package.json`
+
+```json
+"magical-state": "git+https://gitlab.lbd.org.es/publico/magical-state.git"
+```
 
 ## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
 
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
+You can see a more detailed example in the folder `./examples` inside this project.
 
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
+Steps to follow are:
 
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
+1. Define [`specification.json`](###Define-a-`specification.json`-file)
+2. Create an [interface implementation](###Add-the-implementation-of-fetching-data)
+3. Create an [store](###Create-the-store)
+4. Add the [.vue components (optional)](###Add-component-selectors-(optional))
 
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
+### Define a `specification.json` file
 
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
+To begin with, we must define in a .json file which selectors we want to create, and the way in which these selectors are related to each other.
 
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
+To do this we define an array of objects.
+
+| name                | type    | default   | description                                                                                                                     |
+|---------------------|---------|-----------|---------------------------------------------------------------------------------------------------------------------------------|
+| id                  | string  |           | Identifier of the selector, must be unique                                                                                      |
+| label               | string  | undefined | Label to be placed in the label field of the selector                                                                           |
+| group               | String  | undefined | Identifies the selector within a group. Used to bundle selectors into a single component                                        |
+| setItemsOnMounted   | boolean | true      | It can be specified if we want the selector to load data when it is rendered for the first time                                 |
+| setDefaultFirstItem | boolean | false     | You can specify if you want the first element to be selected by default when loading the data                                   |
+| redraw              | boolean | false     | If this option is selected. the callback defined in the store will be fired whenever the @change event of the selector is fired |
+| actions             | array   | []        | List of identifiers of child selectors, for which an @change event will be fired every time the parent's @change event is fired |
+
+Example of an `specification.json`
+
+```json
+[
+  {
+    "id": "SPATIAL_AGGREGATION",
+    "label": "Spatial Aggregation",
+    "group": "Aggregation",
+    "setItemsOnMounted": true,
+    "setDefaultFirstItem": true,
+    "redraw": true,
+    "actions": [
+      "SPATIAL_FILTER"
+    ]
+  },
+  {
+  "id": "SPATIAL_FILTER",
+  "group": "Filter",
+  "setDefaultFirstItem": true,
+  "label": "Spatial Filter",
+  "actions": []
+  }
+]
+```
+
+---
+
+#### **IMPORTANT**
+
+You must be careful with defining cyclic dependencies between selectors, and that the identifiers of the children are defined in the specification
+
+---
+
+### Add the implementation of fetching data
+
+We must define how we are going to want to retrieve the necessary information to populate each of our selectors.
+
+To do this, we extend the interface provided by the library, and implement the 'getValues' method.
+
+We create a new interface `MyInterface.js`
+
+```js
+import { InterfaceGetters } from "magical-state/index";
+
+export default class MyInterface extends InterfaceGetters {
+  async getValues(propId, params) {
+    switch (propId) {
+      case "SPATIAL_AGGREGATION":
+        return aggregationService.getSpatialItems();
+      case "TEMPORAL_AGGREGATION":
+        return aggregationService.getTemporalItems();
+      case "TEMPORAL_FILTER":
+        return filterService.getTemporalFilterItems(params);
+      case "SPATIAL_FILTER":
+        return filterService.getSpatialFilterItems(params);
+    }
+  }
+}
+```
+
+`propId:` Name of the selector from which we want to retrieve the possible values ​​to populate the selector.
+`params:` Name of the value returned by the parent selector.
+
+---
+
+#### **IMPORTANT FOR RETURNING VALUES**
+
+The function always must return a Promise, and the data must be like:
+
+```json
+[
+  {
+  "label": "any",
+  "value": "any"
+  },
+]
+```
+
+---
+
+### Create the store
+
+Into your component (normally a .vue file), import your `specification.json` and your `implementation.js` files, then create the store.
+
+```js
+import jsonSpec from "./specification.json";
+import MyInterface from "./storeImpl.js";
+import {
+  Store
+} from "./magical-state/index.js";
+
+...
+...
+...
+
+this.implementacion = new MyInterface();
+this.store = new Store(jsonSpec, this.implementacion, () => {
+  console.log("store mounted");
+});
+```
+
+### Add component selectors (optional)
+
+Then you normally would like to add the m-selector components, given by the library into your `component.vue`
+
+```js
+import {
+  MSelector,
+} from "./magical-state/index.js";
+```
+
+```html
+  <m-selector :store="store" id="SPATIAL_AGGREGATION"> </m-selector>
+```
+
+| name                | type    | default   | description                                                                                                                     |
+|---------------------|---------|-----------|---------------------------------------------------------------------------------------------------------------------------------|
+| store               | Object  |           | The instance of the store created by the library                                                                                |
+| id                  | string  | undefined | Identifier of the selector to be rendered (must coincide with the id defined into the specification.json file)                  |
+| group               | String  | undefined | Identifier of the group you want to render. Renders all the selectors with de field 'group' with the same value                 |
+
+## Changelog
+
+[CHANGELOG.md](https://gitlab.lbd.org.es/proyectos-sig/magical-state/-/blob/main/CHANGELOG)
 
 ## License
-For open source projects, say how it is licensed.
 
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+[MIT](http://opensource.org/licenses/MIT)
