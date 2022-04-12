@@ -161,6 +161,7 @@ import {
 | store               | Object  |           | The instance of the store created by the library                                                                                |
 | id                  | string  | undefined | Identifier of the selector to be rendered (must coincide with the id defined into the specification.json file)                  |
 | group               | String  | undefined | Identifier of the group you want to render. Renders all the selectors with de field 'group' with the same value                 |
+| i18n               | Function  | undefined | Function to i18n the labels of the selectors                 |
 
 ## Changelog
 
