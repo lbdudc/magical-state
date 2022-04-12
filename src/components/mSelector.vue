@@ -36,7 +36,7 @@ export default {
       default: null,
     },
     i18n: {
-      type: Object,
+      type: Function,
       required: false,
       default: null,
     },
