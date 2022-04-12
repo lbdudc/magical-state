@@ -20,10 +20,10 @@ You can see a more detailed example in the folder `./examples` inside this proje
 
 Steps to follow are:
 
-1. Define [`specification.json`](###Define-a-`specification.json`-file)
-2. Create an [interface implementation](###Add-the-implementation-of-fetching-data)
-3. Create an [store](###Create-the-store)
-4. Add the [.vue components (optional)](###Add-component-selectors-(optional))
+1. Define [`specification.json`](#define-a-specificationjson-file)
+2. Create an [interface implementation](#add-the-implementation-of-fetching-data)
+3. Create an [store](#create-the-store)
+4. Add the [.vue components (optional)](#add-component-selectors-optional)
 
 ### Define a `specification.json` file
 
