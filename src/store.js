@@ -37,20 +37,6 @@ export default class Store {
   }
 
   /**
-   * Calls children or parent depending of the action done
-   * @param {String} propId
-   * @param {Any} newVal
-   */
-  changeSelector(propId, newVal) {
-    // If we have a newVal, we are a child, otherwise we are a parent
-    if (newVal !== null) {
-      this._callChildren(propId, newVal);
-    } else {
-      this._updateSelector(propId);
-    }
-  }
-
-  /**
    * Updates a selector with items received from the implementation
    * @param {String} propId The id of the selector
    */
@@ -60,7 +46,11 @@ export default class Store {
     el.loading = true;
 
     // Await for the implementation to get the items
-    const res = await this._implementationInterface.getValues(el.id);
+    const res = await this._implementationInterface.getValues(
+      el.id,
+      null,
+      null
+    );
 
     // Check if the element needs to set in value the first item retrieved
     this._setDefaultFirstItem(el, res);
@@ -83,7 +73,7 @@ export default class Store {
    * @param {String} propId
    * @param {Any} newVal
    */
-  async _callChildren(propId, newVal) {
+  async change(propId, newVal) {
     // Get the element of the jsonSpec
     const el = utils.findJsonSpecElement(propId, this._jsonSpec);
     const actions = el.actions;
@@ -102,8 +92,12 @@ export default class Store {
 
           // Set the loading state of the child to true
           // Await for the implementation to get the items
-          obsItem.loading = true;
-          const res = await this._implementationInterface.getValues(el, newVal);
+          obsItem.loading = true;;
+          const res = await this._implementationInterface.getValues(
+            el,
+            newVal,
+            utils.getStoreKeyValues(this._observable)
+          );
 
           // Set the items into the selector and end the loading state
           this._setDefaultFirstItem(obsItem, res);
@@ -135,7 +129,7 @@ export default class Store {
     if (observable.setDefaultFirstItem && items && items.length > 0) {
       observable.value = items[0];
       // If we update the value of the selector, we need to call its updated event
-      this.changeSelector(observable.id, items[0]);
+      this.change(observable.id, items[0]);
     }
   }
 }
