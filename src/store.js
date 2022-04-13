@@ -125,9 +125,9 @@ export default class Store {
    */
   _setDefaultFirstItem(observable, items) {
     if (observable.setDefaultFirstItem && items && items.length > 0) {
-      observable.value = items[0];
+      observable.value = items[0].value;
       // If we update the value of the selector, we need to call its updated event
-      this.change(observable.id, items[0]);
+      this.change(observable.id, items[0].value);
     }
   }
 }
