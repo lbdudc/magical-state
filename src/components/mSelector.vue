@@ -10,7 +10,7 @@
           v-model="item.value"
           :item-text="(el) => i18Label(el.label)"
           item-value="value"
-          @change="store.changeSelector(item.id, item.value)"
+          @change="store.change(item.id, item.value)"
         ></v-select>
       </v-col>
     </v-row>

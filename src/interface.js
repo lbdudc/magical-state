@@ -1,5 +1,5 @@
 export default class InterfaceGetters {
-  async getValues(propId, params) {
+  async getValues(propId, parentValue, store) {
     throw new Error("Not implemented");
   }
 }

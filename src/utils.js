@@ -73,6 +73,17 @@ const deleteObservable = (observable) => {
   unobserve(observable);
 };
 
+/**
+ * Returns a list of objects that contain the id and value of each store element
+ * @param {*} store 
+ * @returns list of objects
+ */
+const getStoreKeyValues = (store) => {
+  return store.map((el) => {
+    return { id: el.id, value: el.value };
+  });
+};
+
 export default {
   checkJsonSpec,
   findJsonSpecElement,
@@ -80,4 +91,5 @@ export default {
   createStore,
   createObservable,
   deleteObservable,
+  getStoreKeyValues,
 };
