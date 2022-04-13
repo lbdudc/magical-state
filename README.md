@@ -102,7 +102,8 @@ export default class MyInterface extends InterfaceGetters {
 ```
 
 `propId:` Name of the selector from which we want to retrieve the possible values ​​to populate the selector.
-`params:` Name of the value returned by the parent selector.
+`parentValue:` Name of the value returned by the parent selector.
+`store`:  List of objects {id: "id", value: "value"} representing actual state of the store.
 
 ---
 

@@ -47,9 +47,7 @@ export default class Store {
 
     // Await for the implementation to get the items
     const res = await this._implementationInterface.getValues(
-      el.id,
-      null,
-      null
+      el.id
     );
 
     // Check if the element needs to set in value the first item retrieved
