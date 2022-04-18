@@ -4,6 +4,7 @@
     v-bind:value="sliderActualTime"
     :tickLabels="sliderTickLabels"
     :max="sliderSteps"
+    :min="0"
     :color="sliderColor"
     :step="step"
     :ticks="ticks"

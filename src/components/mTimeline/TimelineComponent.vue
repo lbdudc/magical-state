@@ -4,8 +4,8 @@
       <v-row no-gutters justify="start" align="center">
         <v-col cols="12" md="9" lg="9">
           <MTimelineSlider
-            :sliderSteps="storeElement.items.length"
-            :sliderTickLabels="storeElement.itemsLabels"
+            :sliderSteps="tickLabels.length"
+            :sliderTickLabels="tickLabels"
             :sliderActualTime="storeElement.value"
             :sliderColor="'secondary'"
             @change="changeSliderValue"
@@ -17,7 +17,6 @@
         <v-col cols="12" md="3" lg="3">
           <MTimelineControls
             :isPaused="isPaused"
-            :availableSpeeds="availableSpeeds"
             :speedSelected="speedSelected"
             :label="'Speed'"
             @changeSpeed="updateSpeedSelected"
@@ -67,14 +66,6 @@ export default {
       required: false,
       default: null,
     },
-    timeLine: {
-      type: boolean,
-      required: false,
-      default: false,
-    },
-    instantSelector: {
-      type: boolean,
-    },
     availableSpeeds: {
       type: Array,
       required: false,
@@ -83,7 +74,10 @@ export default {
   },
   computed: {
     storeElement() {
-      return [this.store.observable.find((el) => el.id === this.id)];
+      return this.store.observable.find((el) => el.id === this.id);
+    },
+    tickLabels() {
+      return this.storeElement.items.map((el) => el.label);
     },
   },
   methods: {
@@ -115,20 +109,24 @@ export default {
     startInterval() {
       // TODO, esta funcion tendrá que elegir un nuevo rango para mostrar
       this.playInterval = setInterval(() => {
-        ++storeElement.value;
+        this.store.change(this.id, ++this.storeElement.value);
         // If value reaches end, we probably have to recover new data (API Fetch)
         if (this.storeElement.value === this.storeElement.items.length) {
-          storeElement.value = 0;
+          this.store.change(0);
         }
       }, BASE_SPEED / this.speedSelected);
     },
     changeSliderValue(val) {
       if (val === "next") {
-        ++storeElement.value;
+        if (this.storeElement.value < this.tickLabels.length - 1) {
+          this.store.change(this.id, ++this.storeElement.value);
+        }
       } else if (val === "prev") {
-        --storeElement.value;
+        if (this.storeElement.value > 0) {
+          this.store.change(this.id, --this.storeElement.value);
+        }
       } else {
-        storeElement.value = 0;
+        tthis.store.change(this.id, 0);
       }
     },
   },
