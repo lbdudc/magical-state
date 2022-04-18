@@ -111,8 +111,8 @@ export default {
       this.playInterval = setInterval(() => {
         this.store.change(this.id, ++this.storeElement.value);
         // If value reaches end, we probably have to recover new data (API Fetch)
-        if (this.storeElement.value === this.storeElement.items.length) {
-          this.store.change(0);
+        if (this.storeElement.value === this.storeElement.items.length - 1) {
+          this.store.change(this.id, 0);
         }
       }, BASE_SPEED / this.speedSelected);
     },
@@ -126,7 +126,8 @@ export default {
           this.store.change(this.id, --this.storeElement.value);
         }
       } else {
-        tthis.store.change(this.id, 0);
+        this.storeElement.value = val ? val : 0;
+        this.store.change(this.id, this.storeElement.value);
       }
     },
   },
