@@ -3,7 +3,7 @@
     v-if="sliderTickLabels"
     v-bind:value="sliderActualTime"
     :tickLabels="sliderTickLabels"
-    :max="sliderSteps"
+    :max="sliderTickLabels.length - 1"
     :min="0"
     :color="sliderColor"
     :step="step"

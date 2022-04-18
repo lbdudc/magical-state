@@ -4,6 +4,7 @@
       <v-row no-gutters justify="start" align="center">
         <v-col cols="12" md="9" lg="9">
           <MTimelineSlider
+            v-if="storeElement.items.length != 0"
             :sliderSteps="tickLabels.length"
             :sliderTickLabels="tickLabels"
             :sliderActualTime="storeElement.value"
@@ -12,6 +13,7 @@
             @nextValue="changeSliderValue('next')"
             @prevValue="changeSliderValue('prev')"
           />
+          <span v-else class="text-center">No data available</span>
         </v-col>
         <v-divider vertical></v-divider>
         <v-col cols="12" md="3" lg="3">

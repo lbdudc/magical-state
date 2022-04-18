@@ -6,7 +6,7 @@
       </v-list-item>
     </v-list-item-group>
   </v-list>
-  <span v-else>{{ i18Label("datePicker.noDataAvaliable") }}</span>
+  <span v-else class="text-center">No data available</span>
 </template>
 
 <script>
