@@ -39,7 +39,8 @@ To do this we define an array of objects.
 | setItemsOnMounted   | boolean | true      | It can be specified if we want the selector to load data when it is rendered for the first time                                 |
 | setDefaultFirstItem | boolean | false     | You can specify if you want the first element to be selected by default when loading the data                                   |
 | redraw              | boolean | false     | If this option is selected. the callback defined in the store will be fired whenever the @change event of the selector is fired |
-| actions             | array   | []        | List of identifiers of child selectors, for which an @change event will be fired every time the parent's @change event is fired |
+| actions             | array   | []        | List of identifiers of child selectors, for which an @change event will be fired every time the parent's @change event is fired
+| required             | array   | []        | List of identifiers of required selectors, the @change will trigger only if all the required selectors have a value distinct of null. Also if any of the required selectors change, set this selector to null  |
 
 Example of an `specification.json`
 
@@ -61,7 +62,10 @@ Example of an `specification.json`
   "group": "Filter",
   "setDefaultFirstItem": true,
   "label": "Spatial Filter",
-  "actions": []
+  "actions": [],
+  "required": [
+    "SPATIAL_AGGREGATION"
+    ]
   }
 ]
 ```
