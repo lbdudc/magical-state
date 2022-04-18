@@ -81,7 +81,7 @@ export default class Store {
 
     // For each children, create a new Promise calling the update function
     const act = [];
-    actions.forEach((el) => {
+    actions?.forEach((el) => {
       // If the element has a required field property
       // and its not selected, we dont do anything
       requiredFields = utils.isElementInRequiredField(

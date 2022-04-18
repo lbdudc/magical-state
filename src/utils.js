@@ -38,10 +38,10 @@ const createStore = (jsonSpec) => {
     return {
       id: el.id,
       label: el.label,
-      value: null,
+      value: el.default,
       loading: false,
       showed: true,
-      default: null,
+      default: el.default,
       group: el.group || null,
       redraw: el.redraw || false,
       setDefaultFirstItem: el.setDefaultFirstItem || false,
