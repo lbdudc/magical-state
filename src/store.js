@@ -46,9 +46,7 @@ export default class Store {
     el.loading = true;
 
     // Await for the implementation to get the items
-    const res = await this._implementationInterface.getValues(
-      el.id
-    );
+    const res = await this._implementationInterface.getValues(el.id);
 
     // Check if the element needs to set in value the first item retrieved
     this._setDefaultFirstItem(el, res);
@@ -76,34 +74,49 @@ export default class Store {
     const el = utils.findJsonSpecElement(propId, this._jsonSpec);
     const actions = el.actions;
     let needsRedraw = el.redraw;
+    let requiredFields = true;
+
+    // Reset values of the depending selectors (if has any)
+    utils.resetDependedSelectors(propId, this._jsonSpec, this._observable);
 
     // For each children, create a new Promise calling the update function
     const act = [];
     actions?.forEach((el) => {
-      act.push(
-        new Promise(async (resolve, reject) => {
-          // Get the element of the observable child
-          const obsItem = utils.findElementInObservable(el, this._observable);
-
-          // If a child need to be redrawn, we set the needsRedraw property to true for later
-          if (obsItem.redraw) needsRedraw = true;
-
-          // Set the loading state of the child to true
-          // Await for the implementation to get the items
-          obsItem.loading = true;;
-          const res = await this._implementationInterface.getValues(
-            el,
-            newVal,
-            utils.getStoreKeyValues(this._observable)
-          );
-
-          // Set the items into the selector and end the loading state
-          this._setDefaultFirstItem(obsItem, res);
-          obsItem.items = res;
-          obsItem.loading = false;
-          resolve(res);
-        })
+      // If the element has a required field property
+      // and its not selected, we dont do anything
+      requiredFields = utils.isElementInRequiredField(
+        el,
+        this._jsonSpec,
+        this._observable
       );
+
+      if (requiredFields) {
+        act.push(
+          new Promise(async (resolve, reject) => {
+            // Get the element of the observable child
+            const obsItem = utils.findElementInObservable(el, this._observable);
+
+            // If a child need to be redrawn, we set the needsRedraw property to true for later
+            if (obsItem.redraw) needsRedraw = true;
+
+            // Set the loading state of the child to true
+            // Await for the implementation to get the items
+            obsItem.loading = true;
+            const res = await this._implementationInterface.getValues(
+              el,
+              newVal,
+              utils.getStoreKeyValues(this._observable)
+            );
+
+            // Set the items into the selector and end the loading state
+            obsItem.value = obsItem.default;
+            this._setDefaultFirstItem(obsItem, res);
+            obsItem.items = res;
+            obsItem.loading = false;
+            resolve(res);
+          })
+        );
+      }
     });
 
     // Await for all the promises in the children to be resolved

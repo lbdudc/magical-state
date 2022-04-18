@@ -75,12 +75,48 @@ const deleteObservable = (observable) => {
 
 /**
  * Returns a list of objects that contain the id and value of each store element
- * @param {*} store 
+ * @param {*} store
  * @returns list of objects
  */
 const getStoreKeyValues = (store) => {
   return store.map((el) => {
     return { id: el.id, value: el.value };
+  });
+};
+
+/**
+ * Checks if the element has required elements with null values
+ * @param {String} element
+ * @param {Object} jsonSpec
+ * @param {Object} obs
+ * @returns false if the element has required elements with null values
+ */
+const isElementInRequiredField = (element, jsonSpec, obs) => {
+  const childElement = findJsonSpecElement(element, jsonSpec);
+  if (childElement.required != null) {
+    for (let index = 0; index < childElement.required.length; index++) {
+      const element = childElement.required[index];
+      if (findElementInObservable(element, obs).value == null) return false;
+    }
+  }
+  return true;
+};
+
+/**
+ * Resets the value of the selectors that have required this element
+ * @param {String} element
+ * @param {Object} jsonSpec
+ * @param {Object} obs
+ */
+const resetDependedSelectors = (element, jsonSpec, obs) => {
+  jsonSpec.forEach((specElement) => {
+    if (specElement.required && specElement.length !== 0) {
+      const act = specElement.required.find((action) => action === element);
+      if (act) {
+        const obsElement = findElementInObservable(specElement.id, obs);
+        obsElement.value = null;
+      }
+    }
   });
 };
 
@@ -91,5 +127,7 @@ export default {
   createStore,
   createObservable,
   deleteObservable,
+  isElementInRequiredField,
+  resetDependedSelectors,
   getStoreKeyValues,
 };
