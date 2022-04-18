@@ -79,7 +79,7 @@ export default class Store {
 
     // For each children, create a new Promise calling the update function
     const act = [];
-    actions.forEach((el) => {
+    actions?.forEach((el) => {
       act.push(
         new Promise(async (resolve, reject) => {
           // Get the element of the observable child
