@@ -7,18 +7,17 @@
     <v-row>
       <v-col v-if="store" cols="12">
         <v-row>
-          <m-selector :store="store" id="SPATIAL_AGGREGATION"> </m-selector>
-          <m-selector :store="store" id="TEMPORAL_AGGREGATION"> </m-selector>
+          <m-selector :store="store" group="Aggregation"> </m-selector>
           <m-selector :store="store" id="SPATIAL_FILTER"> </m-selector>
           <m-selector :store="store" id="TEMPORAL_FILTER"> </m-selector>
         </v-row>
       </v-col>
     </v-row>
     <v-divider class="ma-10"></v-divider>
-    <v-btn v-if="!showMSInfo" @click="showMsInfo = !showMSInfo"
+    <v-btn v-if="!showMSInfo" @click="showMSInfo = !showMSInfo"
       >show magical state info</v-btn
     >
-    <v-btn v-else @click="showMsInfo = !showMSInfo"
+    <v-btn v-else @click="showMSInfo = !showMSInfo"
       >hide magical state info</v-btn
     >
     <v-divider class="ma-10"></v-divider>
@@ -49,11 +48,11 @@
 <script>
 import jsonSpec from "./specification.json";
 import Store from "../../../../src/store";
-import MSelector from "../../../../src/components/mSelector";
-import MyInterface from "./storeImpl";
+import MSelector from "../../../../src/components/mSelector/mSelector.vue";
+import MyInterface from "./gettersImplementation";
 
 export default {
-  name: "Example1",
+  name: "Sample1",
   components: {
     MSelector,
   },

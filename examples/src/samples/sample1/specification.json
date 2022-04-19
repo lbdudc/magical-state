@@ -21,7 +21,6 @@
   },
   {
     "id": "SPATIAL_FILTER",
-    "group": "Filter",
     "setDefaultFirstItem": true,
     "label": "Spatial Filter",
     "actions": []
@@ -29,7 +28,6 @@
   {
     "id": "TEMPORAL_FILTER",
     "label": "Temporal Filter",
-    "group": "Filter",
     "actions": []
   }
 ]

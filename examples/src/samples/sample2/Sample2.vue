@@ -44,10 +44,10 @@
 <script>
 import jsonSpec from "./specification.json";
 import Store from "../../../../src/store";
-import MyInterface from "./storeImpl";
+import MyInterface from "./gettersImplementation";
 
 export default {
-  name: "Example1",
+  name: "Sample2",
   components: {},
   data: function () {
     return {
