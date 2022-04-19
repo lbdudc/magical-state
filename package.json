@@ -10,8 +10,10 @@
     "type": "git",
     "url": "https://gitlab.lbd.org.es/proyectos-sig/magical-state.git"
   },
+  "dependencies": {
+    "@nx-js/observer-util": "^4.2.2"
+  },
   "devDependencies": {
-    "@nx-js/observer-util": "^4.2.2",
     "eslint": "^7.26.0"
   },
   "eslintConfig": {
