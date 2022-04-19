@@ -1,0 +1,35 @@
+[
+  {
+    "id": "SPATIAL_AGGREGATION",
+    "label": "Spatial Aggregation",
+    "group": "Aggregation",
+    "setItemsOnMounted": true,
+    "setDefaultFirstItem": true,
+    "redraw": true,
+    "actions": [
+      "SPATIAL_FILTER"
+    ]
+  },
+  {
+    "id": "TEMPORAL_AGGREGATION",
+    "label": "Temporal Aggregation",
+    "group": "Aggregation",
+    "setItemsOnMounted": true,
+    "actions": [
+      "TEMPORAL_FILTER"
+    ]
+  },
+  {
+    "id": "SPATIAL_FILTER",
+    "group": "Filter",
+    "setDefaultFirstItem": true,
+    "label": "Spatial Filter",
+    "actions": []
+  },
+  {
+    "id": "TEMPORAL_FILTER",
+    "label": "Temporal Filter",
+    "group": "Filter",
+    "actions": []
+  }
+]
