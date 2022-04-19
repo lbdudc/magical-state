@@ -1,6 +1,6 @@
-const spatialItems = ["AUTONOMOUS_COMMUNITY", "PROVINCE", "MOBILITY_AREA"];
+const spatialItems = [{ label: "AUTONOMOUS_COMMUNITY", value: 1 }, { label: "PROVINCE", value: 2 }, { label: "MOBILITY_AREA", value: 3 }];
 
-const temporalItems = ["YEARLY", "MONTHLY"];
+const temporalItems = [{ label: "mockLabels.year", value: 1 }, { label: "mockLabels.month", value: 2 }];
 
 async function getSpatialItems() {
   const f = () => {

@@ -7,16 +7,34 @@ Vue.config.productionTip = false
 Vue.use(Vuetify);
 Vue.use(VueI18n);
 
+const messages = {
+  ES: {},
+};
+const localeEs = require.context("./locale/es", true, /\.json$/);
+localeEs.keys().forEach((filename) => {
+  Object.keys(localeEs(filename)).forEach((key) => {
+    messages.ES[key] = localeEs(filename)[key];
+  });
+});
+
 const i18n = new VueI18n({
   locale: "ES",
   fallbackLocale: "ES",
+  silentTranslationWarn: true,
+  messages
+});
+
+const vuetify = new Vuetify({
+  lang: {
+    t: (key, ...params) => i18n.t(key, params),
+  },
+  icons: {
+    iconfont: "mdi",
+  },
 });
 
 new Vue({
-  vuetify: new Vuetify({
-    lang: {
-      t: (key, ...params) => i18n.t(key, params),
-    },
-  }),
+  vuetify: vuetify,
+  i18n: i18n,
   render: function (h) { return h(App) }
 }).$mount('#app')

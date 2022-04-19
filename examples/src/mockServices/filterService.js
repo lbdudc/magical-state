@@ -1,28 +1,28 @@
-const comunities = ["GALICIA", "EXTREMADURA"];
+const comunities = [{ label: "GALICIA", value: 1 }, { label: "EXTREMADURA", value: 2 }];
 const provinces = [
-  "A CORUÑA",
-  "LUGO",
-  "OURENSE",
-  "PONTEVEDRA",
-  "CACERES",
-  "BADAJOZ",
+  { label: "A CORUÑA", value: 1 },
+  { label: "LUGO", value: 2 },
+  { label: "OURENSE", value: 3 },
+  { label: "PONTEVEDRA", value: 4 },
+  { label: "CACERES", value: 5 },
+  { label: "BADAJOZ", value: 6 },
 ];
-const mobArea = ["HOOD", "STREET"];
-const years = ["2022", "2021", "2020"];
+const mobArea = [{ label: "HOOD", value: 1 }, { label: "STREET", value: 1 }];
+const years = [{ label: "2022", value: 2022 }, { label: "2021", value: 2021 }, { label: "2020", value: 2020 }];
 const months = ["JANUARY", "FEBRUAY", "MARCH"];
 
 async function getSpatialFilterItems(filter) {
   await sleep(2000);
   switch (filter) {
-    case "AUTONOMOUS_COMMUNITY":
+    case 1:
       return new Promise((resolve) => {
         resolve(comunities);
       });
-    case "PROVINCE":
+    case 2:
       return new Promise((resolve) => {
         resolve(provinces);
       });
-    case "MOBILITY_AREA":
+    case 3:
       return new Promise((resolve) => {
         resolve(mobArea);
       });
@@ -32,11 +32,11 @@ async function getSpatialFilterItems(filter) {
 async function getTemporalFilterItems(filter) {
   await sleep(2000);
   switch (filter) {
-    case "YEARLY":
+    case 1:
       return new Promise((resolve) => {
         resolve(years);
       });
-    case "MONTHLY":
+    case 2:
       return new Promise((resolve) => {
         resolve(months);
       });

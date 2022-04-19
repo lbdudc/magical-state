@@ -1,44 +1,12 @@
 <template>
   <v-container v-if="store">
     <v-row>
-      <h1>Filters</h1>
-    </v-row>
-
-    <v-row>
       <v-col v-if="store" cols="12">
         <v-row>
-          <m-selector :store="store" group="Aggregation"> </m-selector>
+          <m-selector :store="store" group="Aggregation" :i18n="$t">
+          </m-selector>
           <m-selector :store="store" id="SPATIAL_FILTER"> </m-selector>
           <m-selector :store="store" id="TEMPORAL_FILTER"> </m-selector>
-        </v-row>
-      </v-col>
-    </v-row>
-    <v-divider class="ma-10"></v-divider>
-    <v-btn v-if="!showMSInfo" @click="showMSInfo = !showMSInfo"
-      >show magical state info</v-btn
-    >
-    <v-btn v-else @click="showMSInfo = !showMSInfo"
-      >hide magical state info</v-btn
-    >
-    <v-divider class="ma-10"></v-divider>
-    <v-row v-if="showMSInfo">
-      <v-col cols="12">
-        <v-row>
-          <h1>Store:</h1>
-        </v-row>
-        <v-row>
-          <v-col v-if="store._store" cols="4">
-            <h3>Store.store:</h3>
-            <pre>{{ store._store }}</pre>
-          </v-col>
-          <v-col v-if="store._observable" cols="4">
-            <h3>Observable</h3>
-            <pre>{{ store._observable }}</pre>
-          </v-col>
-          <v-col v-if="store._jsonSpec" cols="4">
-            <h3>JsonSpec:</h3>
-            <pre>{{ store._jsonSpec }}</pre>
-          </v-col>
         </v-row>
       </v-col>
     </v-row>
@@ -60,7 +28,6 @@ export default {
     return {
       store: null,
       implementacion: null,
-      showMSInfo: false,
     };
   },
   mounted() {

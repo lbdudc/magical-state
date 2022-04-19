@@ -12,6 +12,7 @@
     "id": "INSTANT_FILTER",
     "setItemsOnMounted": false,
     "setDefaultFirstItem": false,
-    "default": 0
+    "default": 0,
+    "actions": []
   }
 ]
