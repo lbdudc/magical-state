@@ -61,7 +61,9 @@ export default class Store {
       el.redraw &&
       utils.findJsonSpecElement(propId, this._jsonSpec).actions.length === 0
     )
-      this._callback();
+      this._callback(this._observable.filter(el => el.value).map(el => {
+        return { id: el.id, value: el.value }
+      }));
   }
 
   /**
@@ -123,7 +125,9 @@ export default class Store {
     Promise.all(act)
       .then((res) => {
         // If the element has a redraw property, call the callback funct
-        if (needsRedraw) this._callback();
+        if (needsRedraw) this._callback(this._observable.filter(el => el.value).map(el => {
+          return { id: el.id, value: el.value }
+        }));
       })
       .catch((err) => {
         console.log(err);
