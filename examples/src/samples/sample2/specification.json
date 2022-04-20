@@ -1,0 +1,19 @@
+[
+  {
+    "id": "DATE_FILTER",
+    "label": "Date filter",
+    "setItemsOnMounted": false,
+    "setDefaultFirstItem": false,
+    "actions": [
+      "INSTANT_FILTER"
+    ]
+  },
+  {
+    "id": "INSTANT_FILTER",
+    "setItemsOnMounted": false,
+    "setDefaultFirstItem": false,
+    "default": 0,
+    "actions": [],
+    "redraw": true
+  }
+]
