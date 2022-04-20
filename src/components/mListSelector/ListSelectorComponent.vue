@@ -1,10 +1,18 @@
 <template>
-  <v-list v-if="store && storeElement.items.length > 0">
-    <v-list-item-group v-model="storeElement.value">
+  <v-list v-if="store">
+    <v-list-item-group
+      v-if="!storeElement.loading"
+      v-model="storeElement.value"
+    >
       <v-list-item v-for="(item, index) in storeElement.items" :key="index">
         <v-list-item-title>{{ item.label }}</v-list-item-title>
       </v-list-item>
     </v-list-item-group>
+    <v-progress-circular
+      v-else
+      indeterminate
+      color="primary"
+    ></v-progress-circular>
   </v-list>
   <span v-else class="text-center">No data available</span>
 </template>

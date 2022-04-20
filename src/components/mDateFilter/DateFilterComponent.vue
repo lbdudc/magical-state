@@ -12,6 +12,7 @@
         v-model="storeElement.value"
         :label="i18Label(storeElement.label)"
         prepend-icon="mdi-calendar"
+        :loading="storeElement.loading || store.state.loading"
         readonly
         v-bind="attrs"
         v-on="on"

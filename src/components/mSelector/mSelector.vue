@@ -5,8 +5,8 @@
         <v-select
           :label="i18Label(item.label)"
           :items="item.items"
-          :loading="item.loading"
-          :disabled="item.loading"
+          :loading="item.loading || store.state.loading"
+          :disabled="item.loading || store.state.loading"
           v-model="item.value"
           :item-text="(el) => i18Label(el.label)"
           item-value="value"

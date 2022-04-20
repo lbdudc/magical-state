@@ -1,6 +1,6 @@
 <template>
   <v-card outlined v-if="store">
-    <v-container>
+    <v-container v-if="!storeElement.loading && !store.state.loading">
       <v-row no-gutters justify="start" align="center">
         <v-col cols="12" md="9" lg="9">
           <MTimelineSlider
@@ -28,6 +28,9 @@
         </v-col>
       </v-row>
     </v-container>
+    <div class="text-center" v-else>
+      <v-progress-circular indeterminate color="primary"></v-progress-circular>
+    </div>
   </v-card>
 </template>
 
