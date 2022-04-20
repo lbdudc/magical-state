@@ -3,34 +3,40 @@
     <component :is="example" />
     <v-divider class="ma-10"></v-divider>
     <v-row>
-      <v-btn @click="picked = 'Example1'">Example1</v-btn>
-      <v-btn @click="picked = 'Example2'">Example2</v-btn>
+      <v-btn @click="picked = 'Example1'">Aggregations</v-btn>
+      <v-btn @click="picked = 'Example2'">Instants</v-btn>
+      <v-btn @click="picked = 'Example3'">Default State</v-btn>
     </v-row>
   </v-app>
 </template>
 
 <script>
-import Sample1 from "./samples/sample1/Sample1";
-import Sample2 from "./samples/sample2/Sample2";
+import AggregationsExample from "./samples/aggregationsExample/AggregationsExample";
+import InstantsExample from "./samples/instantsExample/InstantsExample";
+import DefaultStateExample from "./samples/defaultStateExample/DefaultStateExample";
 
 export default {
   name: "App",
   components: {
-    Sample1,
-    Sample2,
+    AggregationsExample,
+    InstantsExample,
+    DefaultStateExample,
   },
   data() {
-    return { picked: "Example1" };
+    return { picked: localStorage.getItem("picked") };
   },
   computed: {
     example() {
+      localStorage.setItem("picked", this.picked);
       switch (this.picked) {
         case "Example1":
-          return Sample1;
+          return AggregationsExample;
         case "Example2":
-          return Sample2;
+          return InstantsExample;
+        case "Example3":
+          return DefaultStateExample;
         default:
-          return Sample1;
+          return AggregationsExample;
       }
     },
   },

@@ -36,6 +36,7 @@ let a = false;
 
 async function getInstants(params) {
   a = !a;
+  await sleep(2000);
   const f = () => {
     return new Promise((resolve) => {
       if (a) {
@@ -46,6 +47,10 @@ async function getInstants(params) {
     });
   };
   return await f();
+}
+
+function sleep(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 export default { getInstants };

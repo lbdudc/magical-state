@@ -5,6 +5,9 @@ export default class Store {
     this._jsonSpec = jsonSpec;
     this._store = {};
     this._observable = null;
+    this._state = {
+      loading: true,
+    }
     this._callback = callback;
     this._implementationInterface = implementationInterface;
 
@@ -23,17 +26,22 @@ export default class Store {
     return this._observable;
   }
 
+  get state() {
+    return this._state;
+  }
+
   /**
    * Populates the store with the initial values
    * If the selector has the property "setItemsOnMounted" setted to true,
    * we call the update function
    */
   async _populateStore() {
-    this._observable.forEach((el) => {
+    this._observable.forEach(async (el) => {
       if (el.setItemsOnMounted) {
-        this._updateSelector(el.id);
+        await this._updateSelector(el.id);
       }
     });
+    this._state.loading = false;
   }
 
   /**
@@ -61,11 +69,51 @@ export default class Store {
       el.redraw &&
       el._setDefaultFirstItem &&
       utils.findJsonSpecElement(propId, this._jsonSpec).actions.length === 0
-    )
+    ) {
+      this._state.loading = false;
       this._callback(this._observable.filter(el => el.value).map(el => {
         return { id: el.id, value: el.value }
       }));
+    }
   }
+
+
+  /**
+   * Changes the general state of all the selectors passed
+   * @param {Array} newState [{id: selectorId, value: newValue}]
+   * @param {Boolean} executeCallback
+   * @param {Function} customCallback
+   */
+  async setState(newState, executeCallback, customCallback) {
+    this._state.loading = true;
+    let set = [];
+    newState.forEach(async el => {
+      utils.findElementInObservable(el.id, this._observable).value = el.value;
+      set.push(
+        new Promise(async (resolve) => {
+          await utils.getActionsValues(el, newState, this._implementationInterface, this._observable, this._jsonSpec);
+          resolve();
+        })
+      )
+    })
+
+    Promise.all(set).then(() => {
+      this._state.loading = false;
+      if (executeCallback) {
+        if (customCallback) {
+          customCallback(this._observable.filter(el => el.value).map(el => {
+            return { id: el.id, value: el.value }
+          }));
+        } else {
+          this._callback(this._observable.filter(el => el.value).map(el => {
+            return { id: el.id, value: el.value }
+          }));
+        }
+      }
+    }
+    );
+  }
+
 
   /**
    * Calls the callbacks of the elements that depend on the element that has changed

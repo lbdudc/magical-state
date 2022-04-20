@@ -7,7 +7,7 @@ const provinces = [
   { label: "CACERES", value: 5 },
   { label: "BADAJOZ", value: 6 },
 ];
-const mobArea = [{ label: "HOOD", value: 1 }, { label: "STREET", value: 1 }];
+const mobArea = [{ label: "HOOD", value: 1 }, { label: "STREET", value: 2 }];
 const years = [{ label: "2022", value: 2022 }, { label: "2021", value: 2021 }, { label: "2020", value: 2020 }];
 const months = ["JANUARY", "FEBRUAY", "MARCH"];
 
@@ -40,6 +40,10 @@ async function getTemporalFilterItems(filter) {
       return new Promise((resolve) => {
         resolve(months);
       });
+    default:
+      return new Promise((resolve) => {
+        resolve(["algo"])
+      })
   }
 }
 

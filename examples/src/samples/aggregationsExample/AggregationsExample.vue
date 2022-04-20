@@ -3,15 +3,10 @@
     <v-row>
       <v-col v-if="store" cols="12">
         <v-row>
-          <MDateSelector id="DATE_FILTER" :store="store" :i18n="$t" />
-        </v-row>
-        <v-row>
-          <MListSelector id="INSTANT_FILTER" :store="store" />
-        </v-row>
-        <v-row>
-          <v-col cols="12">
-            <MTimeline id="INSTANT_FILTER" :store="store" />
-          </v-col>
+          <m-selector :store="store" group="Aggregation" :i18n="$t">
+          </m-selector>
+          <m-selector :store="store" id="SPATIAL_FILTER"> </m-selector>
+          <m-selector :store="store" id="TEMPORAL_FILTER"> </m-selector>
         </v-row>
         <v-divider class="ma-10"></v-divider>
         <span>{{ storeContent }}</span>
@@ -23,20 +18,19 @@
 <script>
 import jsonSpec from "./specification.json";
 import Store from "../../../../src/store";
+import MSelector from "../../../../src/components/mSelector/mSelector.vue";
 import MyInterface from "./gettersImplementation";
-import MDateSelector from "../../../../src/components/mDateFilter/DateFilterComponent.vue";
-import MListSelector from "../../../../src/components/mListSelector/ListSelectorComponent.vue";
-import MTimeline from "../../../../src/components/mTimeline/TimelineComponent.vue";
 
 export default {
-  name: "Sample2",
-  components: { MDateSelector, MListSelector, MTimeline },
+  name: "AggregationsExample",
+  components: {
+    MSelector,
+  },
   data: function () {
     return {
       store: null,
       implementacion: null,
       storeContent: null,
-      showMSInfo: false,
     };
   },
   mounted() {

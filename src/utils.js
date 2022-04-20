@@ -45,7 +45,8 @@ const createStore = (jsonSpec) => {
       group: el.group || null,
       redraw: el.redraw || false,
       setDefaultFirstItem: el.setDefaultFirstItem || false,
-      setItemsOnMounted: el.setItemsOnMounted === false ? false : true,
+      setItemsOnMounted:
+        el.setItemsOnMounted && el.setItemsOnMounted === true ? true : false,
       items: [],
     };
   });
@@ -120,6 +121,41 @@ const resetDependedSelectors = (element, jsonSpec, obs) => {
   });
 };
 
+/**
+ * Returns a promise that resolves when all the children
+ * of the element are loaded
+ * @param {Object} el root element
+ * @param {Array} newState array of the new state to be set
+ * @param {Function} impl function to get the items of the selectors
+ * @param {Object} obs observable of the store
+ * @param {Array} jsonSpec jsonSpec of the store
+ * @returns a promise that resolves when all the children are fullfilled
+ */
+const getActionsValues = (el, newState, impl, obs, jsonSpec) => {
+  const act = [];
+  findJsonSpecElement(el.id, jsonSpec).actions.forEach(async (action) => {
+    act.push(
+      new Promise(async (resolve, reject) => {
+        // Get the element of the observable child
+        // const obsItem = utils.findElementInObservable(el, this._observable);
+        const res = await impl.getValues(
+          action,
+          el.value,
+          getStoreKeyValues(obs)
+        );
+        // Setear el value del hijo si se encuentra en la lista de items que les pasamos
+        const foundChild = newState.find(child => child.id === action);
+        if (foundChild) {
+          findElementInObservable(foundChild.id, obs).value = foundChild.value;
+        }
+        findElementInObservable(action, obs).items = res;
+        resolve(res);
+      })
+    );
+  });
+  return Promise.all(act);
+}
+
 export default {
   checkJsonSpec,
   findJsonSpecElement,
@@ -129,5 +165,6 @@ export default {
   deleteObservable,
   isElementInRequiredField,
   resetDependedSelectors,
+  getActionsValues,
   getStoreKeyValues,
 };
