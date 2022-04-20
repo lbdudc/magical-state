@@ -13,6 +13,7 @@
     "setItemsOnMounted": false,
     "setDefaultFirstItem": false,
     "default": 0,
-    "actions": []
+    "actions": [],
+    "redraw": true
   }
 ]

@@ -5,7 +5,6 @@
     "group": "Aggregation",
     "setItemsOnMounted": true,
     "setDefaultFirstItem": true,
-    "redraw": true,
     "actions": [
       "SPATIAL_FILTER"
     ]
@@ -28,6 +27,7 @@
   {
     "id": "TEMPORAL_FILTER",
     "label": "Temporal Filter",
+    "redraw": true,
     "actions": []
   }
 ]

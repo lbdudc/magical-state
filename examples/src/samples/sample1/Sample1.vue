@@ -8,6 +8,8 @@
           <m-selector :store="store" id="SPATIAL_FILTER"> </m-selector>
           <m-selector :store="store" id="TEMPORAL_FILTER"> </m-selector>
         </v-row>
+        <v-divider class="ma-10"></v-divider>
+        <span>{{ storeContent }}</span>
       </v-col>
     </v-row>
   </v-container>
@@ -28,12 +30,13 @@ export default {
     return {
       store: null,
       implementacion: null,
+      storeContent: null,
     };
   },
   mounted() {
     this.implementacion = new MyInterface();
-    this.store = new Store(jsonSpec, this.implementacion, () => {
-      console.log("store mounted");
+    this.store = new Store(jsonSpec, this.implementacion, (storeContent) => {
+      this.storeContent = storeContent;
     });
   },
 };

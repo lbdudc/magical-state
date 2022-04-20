@@ -59,6 +59,7 @@ export default class Store {
     // call the callback funct
     if (
       el.redraw &&
+      el._setDefaultFirstItem &&
       utils.findJsonSpecElement(propId, this._jsonSpec).actions.length === 0
     )
       this._callback(this._observable.filter(el => el.value).map(el => {
