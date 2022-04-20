@@ -3,7 +3,7 @@
     <v-row>
       <v-col v-if="store" cols="12">
         <v-row>
-          <MDateSelector id="DATE_FILTER" :store="store" :i18n="$t" />
+          <MDateFilter id="DATE_FILTER" :store="store" :i18n="$t" />
         </v-row>
         <v-row>
           <MListSelector id="INSTANT_FILTER" :store="store" />
@@ -22,15 +22,17 @@
 
 <script>
 import jsonSpec from "./specification.json";
-import Store from "../../../../src/store";
+import {
+  Store,
+  MDateFilter,
+  MListSelector,
+  MTimeline,
+} from "../../../../index";
 import MyInterface from "./gettersImplementation";
-import MDateSelector from "../../../../src/components/mDateFilter/DateFilterComponent.vue";
-import MListSelector from "../../../../src/components/mListSelector/ListSelectorComponent.vue";
-import MTimeline from "../../../../src/components/mTimeline/TimelineComponent.vue";
 
 export default {
   name: "InstantsExample",
-  components: { MDateSelector, MListSelector, MTimeline },
+  components: { MDateFilter, MListSelector, MTimeline },
   data: function () {
     return {
       store: null,

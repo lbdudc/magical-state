@@ -17,8 +17,7 @@
 
 <script>
 import jsonSpec from "./specification.json";
-import Store from "../../../../src/store";
-import MSelector from "../../../../src/components/mSelector/mSelector.vue";
+import { Store, MSelector } from "../../../../index";
 import MyInterface from "./gettersImplementation";
 
 export default {
