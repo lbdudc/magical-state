@@ -1,5 +1,5 @@
 <template>
-  <v-container v-if="store">
+  <v-container class="ma-0 pa-0" v-if="store">
     <v-row no-gutters>
       <v-col cols="12" v-for="item in itemsFiltered" :key="item.id">
         <v-select

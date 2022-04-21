@@ -1,6 +1,9 @@
 <template>
   <v-card outlined v-if="store">
-    <v-container v-if="!storeElement.loading && !store.state.loading">
+    <v-container
+      class="ma-0 pa-0"
+      v-if="!storeElement.loading && !store.state.loading"
+    >
       <v-row no-gutters justify="start" align="center">
         <v-col cols="12" md="9" lg="9">
           <MTimelineSlider
