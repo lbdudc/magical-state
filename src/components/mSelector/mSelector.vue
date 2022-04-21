@@ -7,6 +7,9 @@
           :items="item.items"
           :loading="item.loading || store.state.loading"
           :disabled="item.loading || store.state.loading"
+          :clearable="clearable"
+          :dense="dense"
+          :outlined="outlined"
           v-model="item.value"
           :item-text="(el) => i18Label(el.label)"
           item-value="value"
@@ -39,6 +42,21 @@ export default {
       type: Function,
       required: false,
       default: null,
+    },
+    clearable: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
+    outlined: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
+    dense: {
+      type: Boolean,
+      required: false,
+      default: false,
     },
   },
   computed: {
