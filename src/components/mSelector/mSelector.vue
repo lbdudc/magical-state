@@ -1,7 +1,7 @@
 <template>
   <v-container class="ma-0 pa-0" v-if="store">
     <v-row no-gutters>
-      <v-col cols="12" v-for="item in itemsFiltered" :key="item.id">
+      <v-col cols="12">
         <v-select
           :label="i18Label(item.label)"
           :items="item.items"
@@ -60,12 +60,20 @@ export default {
     },
   },
   computed: {
-    itemsFiltered() {
-      if (this.group !== null) {
-        return this.store.observable.filter((el) => el.group === this.group);
-      } else {
-        return [this.store.observable.find((el) => el.id === this.id)];
-      }
+    item() {
+      return this.store.observable.find((el) => el.id === this.id);
+    },
+  },
+  watch: {
+    "item.value": {
+      handler(newVal) {
+        this.$emit("change", {
+          id: this.item.id,
+          value: newVal,
+          store: this.store.observable,
+        });
+      },
+      deep: true,
     },
   },
   methods: {

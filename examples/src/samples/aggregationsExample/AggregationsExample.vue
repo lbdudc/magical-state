@@ -3,8 +3,8 @@
     <v-row>
       <v-col v-if="store" cols="12">
         <v-row>
-          <m-selector :store="store" group="Aggregation" :i18n="$t">
-          </m-selector>
+          <m-selector :store="store" id="SPATIAL_AGGREGATION"> </m-selector>
+          <m-selector :store="store" id="TEMPORAL_AGGREGATION"> </m-selector>
           <m-selector :store="store" id="SPATIAL_FILTER"> </m-selector>
           <m-selector :store="store" id="TEMPORAL_FILTER"> </m-selector>
         </v-row>

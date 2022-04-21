@@ -88,6 +88,18 @@ export default {
       return this.storeElement.items.map((el) => el.label);
     },
   },
+  watch: {
+    "storeElement.value": {
+      handler(newVal) {
+        this.$emit("change", {
+          id: this.storeElement.id,
+          value: newVal,
+          store: this.store.observable,
+        });
+      },
+      deep: true,
+    },
+  },
   methods: {
     /**
      * Speed selector
