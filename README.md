@@ -36,7 +36,6 @@ To do this we define an array of objects.
 |---------------------|---------|-----------|---------------------------------------------------------------------------------------------------------------------------------|
 | id                  | string  |           | Identifier of the selector, must be unique                                                                                      |
 | label               | string  | undefined | Label to be placed in the label field of the selector                                                                           |
-| group               | String  | undefined | Identifies the selector within a group. Used to bundle selectors into a single component                                        |
 | setItemsOnMounted   | boolean | true      | It can be specified if we want the selector to load data when it is rendered for the first time                                 |
 | setDefaultFirstItem | boolean | false     | You can specify if you want the first element to be selected by default when loading the data                                   |
 | redraw              | boolean | false     | If this option is selected. the callback defined in the store will be fired whenever the @change event of the selector is fired |
@@ -50,7 +49,6 @@ Example of an `specification.json`
   {
     "id": "SPATIAL_AGGREGATION",
     "label": "Spatial Aggregation",
-    "group": "Aggregation",
     "setItemsOnMounted": true,
     "setDefaultFirstItem": true,
     "redraw": true,
@@ -60,7 +58,6 @@ Example of an `specification.json`
   },
   {
   "id": "SPATIAL_FILTER",
-  "group": "Filter",
   "setDefaultFirstItem": true,
   "label": "Spatial Filter",
   "actions": [],
@@ -186,14 +183,13 @@ import {
 ```
 
 ```html
-  <m-selector :store="store" id="SPATIAL_AGGREGATION"> </m-selector>
+  <m-selector :store="store" id="SPATIAL_AGGREGATION" @change="doSomethingWhenChanged"> </m-selector>
 ```
 
 | name                | type    | default   | description                                                                                                                     |
 |---------------------|---------|-----------|---------------------------------------------------------------------------------------------------------------------------------|
 | store               | Object  |           | The instance of the store created by the library                                                                                |
 | id                  | string  | undefined | Identifier of the selector to be rendered (must coincide with the id defined into the specification.json file)                  |
-| group               | String  | undefined | Identifier of the group you want to render. Renders all the selectors with de field 'group' with the same value                 |
 | i18n               | Function  | undefined | Function to i18n the labels of the selectors                 |
 
 ## Changelog
