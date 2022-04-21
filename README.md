@@ -200,6 +200,8 @@ import {
 
 [CHANGELOG.md](https://gitlab.lbd.org.es/proyectos-sig/magical-state/-/blob/main/CHANGELOG)
 
+In order to automate CHANGELOG update, developers should write commit messages following [Angular Commit Message Conventions](https://semantic-release.gitbook.io/semantic-release/#commit-message-format)
+
 ## License
 
 [MIT](http://opensource.org/licenses/MIT)
