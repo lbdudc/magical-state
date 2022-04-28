@@ -99,10 +99,12 @@ export default class Store {
     newState.forEach(async el => {
       // first check if we can change de value (appears in the items)
       const selector = utils.findElementInObservable(el.id, this._observable);
+      const res = await this._implementationInterface.getValues(el.id);
+      selector.items = res;
       if ((selector.items && selector.items.find(item => item.value === el.value)) || selector.type === "date") {
-        utils.findElementInObservable(el.id, this._observable).value = el.value;
+        selector.value = el.value;
       } else {
-        utils.findElementInObservable(el.id, this._observable).value = null;
+        selector.value = null;
       }
       set.push(
         new Promise(async (resolve) => {
