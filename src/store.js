@@ -31,6 +31,15 @@ export default class Store {
   }
 
   /**
+   * Gets the observable of a given selector id
+   * @param {String} id
+   * @returns the observable of the selector
+   */
+  getSelector(id) {
+    return this._observable.find(el => el.id === id);
+  }
+
+  /**
    * Populates the store with the initial values
    * If the selector has the property "setItemsOnMounted" setted to true,
    * we call the update function
