@@ -2,6 +2,13 @@
 
 <!--- next entry here -->
 
+## 0.3.0
+2022-04-28
+
+### Features
+
+- Created getSelector function to retrieve obsrvable with a given id (0f691ee3fe087a452e7fac7b537d8725607ac94d)
+
 ## 0.2.1
 2022-04-28
 
