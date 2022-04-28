@@ -34,6 +34,7 @@
   {
     "id": "DATE_FILTER",
     "label": "Date Filter",
+    "type": "date",
     "actions": []
   }
 ]
