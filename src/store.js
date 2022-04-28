@@ -97,7 +97,11 @@ export default class Store {
     this._state.loading = true;
     let set = [];
     newState.forEach(async el => {
-      utils.findElementInObservable(el.id, this._observable).value = el.value;
+      // first check if we can change de value (appears in the items)
+      const selector = utils.findElementInObservable(el.id, this._observable);
+      if (selector.items.find(item => item.value === el.value)) {
+        utils.findElementInObservable(el.id, this._observable).value = el.value;
+      }
       set.push(
         new Promise(async (resolve) => {
           await utils.getActionsValues(el, newState, this._implementationInterface, this._observable, this._jsonSpec);

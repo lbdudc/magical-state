@@ -145,10 +145,14 @@ const getActionsValues = (el, newState, impl, obs, jsonSpec) => {
         );
         // Setear el value del hijo si se encuentra en la lista de items que les pasamos
         const foundChild = newState.find(child => child.id === action);
-        if (foundChild) {
-          findElementInObservable(foundChild.id, obs).value = foundChild.value;
-        }
+        // Set items and check if set value can be setted
         findElementInObservable(action, obs).items = res;
+        if (foundChild) {
+          const elem = findElementInObservable(foundChild.id, obs)
+          if (elem.items.find(item => item.value === foundChild.value)) {
+            elem.value = foundChild.value
+          }
+        }
         resolve(res);
       })
     );
