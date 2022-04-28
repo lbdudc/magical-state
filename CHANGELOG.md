@@ -2,6 +2,13 @@
 
 <!--- next entry here -->
 
+## 0.2.0
+2022-04-28
+
+### Features
+
+- Added new component: mAutocomplete (820c3f603c96659dca4973b45aa29bb2c1843438)
+
 ## 0.1.0
 2022-04-21
 
