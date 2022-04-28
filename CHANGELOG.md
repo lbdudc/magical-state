@@ -2,6 +2,18 @@
 
 <!--- next entry here -->
 
+## 0.4.0
+2022-04-28
+
+### Features
+
+- Added type date to specification (43b51de17d7f1cb7d03310bcc653030e3ceb104e)
+
+### Fixes
+
+- Condition to check if the value is in the posible items to be set in the SetState method (c3fb56a7ee843ac3297cf8465fb056fc5256a2b1)
+- Check if its a date in setState method (e3e87fd098de93906f112b37c200a08be054e67a)
+
 ## 0.3.0
 2022-04-28
 
