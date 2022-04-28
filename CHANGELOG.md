@@ -2,6 +2,13 @@
 
 <!--- next entry here -->
 
+## 0.2.1
+2022-04-28
+
+### Fixes
+
+- Error on index import of mAutocomplete component (32a6bb77c5bb92a22cdb9f3a4241f82f22a5efcd)
+
 ## 0.2.0
 2022-04-28
 
