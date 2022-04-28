@@ -2,6 +2,13 @@
 
 <!--- next entry here -->
 
+## 0.4.1
+2022-04-28
+
+### Fixes
+
+- Await for items on parent selector to check if we can vhange the value (1e01adf1186729f76c7931259e32dae845be3f9d)
+
 ## 0.4.0
 2022-04-28
 
