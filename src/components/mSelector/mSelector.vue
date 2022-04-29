@@ -3,16 +3,33 @@
     <v-row no-gutters>
       <v-col cols="12">
         <v-select
-          :label="i18Label(item.label)"
-          :items="item.items"
-          :loading="item.loading || store.state.loading"
-          :disabled="item.loading || store.state.loading"
+          :append-icon="appendIcon"
+          :append-outer-icon="appendOuterIcon"
+          :background-color="backgroundColor"
+          :chips="chips"
           :clearable="clearable"
+          :color="color"
+          :deletable-chips="deletableChips"
           :dense="dense"
-          :outlined="outlined"
-          v-model="item.value"
+          :disabled="item.loading || store.state.loading"
+          :filled="filled"
+          :flat="flat"
+          :hint="hint"
+          :item-color="itemColor"
           :item-text="(el) => i18Label(el.label)"
+          :items="item.items"
+          :label="i18Label(item.label)"
+          :loading="item.loading || store.state.loading"
+          :multiple="multiple"
+          :outlined="outlined"
+          :persistent-hint="persistentHint"
+          :prepend-icon="prependIcon"
+          :prepend-inner-icon="prependInnerIcon"
+          :reverse="reverse"
+          :small-chips="smallChips"
+          :solo="solo"
           item-value="value"
+          v-model="item.value"
           @change="store.change(item.id, item.value)"
         ></v-select>
       </v-col>
@@ -54,6 +71,91 @@ export default {
       default: false,
     },
     dense: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
+    multiple: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
+    appendIcon: {
+      type: String,
+      required: false,
+      default: "$dropdown",
+    },
+    appendOuterIcon: {
+      type: String,
+      required: false,
+      default: null,
+    },
+    prependIcon: {
+      type: String,
+      required: false,
+      default: null,
+    },
+    prependInnerIcon: {
+      type: String,
+      required: false,
+      default: null,
+    },
+    color: {
+      type: String,
+      required: false,
+      default: null,
+    },
+    backgroundColor: {
+      type: String,
+      required: false,
+      default: null,
+    },
+    itemColor: {
+      type: String,
+      required: false,
+      default: "primary",
+    },
+    chips: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
+    smallChips: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
+    deletableChips: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
+    filled: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
+    solo: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
+    flat: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
+    reverse: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
+    hint: {
+      type: String,
+      required: false,
+      default: null,
+    },
+    persistentHint: {
       type: Boolean,
       required: false,
       default: false,
