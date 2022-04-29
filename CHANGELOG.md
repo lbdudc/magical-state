@@ -2,6 +2,13 @@
 
 <!--- next entry here -->
 
+## 0.5.0
+2022-04-29
+
+### Features
+
+- Added more visual customization on mSelect and mAutocomplete components (16c0df249890889132640691f6e9aea6293a686d)
+
 ## 0.4.1
 2022-04-28
 
