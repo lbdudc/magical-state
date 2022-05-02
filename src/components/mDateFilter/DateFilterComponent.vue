@@ -9,25 +9,30 @@
   >
     <template v-slot:activator="{ on, attrs }">
       <v-text-field
-        v-model="storeElement.value"
+        :color="color"
+        :dense="dense"
+        :filled="filled"
+        :flat="flat"
         :label="i18Label(storeElement.label)"
-        append-icon="mdi-calendar"
         :loading="storeElement.loading || store.state.loading"
+        :outlined="outlined"
+        append-icon="mdi-calendar"
         readonly
         v-bind="attrs"
+        v-model="storeElement.value"
         v-on="on"
       ></v-text-field>
     </template>
     <v-date-picker
-      :max="new Date().toISOString().slice(0, 10)"
-      v-model="storeElement.value"
-      persistent-hint
       :locale="$i18n.locale"
+      :max="new Date().toISOString().slice(0, 10)"
       :next-month-aria-label="i18Label('datePicker.nextMonthAriaLabel')"
+      :next-year-aria-label="i18Label('datePicker.nextYearAriaLabel')"
       :prev-month-aria-label="i18Label('datePicker.prevMonthAriaLabel')"
       :prev-year-aria-label="i18Label('datePicker.prevYearAriaLabel')"
-      :next-year-aria-label="i18Label('datePicker.nextYearAriaLabel')"
       no-title
+      persistent-hint
+      v-model="storeElement.value"
       @input="
         () => {
           daySelected(storeElement.value, 0);
@@ -66,6 +71,31 @@ export default {
       type: String,
       required: false,
       default: "Picker date",
+    },
+    dense: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
+    outlined: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
+    filled: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
+    flat: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
+    color: {
+      type: String,
+      required: false,
+      default: null,
     },
   },
   computed: {
