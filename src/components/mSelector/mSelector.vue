@@ -169,11 +169,13 @@ export default {
   watch: {
     "item.value": {
       handler(newVal) {
-        this.$emit("change", {
-          id: this.item.id,
-          value: newVal,
-          store: this.store.observable,
-        });
+        if (!this.store.state.loading) {
+          this.$emit("change", {
+            id: this.item.id,
+            value: newVal,
+            store: this.store.observable,
+          });
+        }
       },
       deep: true,
     },
