@@ -30,6 +30,18 @@ export default class Store {
     return this._state;
   }
 
+
+  /**
+   * Returns the actual state of the store, formated like an object
+   * (its going to be used to send this as query params to update the URL)
+   */
+  get objFromObservable() {
+    return this._observable.reduce(
+      (obj, cur) => ({ ...obj, [cur.id]: cur.value }),
+      Object.create(Object.prototype)
+    )
+  }
+
   /**
    * Gets the observable of a given selector id
    * @param {String} id
