@@ -9,7 +9,8 @@
           <m-selector :store="store" id="TEMPORAL_FILTER"> </m-selector>
         </v-row>
         <v-divider class="ma-10"></v-divider>
-        <span>{{ storeContent }}</span>
+        <span>{{ store }}</span>
+        <v-btn @click="routeChange"></v-btn>
       </v-col>
     </v-row>
   </v-container>
@@ -37,6 +38,11 @@ export default {
     this.store = new Store(jsonSpec, this.implementacion, (storeContent) => {
       this.storeContent = storeContent;
     });
+  },
+  methods: {
+    routeChange() {
+      console.log(this.store.route);
+    },
   },
 };
 </script>

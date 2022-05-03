@@ -66,16 +66,19 @@ export default {
       customText: null,
     };
   },
-  mounted() {
+  async mounted() {
     this.implementacion = new MyInterface();
     this.store = new Store(jsonSpec, this.implementacion, (storeContent) => {
       this.storeContent = storeContent;
     });
+
+    await this.updateState();
+    this.redirect();
   },
   methods: {
-    updateState() {
+    async updateState() {
       this.customText = null;
-      this.store.setState(initialState, true);
+      await this.store.setState(initialState, true);
     },
     updateCustomState() {
       this.storeContent = null;
@@ -86,6 +89,14 @@ export default {
     },
     changed(res) {
       console.log("holis", res);
+      this.redirect();
+    },
+    redirect() {
+      console.log(this.store.objFromObservable);
+      // this.$router.replace({
+      //   path: this.$route.path,
+      //   query: this.store.objFromObservable,
+      // });
     },
   },
 };
