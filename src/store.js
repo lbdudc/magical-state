@@ -96,25 +96,24 @@ export default class Store {
   async setState(newState, executeCallback, customCallback) {
     this._state.loading = true;
     let set = [];
-    newState.forEach(async el => {
+    newState.forEach(async (el) => {
       // first check if we can change de value (appears in the items)
       const selector = utils.findElementInObservable(el.id, this._observable);
-      const res = await this._implementationInterface.getValues(el.id);
-      selector.items = res;
-      if ((selector.items && selector.items.find(item => item.value === el.value)) || selector.type === "date") {
-        selector.value = el.value;
-      } else {
-        selector.value = null;
-      }
-      set.push(
-        new Promise(async (resolve) => {
-          await utils.getActionsValues(el, newState, this._implementationInterface, this._observable, this._jsonSpec);
-          resolve();
-        })
+      set.push(new Promise(async (resolve) => {
+        const res = await this._implementationInterface.getValues(el.id);
+        selector.items = res;
+        if ((selector.items && selector.items.find(item => item.value === el.value)) || selector.type === "date") {
+          selector.value = el.value;
+        } else {
+          selector.value = null;
+        }
+        await (utils.getActionsValues(el, newState, this._implementationInterface, this._observable, this._jsonSpec))
+        resolve()
+      })
       )
     })
 
-    Promise.all(set).then(() => {
+    return Promise.all(set).then(() => {
       this._state.loading = false;
       if (executeCallback) {
         if (customCallback) {
