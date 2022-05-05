@@ -52,6 +52,20 @@ export default class Store {
   }
 
   /**
+   * Sets the value of a selector
+   * @param id - the id of the selector
+   * @param value - The value to be set
+   */
+  async setSelector(id, value) {
+    const obs = utils.findElementInObservable(id, this._observable);
+    if (obs.items && obs.items.find(el => el.id = value) != null) {
+      obs.value = value;
+      // If we update the value of the selector, we need to call its updated event
+      this.change(obs.id, value);
+    }
+  }
+
+  /**
    * Populates the store with the initial values
    * If the selector has the property "setItemsOnMounted" setted to true,
    * we call the update function
@@ -174,6 +188,9 @@ export default class Store {
           new Promise(async (resolve, reject) => {
             // Get the element of the observable child
             const obsItem = utils.findElementInObservable(el, this._observable);
+
+            obsItem.items = []
+            obsItem.value = null;
 
             // If a child need to be redrawn, we set the needsRedraw property to true for later
             if (obsItem.redraw) needsRedraw = true;
