@@ -26,8 +26,8 @@
 </template>
 <script>
 import jsonSpec from "./specification.json";
-import { Store } from "../../../../index";
-import { MSelector, MDateFilter } from "../../../../vue2-components";
+import { Store } from "../../../../../index";
+import { MSelector, MDateFilter } from "../../../../../vue2-components";
 import getValues from "./getters";
 
 const initialState = [
