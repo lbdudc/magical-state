@@ -41,6 +41,7 @@ const createStore = (jsonSpec) => {
       value: el.default,
       loading: false,
       showed: true,
+      emitEvt: false,
       type: el.type,
       default: el.default,
       group: el.group || null,
@@ -111,15 +112,12 @@ const isElementInRequiredField = (element, jsonSpec, obs) => {
  * @param {Object} obs
  */
 const resetDependedSelectors = (element, jsonSpec, obs) => {
-  jsonSpec.forEach((specElement) => {
-    if (specElement.required && specElement.length !== 0) {
-      const act = specElement.required.find((action) => action === element);
-      if (act) {
-        const obsElement = findElementInObservable(specElement.id, obs);
-        obsElement.value = null;
-      }
-    }
-  });
+  const el = findJsonSpecElement(element, jsonSpec);
+  el.actions.forEach(child => {
+    const childElement = findElementInObservable(child, obs);
+    childElement.value = undefined;
+    childElement.items = [];
+  })
 };
 
 /**
