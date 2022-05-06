@@ -1,0 +1,19 @@
+[
+  {
+    "id": "SPATIAL_AGGREGATION",
+    "label": "Spatial Aggregation",
+    "redraw": true,
+    "actions": [
+      "SPATIAL_FILTER"
+    ]
+  },
+  {
+    "id": "SPATIAL_FILTER",
+    "label": "Spatial Filter",
+    "actions": [],
+    "redraw": true,
+    "required": [
+      "SPATIAL_AGGREGATION"
+    ]
+  }
+]
