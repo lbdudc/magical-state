@@ -2,6 +2,13 @@
 
 <!--- next entry here -->
 
+## 0.5.1
+2022-05-09
+
+### Fixes
+
+- Added onchange event only when all the children are finished (f89ee02792b5841390eb6a737e3dbdfe925db3d4)
+
 ## 0.5.0
 2022-04-29
 
