@@ -89,7 +89,7 @@ export default {
     },
   },
   watch: {
-    "storeElement.value": {
+    "storeElement.emitEvt": {
       handler(newVal) {
         if (!this.store.state.loading) {
           this.$emit("change", {

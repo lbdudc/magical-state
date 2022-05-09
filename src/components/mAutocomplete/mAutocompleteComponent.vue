@@ -167,7 +167,7 @@ export default {
     },
   },
   watch: {
-    "item.value": {
+    "item.emitEvt": {
       handler(newVal) {
         if (!this.store.state.loading) {
           this.$emit("change", {

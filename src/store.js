@@ -30,7 +30,6 @@ export default class Store {
     return this._state;
   }
 
-
   /**
    * Returns the actual state of the store, formated like an object
    * (its going to be used to send this as query params to update the URL)
@@ -58,7 +57,7 @@ export default class Store {
    */
   async setSelector(id, value) {
     const obs = utils.findElementInObservable(id, this._observable);
-    if (obs.items && obs.items.find(el => el.id = value) != null) {
+    if ((obs.items && obs.items.find(el => el.id = value) != null) || (obs.type === "date")) {
       obs.value = value;
       // If we update the value of the selector, we need to call its updated event
       this.change(obs.id, value);
@@ -189,9 +188,6 @@ export default class Store {
             // Get the element of the observable child
             const obsItem = utils.findElementInObservable(el, this._observable);
 
-            obsItem.items = []
-            obsItem.value = null;
-
             // If a child need to be redrawn, we set the needsRedraw property to true for later
             if (obsItem.redraw) needsRedraw = true;
 
@@ -205,7 +201,7 @@ export default class Store {
             );
 
             // Set the items into the selector and end the loading state
-            obsItem.value = obsItem.default;
+            obsItem.value = obsItem.default || undefined;
             this._setDefaultFirstItem(obsItem, res);
             obsItem.items = res;
             obsItem.loading = false;
@@ -218,6 +214,10 @@ export default class Store {
     // Await for all the promises in the children to be resolved
     Promise.all(act)
       .then((res) => {
+        // Change emit flag forcing vue to send an emit event
+        const obs = utils.findJsonSpecElement(propId, this._observable);
+        obs.emitEvt = !obs.emitEvt;
+
         // If the element has a redraw property, call the callback funct
         if (needsRedraw) this._callback(this._observable.filter(el => el.value).map(el => {
           return { id: el.id, value: el.value }
