@@ -57,7 +57,7 @@ export default class Store {
    */
   async setSelector(id, value) {
     const obs = utils.findElementInObservable(id, this._observable);
-    if ((obs.items && obs.items.find(el => el.id = value) != null) || (obs.type === "date")) {
+    if ((obs.items && obs.items.find(el => el.id = value) != null) || (obs.type === "date") || (value == null)) {
       obs.value = value;
       // If we update the value of the selector, we need to call its updated event
       this.change(obs.id, value);
