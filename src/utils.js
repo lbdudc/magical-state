@@ -130,14 +130,14 @@ const resetDependedSelectors = (element, jsonSpec, obs) => {
  * @param {Array} jsonSpec jsonSpec of the store
  * @returns a promise that resolves when all the children are fullfilled
  */
-const getActionsValues = (el, newState, impl, obs, jsonSpec) => {
+const getActionsValues = (el, newState, getValues, obs, jsonSpec) => {
   const act = [];
   findJsonSpecElement(el.id, jsonSpec).actions.forEach(async (action) => {
     act.push(
       new Promise(async (resolve, reject) => {
         // Get the element of the observable child
         // const obsItem = utils.findElementInObservable(el, this._observable);
-        const res = await impl.getValues(
+        const res = await getValues(
           action,
           el.value,
           getStoreKeyValues(obs)

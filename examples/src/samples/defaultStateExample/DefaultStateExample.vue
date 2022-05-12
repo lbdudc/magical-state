@@ -35,7 +35,7 @@
 <script>
 import jsonSpec from "./specification.json";
 import { Store, MSelector, MDateFilter } from "../../../../index";
-import MyInterface from "./gettersImplementation";
+import getValues from "./getters";
 
 const initialState = [
   {
@@ -67,8 +67,7 @@ export default {
     };
   },
   async mounted() {
-    this.implementacion = new MyInterface();
-    this.store = new Store(jsonSpec, this.implementacion, (storeContent) => {
+    this.store = new Store(jsonSpec, getValues, (storeContent) => {
       this.storeContent = storeContent;
     });
 
