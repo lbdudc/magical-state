@@ -1,7 +1,7 @@
 import utils from "./utils";
 
 export default class Store {
-  constructor(jsonSpec, implementationInterface, callback) {
+  constructor(jsonSpec, getValues, callback) {
     this._jsonSpec = jsonSpec;
     this._store = {};
     this._observable = null;
@@ -9,7 +9,7 @@ export default class Store {
       loading: true,
     }
     this._callback = callback;
-    this._implementationInterface = implementationInterface;
+    this._getValues = getValues;
 
     // TODO check if the jsonSpec is valid
     utils.checkJsonSpec(this._jsonSpec);
@@ -88,7 +88,7 @@ export default class Store {
     el.loading = true;
 
     // Await for the implementation to get the items
-    const res = await this._implementationInterface.getValues(el.id);
+    const res = await this._getValues(el.id);
 
     // Check if the element needs to set in value the first item retrieved
     this._setDefaultFirstItem(el, res);
@@ -125,14 +125,14 @@ export default class Store {
       // first check if we can change de value (appears in the items)
       const selector = utils.findElementInObservable(el.id, this._observable);
       set.push(new Promise(async (resolve) => {
-        const res = await this._implementationInterface.getValues(el.id);
+        const res = await this._getValues(el.id);
         selector.items = res;
         if ((selector.items && selector.items.find(item => item.value === el.value)) || selector.type === "date") {
           selector.value = el.value;
         } else {
           selector.value = null;
         }
-        await (utils.getActionsValues(el, newState, this._implementationInterface, this._observable, this._jsonSpec))
+        await (utils.getActionsValues(el, newState, this._getValues, this._observable, this._jsonSpec))
         resolve()
       })
       )
@@ -194,7 +194,7 @@ export default class Store {
             // Set the loading state of the child to true
             // Await for the implementation to get the items
             obsItem.loading = true;
-            const res = await this._implementationInterface.getValues(
+            const res = await this._getValues(
               el,
               newVal,
               utils.getStoreKeyValues(this._observable)

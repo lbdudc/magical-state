@@ -19,7 +19,7 @@
 <script>
 import jsonSpec from "./specification.json";
 import { Store, MSelector } from "../../../../index";
-import MyInterface from "./gettersImplementation";
+import getValues from "./getters";
 
 export default {
   name: "AggregationsExample",
@@ -34,8 +34,7 @@ export default {
     };
   },
   mounted() {
-    this.implementacion = new MyInterface();
-    this.store = new Store(jsonSpec, this.implementacion, (storeContent) => {
+    this.store = new Store(jsonSpec, getValues, (storeContent) => {
       this.storeContent = storeContent;
     });
   },

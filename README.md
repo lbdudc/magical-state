@@ -21,10 +21,10 @@ You can see a more detailed example in the folder `./examples` inside this proje
 Steps to follow are:
 
 1. Define [`specification.json`](#define-a-specificationjson-file)
-2. Create an [interface implementation](#add-the-implementation-of-fetching-data)
+2. Define how to [retrieve values to the selectors](#add-the-implementation-of-fetching-data)
 3. Create an [store](#create-the-store)
 4. [Change the current status](#update-the-selectors-state-optional) of the store
-4. Add the [.vue components (optional)](#add-component-selectors-optional)
+5. Add the [.vue components (optional)](#add-component-selectors-optional)
 
 ### Define a `specification.json` file
 
@@ -80,31 +80,28 @@ You must be careful with defining cyclic dependencies between selectors, and tha
 
 We must define how we are going to want to retrieve the necessary information to populate each of our selectors.
 
-To do this, we extend the interface provided by the library, and implement the 'getValues' method.
-
-We create a new interface `MyInterface.js`
+To do this, we create a 'getValues' method.
 
 ```js
-import { InterfaceGetters } from "magical-state/index";
-
-export default class MyInterface extends InterfaceGetters {
-  async getValues(propId, params) {
-    switch (propId) {
-      case "SPATIAL_AGGREGATION":
-        return aggregationService.getSpatialItems();
-      case "TEMPORAL_AGGREGATION":
-        return aggregationService.getTemporalItems();
-      case "TEMPORAL_FILTER":
-        return filterService.getTemporalFilterItems(params);
-      case "SPATIAL_FILTER":
-        return filterService.getSpatialFilterItems(params);
-    }
+export default async (propId, params, store) =>  {
+  switch (propId) {
+    case "SPATIAL_AGGREGATION":
+      return aggregationService.getSpatialItems();
+    case "TEMPORAL_AGGREGATION":
+      return aggregationService.getTemporalItems();
+    case "TEMPORAL_FILTER":
+      return filterService.getTemporalFilterItems(params);
+    case "SPATIAL_FILTER":
+      return filterService.getSpatialFilterItems(params);
   }
 }
+
 ```
 
 `propId:` Name of the selector from which we want to retrieve the possible values ​​to populate the selector.
-`parentValue:` Name of the value returned by the parent selector.
+
+`params:` Name of the value returned by the parent selector.
+
 `store`:  List of objects {id: "id", value: "value"} representing actual state of the store.
 
 ---
@@ -130,7 +127,6 @@ Into your component (normally a .vue file), import your `specification.json` and
 
 ```js
 import jsonSpec from "./specification.json";
-import MyInterface from "./storeImpl.js";
 import {
   Store
 } from "./magical-state/index.js";
@@ -139,8 +135,9 @@ import {
 ...
 ...
 
-this.implementacion = new MyInterface();
-this.store = new Store(jsonSpec, this.implementacion, (currentState) => {
+this.store = new Store(jsonSpec, 
+  (propId, params, store) => { return await [{ ... }] }, 
+  (currentState) => {
   console.log(`Your current state is: [${currentState}]`);
 });
 ```
