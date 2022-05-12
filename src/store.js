@@ -42,6 +42,23 @@ export default class Store {
   }
 
   /**
+   * It returns the encoded URL of the store.
+   * @returns A string of the store's values, encoded in base64.
+   */
+  exportStoreEncodedURL() {
+    return utils.exportStoreEncodedURL(this._observable)
+  }
+
+  /**
+   * It takes a URL, decodes it, and then parses the decoded URL
+   * @param url - The URL to import.
+   * @returns An array of objects with the id and value of each element in the store.
+   */
+  importStoreEncodedURL(url) {
+    return utils.importStoreDecodedURL(url, this._store);
+  }
+
+  /**
    * Gets the observable of a given selector id
    * @param {String} id
    * @returns the observable of the selector
@@ -154,7 +171,6 @@ export default class Store {
     }
     );
   }
-
 
   /**
    * Calls the callbacks of the elements that depend on the element that has changed

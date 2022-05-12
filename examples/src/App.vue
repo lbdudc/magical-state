@@ -6,6 +6,7 @@
       <v-btn @click="picked = 'Example1'">Aggregations</v-btn>
       <v-btn @click="picked = 'Example2'">Instants</v-btn>
       <v-btn @click="picked = 'Example3'">Default State</v-btn>
+      <v-btn @click="picked = 'Example4'">Update State</v-btn>
     </v-row>
   </v-app>
 </template>
@@ -14,6 +15,7 @@
 import AggregationsExample from "./samples/aggregationsExample/AggregationsExample";
 import InstantsExample from "./samples/instantsExample/InstantsExample";
 import DefaultStateExample from "./samples/defaultStateExample/DefaultStateExample";
+import UpdateStateExample from "./samples/updateStateExample/UpdateStateExample";
 
 export default {
   name: "App",
@@ -21,6 +23,7 @@ export default {
     AggregationsExample,
     InstantsExample,
     DefaultStateExample,
+    UpdateStateExample,
   },
   data() {
     return { picked: localStorage.getItem("picked") };
@@ -35,6 +38,8 @@ export default {
           return InstantsExample;
         case "Example3":
           return DefaultStateExample;
+        case "Example4":
+          return UpdateStateExample;
         default:
           return AggregationsExample;
       }

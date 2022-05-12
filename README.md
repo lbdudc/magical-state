@@ -14,6 +14,16 @@ Add the dependency for your proyect into `package.json`
 "magical-state": "git+https://gitlab.lbd.org.es/publico/magical-state.git"
 ```
 
+## Store methods
+
+- ```exportStoreEncodedURL(): String```: Returns an encoded URL with the current state of the store.
+- ```importStoreEncodedURL(url): Array<{String id, Any value}>```: Parses the URL and returns a valid State of the store (normally to be used with ```setState``` method ).
+- ```change(String propId, Any newVal): void```: Changes the value of the selector with the given id.
+- ```setState(Array<{String id, Any value}> newState, Boolean executeCallback, Function customCallback)```: Sets the state of the store, second param specifies if want to execute the redraw method, or a custom one (third param).
+- ```setSelector(String selectorId, Any newVal)```: Changes the value of the selector with the given id.
+- ```getSelector(String selectorId): Proxy```: Returns the value of the selector with the given id).
+- ```(getter) objFromObservable: Array<{String id, Any value}>```: Returns a copy of the actual state of the store.
+
 ## Usage
 
 You can see a more detailed example in the folder `./examples` inside this project.
