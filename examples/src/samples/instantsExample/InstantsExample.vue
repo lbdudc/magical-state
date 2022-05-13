@@ -27,12 +27,12 @@
 
 <script>
 import jsonSpec from "./specification.json";
+import { Store } from "../../../../index";
 import {
-  Store,
   MDateFilter,
   MListSelector,
   MTimeline,
-} from "../../../../index";
+} from "../../../../vue2-components";
 import getValues from "./getters";
 
 export default {

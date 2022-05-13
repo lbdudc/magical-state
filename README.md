@@ -187,7 +187,7 @@ Then you normally would like to add the m-selector components, given by the libr
 ```js
 import {
   MSelector,
-} from "./magical-state/index.js";
+} from "./magical-state/vue2-components";
 ```
 
 ```html
