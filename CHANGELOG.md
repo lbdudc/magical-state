@@ -2,6 +2,20 @@
 
 <!--- next entry here -->
 
+## 0.6.0
+2022-05-13
+
+### Breaking changes
+
+#### Changed the way vue2-components are imported / deleted from index to be more vanilla (bf97d615440d00fe756410524a256096326fd120)
+
+changed the way import the vue components
+
+### Features
+
+- Changed interfaceGetters to a getValues method only (a41de54cd486379195770a2191d094882ec1d0c2)
+- Added import/export URL methods encoded/decoded in base64 (5efcb8e47706aed64956ca5067fd2a7ed654f388)
+
 ## 0.5.1
 2022-05-09
 
