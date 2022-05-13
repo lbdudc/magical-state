@@ -50,12 +50,21 @@ export default class Store {
   }
 
   /**
-   * It takes a URL, decodes it, and then parses the decoded URL
+   * It takes a URL, decodes it, and then updates the state of the store
    * @param url - The URL to import.
-   * @returns An array of objects with the id and value of each element in the store.
    */
-  importStoreEncodedURL(url) {
-    return utils.importStoreDecodedURL(url, this._store);
+  async importStoreEncodedURL(url) {
+    const decodedUrl = utils.decodeURL(url, this._store);
+    await this.setState(decodedUrl);
+  }
+
+  /**
+   * It takes a URL and returns a decoded URL
+   * @param url - The URL to decode.
+   * @returns The decoded URL.
+   */
+  decodeURL(url) {
+    return utils.decodeURL(url, this._store);
   }
 
   /**

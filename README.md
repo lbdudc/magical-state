@@ -17,7 +17,8 @@ Add the dependency for your proyect into `package.json`
 ## Store methods
 
 - ```exportStoreEncodedURL(): String```: Returns an encoded URL with the current state of the store.
-- ```importStoreEncodedURL(url): Array<{String id, Any value}>```: Parses the URL and returns a valid State of the store (normally to be used with ```setState``` method ).
+- ```importStoreEncodedURL(url): void```: Parses the URL and sets the state of the store).
+- ```decodeUrl(url): Array<{String id, Any value}>```: Parses the URL and returns the decoded state of the store).
 - ```change(String propId, Any newVal): void```: Changes the value of the selector with the given id.
 - ```setState(Array<{String id, Any value}> newState, Boolean executeCallback, Function customCallback)```: Sets the state of the store, second param specifies if want to execute the redraw method, or a custom one (third param).
 - ```setSelector(String selectorId, Any newVal)```: Changes the value of the selector with the given id.

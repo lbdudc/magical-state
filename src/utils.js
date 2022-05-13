@@ -181,7 +181,7 @@ const exportStoreEncodedURL = (obs) => {
  * @param url - The encoded URL that you want to decode.
  * @returns An array of objects with the id and value of each element in the store.
  */
-const importStoreDecodedURL = (url, store) => {
+const decodeURL = (url, store) => {
   const decoded = window.atob(url);
   const decodedArray = decoded.split("&");
 
@@ -218,6 +218,6 @@ export default {
   resetDependedSelectors,
   getActionsValues,
   getStoreKeyValues,
-  importStoreDecodedURL,
+  decodeURL,
   exportStoreEncodedURL
 };

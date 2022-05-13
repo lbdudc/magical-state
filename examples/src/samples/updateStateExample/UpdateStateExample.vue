@@ -56,8 +56,7 @@ export default {
     },
     async updateState() {
       const enc = window.location.search;
-      const initialState = this.store.importStoreEncodedURL(enc.substring(1));
-      await this.store.setState(initialState);
+      await this.store.importStoreEncodedURL(enc.substring(1));
     },
   },
 };
