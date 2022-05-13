@@ -161,6 +161,52 @@ const getActionsValues = (el, newState, getValues, obs, jsonSpec) => {
   return Promise.all(act);
 }
 
+/**
+ * It takes the store, maps it to an array of objects with the id, value, and index of each element,
+ * filters out the elements that have no value, then maps the array to a string of key-value pairs, and
+ * finally joins the array with an ampersand
+ * @returns A string of the store's values, encoded in base64.
+ */
+const exportStoreEncodedURL = (obs) => {
+  const parsedStore = obs.map((el, index) => {
+    return { id: el.id, value: el.value, index: index }
+  }).filter(el => el.value);
+
+  return window.btoa(parsedStore.map(el => `${el.index}=${el.value}`).join("&"))
+};
+
+/**
+ * It takes a URL, decodes it, splits it into an array, maps the array into an object, and then returns
+ * the object
+ * @param url - The encoded URL that you want to decode.
+ * @returns An array of objects with the id and value of each element in the store.
+ */
+const decodeURL = (url, store) => {
+  const decoded = window.atob(url);
+  const decodedArray = decoded.split("&");
+
+  const decodedObj = decodedArray.map(el => {
+    const [key, value] = el.split("=");
+    // Check if the value is an integer, else return string
+    if (Number.isInteger(Number(value)))
+      return { id: key, value: Number(value) };
+    return { id: key, value: value };
+
+  });
+
+  const result = JSON.parse(JSON.stringify(store));
+  decodedObj.forEach(el => {
+    result[el.id].value = el.value;
+  });
+
+  return Object.keys(result).map(key => {
+    return {
+      id: result[key].id,
+      value: result[key].value
+    }
+  });
+}
+
 export default {
   checkJsonSpec,
   findJsonSpecElement,
@@ -172,4 +218,6 @@ export default {
   resetDependedSelectors,
   getActionsValues,
   getStoreKeyValues,
+  decodeURL,
+  exportStoreEncodedURL
 };
