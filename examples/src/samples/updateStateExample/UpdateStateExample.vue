@@ -23,7 +23,9 @@
 </template>
 <script>
 import jsonSpec from "./specification.json";
-import { Store, MSelector, MDateFilter } from "../../../../index";
+import { Store } from "../../../../index";
+import { MSelector, MDateFilter } from "../../../../vue2-components";
+
 import getValues from "./getters";
 
 export default {

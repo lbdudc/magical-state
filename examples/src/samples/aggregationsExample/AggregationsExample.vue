@@ -18,7 +18,9 @@
 
 <script>
 import jsonSpec from "./specification.json";
-import { Store, MSelector } from "../../../../index";
+import { Store } from "../../../../index";
+import { MSelector } from "../../../../vue2-components";
+
 import getValues from "./getters";
 
 export default {
