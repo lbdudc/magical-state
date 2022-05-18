@@ -234,15 +234,15 @@ export default class Store {
     // Await for all the promises in the children to be resolved
     Promise.all(act)
       .then((res) => {
-        // Change emit flag forcing vue to send an emit event
-        const obs = utils.findJsonSpecElement(propId, this._observable);
-        obs.emitEvt = !obs.emitEvt;
+        // Emitting event selector changed
+        const customEvt = utils.createCustomEvent("change", { id: el.id, value: el.value, store: this._store });
+        document.dispatchEvent(customEvt);
 
         // If the element has a redraw property, call the callback funct
         if (needsRedraw) {
           const dataObj = {};
           this._observable.filter(el => el.value != null).forEach(el => (dataObj[el.id] = el.value))
-          fn(dataObj);
+          this._callback(dataObj);
         }
       })
       .catch((err) => {

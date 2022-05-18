@@ -19,7 +19,7 @@ Add the dependency for your proyect into `package.json`
 - ```exportStoreEncodedURL(): String```: Returns an encoded URL with the current state of the store.
 - ```importStoreEncodedURL(url): void```: Parses the URL and sets the state of the store).
 - ```decodeUrl(url): Array<{String id, Any value}>```: Parses the URL and returns the decoded state of the store).
-- ```change(String propId, Any newVal): void```: Changes the value of the selector with the given id.
+- ```change(String propId, Any newVal): void```: Changes the value of the selector with the given id and emits an event "change" which contains: the store, the before mentioned id of the selector and its new set value.
 - ```setState(Array<{String id, Any value}> newState, Boolean executeCallback, Function customCallback)```: Sets the state of the store, second param specifies if want to execute the redraw method, or a custom one (third param).
 - ```setSelector(String selectorId, Any newVal)```: Changes the value of the selector with the given id.
 - ```getSelector(String selectorId): Proxy```: Returns the value of the selector with the given id).
@@ -191,7 +191,7 @@ import {
 ```
 
 ```html
-  <m-selector :store="store" id="SPATIAL_AGGREGATION" @change="doSomethingWhenChanged"> </m-selector>
+  <m-selector :store="store" id="SPATIAL_AGGREGATION"> </m-selector>
 ```
 
 | name                | type    | default   | description                                                                                                                     |

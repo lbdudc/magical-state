@@ -3,24 +3,12 @@
     <v-row>
       <v-col v-if="store" cols="12">
         <v-row>
-          <m-selector
-            :store="store"
-            id="SPATIAL_AGGREGATION"
-            :i18n="$t"
-            @change="changed"
-          >
+          <m-selector :store="store" id="SPATIAL_AGGREGATION" :i18n="$t">
           </m-selector>
-          <m-selector
-            :store="store"
-            id="TEMPORAL_AGGREGATION"
-            :i18n="$t"
-            @change="changed"
-          >
+          <m-selector :store="store" id="TEMPORAL_AGGREGATION" :i18n="$t">
           </m-selector>
-          <m-selector :store="store" id="SPATIAL_FILTER" @change="changed">
-          </m-selector>
-          <m-selector :store="store" id="TEMPORAL_FILTER" @change="changed">
-          </m-selector>
+          <m-selector :store="store" id="SPATIAL_FILTER"> </m-selector>
+          <m-selector :store="store" id="TEMPORAL_FILTER"> </m-selector>
           <m-date-filter :store="store" id="DATE_FILTER"></m-date-filter>
         </v-row>
         <v-divider class="ma-10"></v-divider>
@@ -74,6 +62,11 @@ export default {
 
     await this.updateState();
     this.redirect();
+
+    document.addEventListener("change", (event) => {
+      console.log("holis", event.detail);
+      this.redirect();
+    });
   },
   methods: {
     async updateState() {
@@ -86,10 +79,6 @@ export default {
         console.log(this.store._observable);
         this.customText = "I am custom";
       });
-    },
-    changed(res) {
-      console.log("holis", res);
-      this.redirect();
     },
     redirect() {
       console.log(this.store.objFromObservable);

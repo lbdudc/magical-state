@@ -41,7 +41,6 @@ const createStore = (jsonSpec) => {
       value: el.default,
       loading: false,
       showed: true,
-      emitEvt: false,
       type: el.type,
       default: el.default,
       group: el.group || null,
@@ -207,6 +206,10 @@ const decodeURL = (url, store) => {
   });
 }
 
+const createCustomEvent = (nameEvent, detail) => {
+  return new CustomEvent(nameEvent, { detail: detail });
+}
+
 export default {
   checkJsonSpec,
   findJsonSpecElement,
@@ -219,5 +222,6 @@ export default {
   getActionsValues,
   getStoreKeyValues,
   decodeURL,
-  exportStoreEncodedURL
+  exportStoreEncodedURL,
+  createCustomEvent
 };

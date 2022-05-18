@@ -3,19 +3,14 @@
     <v-row>
       <v-col v-if="store" cols="12">
         <v-row>
-          <MDateFilter
-            id="DATE_FILTER"
-            :store="store"
-            :i18n="$t"
-            @change="changed"
-          />
+          <MDateFilter id="DATE_FILTER" :store="store" :i18n="$t" />
         </v-row>
         <v-row>
-          <MListSelector id="INSTANT_FILTER" :store="store" @change="changed" />
+          <MListSelector id="INSTANT_FILTER" :store="store" />
         </v-row>
         <v-row>
           <v-col cols="12">
-            <MTimeline id="INSTANT_FILTER" :store="store" @change="changed" />
+            <MTimeline id="INSTANT_FILTER" :store="store" />
           </v-col>
         </v-row>
         <v-divider class="ma-10"></v-divider>
@@ -50,11 +45,9 @@ export default {
     this.store = new Store(jsonSpec, getValues, (storeContent) => {
       this.storeContent = storeContent;
     });
-  },
-  methods: {
-    changed(res) {
-      console.log("holis", res);
-    },
+    document.addEventListener("change", (event) => {
+      console.log("holis", event.detail);
+    });
   },
 };
 </script>

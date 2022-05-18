@@ -166,20 +166,6 @@ export default {
       return this.store.observable.find((el) => el.id === this.id);
     },
   },
-  watch: {
-    "item.emitEvt": {
-      handler(newVal) {
-        if (!this.store.state.loading) {
-          this.$emit("change", {
-            id: this.item.id,
-            value: newVal,
-            store: this.store.observable,
-          });
-        }
-      },
-      deep: true,
-    },
-  },
   methods: {
     i18Label(label) {
       if (label) return this.i18n ? this.i18n(label) : label;
