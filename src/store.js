@@ -131,9 +131,10 @@ export default class Store {
       utils.findJsonSpecElement(propId, this._jsonSpec).actions.length === 0
     ) {
       this._state.loading = false;
-      this._callback(this._observable.filter(el => el.value).map(el => {
-        return { id: el.id, value: el.value }
-      }));
+
+      const dataObj = {};
+      this._observable.filter(el => el.value != null).forEach(el => (dataObj[el.id] = el.value))
+      this._callback(dataObj);
     }
   }
 
@@ -167,18 +168,12 @@ export default class Store {
     return Promise.all(set).then(() => {
       this._state.loading = false;
       if (executeCallback) {
-        if (customCallback) {
-          customCallback(this._observable.filter(el => el.value).map(el => {
-            return { id: el.id, value: el.value }
-          }));
-        } else {
-          this._callback(this._observable.filter(el => el.value).map(el => {
-            return { id: el.id, value: el.value }
-          }));
-        }
+        const fn = customCallback || this._callback;
+        const dataObj = {};
+        this._observable.filter(el => el.value != null).forEach(el => (dataObj[el.id] = el.value))
+        fn(dataObj);
       }
-    }
-    );
+    });
   }
 
   /**
@@ -244,9 +239,11 @@ export default class Store {
         obs.emitEvt = !obs.emitEvt;
 
         // If the element has a redraw property, call the callback funct
-        if (needsRedraw) this._callback(this._observable.filter(el => el.value).map(el => {
-          return { id: el.id, value: el.value }
-        }));
+        if (needsRedraw) {
+          const dataObj = {};
+          this._observable.filter(el => el.value != null).forEach(el => (dataObj[el.id] = el.value))
+          fn(dataObj);
+        }
       })
       .catch((err) => {
         console.log(err);

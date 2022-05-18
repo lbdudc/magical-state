@@ -113,7 +113,7 @@ export default async (propId, params, store) =>  {
 
 `params:` Name of the value returned by the parent selector.
 
-`store`:  List of objects {id: "id", value: "value"} representing actual state of the store.
+`store`:  Object with {id1: value1, id2: value2, ... } representing actual state of the store.
 
 ---
 
