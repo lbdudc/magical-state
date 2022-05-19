@@ -37,7 +37,7 @@ const findElementInObservable = (propId, observable) => {
 const createStore = (jsonSpec, initialState) => {
 
   // Check if initialState is valid
-  let parsedState = initialState ? initialState : {};
+  let parsedState = initialState ? initialState : [];
   if (typeof initialState === "string") {
     try {
       parsedState = decodeURL(initialState, jsonSpec);
@@ -45,7 +45,7 @@ const createStore = (jsonSpec, initialState) => {
       throw new Error("initialState is not a valid url");
     }
   } else if (typeof initialState !== "object") {
-    parsedState = {}
+    parsedState = []
   }
 
   return jsonSpec.map((el) => {
