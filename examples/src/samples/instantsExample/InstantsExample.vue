@@ -45,9 +45,15 @@ export default {
     this.store = new Store(jsonSpec, getValues, (storeContent) => {
       this.storeContent = storeContent;
     });
-    document.addEventListener("change", (event) => {
+    document.addEventListener("change", this.handleChangeEvent);
+  },
+  methods: {
+    handleChangeEvent(event) {
       console.log("holis", event.detail);
-    });
+    },
+  },
+  beforeDestroy() {
+    document.removeEventListener("change", this.handleChangeEvent);
   },
 };
 </script>

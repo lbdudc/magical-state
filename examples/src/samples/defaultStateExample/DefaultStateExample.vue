@@ -63,10 +63,7 @@ export default {
     await this.updateState();
     this.redirect();
 
-    document.addEventListener("change", (event) => {
-      console.log("holis", event.detail);
-      this.redirect();
-    });
+    document.addEventListener("change", this.handleChangeEvent);
   },
   methods: {
     async updateState() {
@@ -87,6 +84,13 @@ export default {
       //   query: this.store.objFromObservable,
       // });
     },
+    handleChangeEvent(event) {
+      console.log("holis", event.detail);
+      this.redirect();
+    },
+  },
+  beforeDestroy() {
+    document.removeEventListener("change", this.handleChangeEvent);
   },
 };
 </script>
