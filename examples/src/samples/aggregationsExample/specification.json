@@ -4,7 +4,6 @@
     "label": "Spatial Aggregation",
     "group": "Aggregation",
     "setItemsOnMounted": true,
-    "setDefaultFirstItem": true,
     "actions": [
       "SPATIAL_FILTER"
     ]
@@ -20,8 +19,8 @@
   },
   {
     "id": "SPATIAL_FILTER",
-    "setDefaultFirstItem": true,
     "label": "Spatial Filter",
+    "setItemsOnMounted": true,
     "actions": []
   },
   {

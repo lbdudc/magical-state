@@ -43,7 +43,7 @@ export default {
     };
   },
   async mounted() {
-    this.store = new Store(jsonSpec, getValues, (storeContent) => {
+    this.store = new Store(jsonSpec, getValues, null, (storeContent) => {
       this.storeContent = storeContent;
     });
   },
