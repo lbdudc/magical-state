@@ -103,20 +103,6 @@ export default {
       return this.store.observable.find((el) => el.id === this.id);
     },
   },
-  watch: {
-    "storeElement.emitEvt": {
-      handler(newVal) {
-        if (!this.store.state.loading) {
-          this.$emit("change", {
-            id: this.storeElement.id,
-            value: newVal,
-            store: this.store.observable,
-          });
-        }
-      },
-      deep: true,
-    },
-  },
   methods: {
     daySelected(pickedDate) {
       this.store.change(this.id, pickedDate);

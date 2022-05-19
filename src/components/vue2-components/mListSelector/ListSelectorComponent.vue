@@ -3,6 +3,7 @@
     <v-list-item-group
       v-if="!storeElement.loading"
       v-model="storeElement.value"
+      @change="store.change(storeElement.id, storeElement.value)"
     >
       <v-list-item v-for="(item, index) in storeElement.items" :key="index">
         <v-list-item-title>{{ item.label }}</v-list-item-title>
