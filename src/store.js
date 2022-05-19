@@ -1,21 +1,30 @@
 import utils from "./utils";
 
 export default class Store {
-  constructor(jsonSpec, getValues, callback) {
+  constructor(jsonSpec, getValues, initialState, callback) {
     this._jsonSpec = jsonSpec;
     this._store = {};
     this._observable = null;
     this._state = {
       loading: true,
     }
+
+    if (typeof callback !== "function")
+      throw new Error("callback is not a function");
+
     this._callback = callback;
     this._getValues = getValues;
 
     // TODO check if the jsonSpec is valid
     utils.checkJsonSpec(this._jsonSpec);
-    this._store = utils.createStore(this._jsonSpec);
+    this._store = utils.createStore(this._jsonSpec, initialState);
     this._observable = utils.createObservable(this._store);
-    this._populateStore();
+    // If initialState is defined, we have to set a new state
+    if (initialState != null) {
+      this.setState(this._decodeURL(initialState, this.jsonSpec), false);
+    } else {
+      this._populateStore();
+    }
   }
 
   get jsonSpec() {
@@ -66,7 +75,7 @@ export default class Store {
    * @param url - The URL to import.
    */
   async importStoreEncodedURL(url) {
-    const decodedUrl = utils.decodeURL(url, this._store);
+    const decodedUrl = utils.decodeURL(url, this._observable);
     await this.setState(decodedUrl);
   }
 
@@ -75,8 +84,8 @@ export default class Store {
    * @param url - The URL to decode.
    * @returns The decoded URL.
    */
-  decodeURL(url) {
-    return utils.decodeURL(url, this._store);
+  _decodeURL(url, spec) {
+    return utils.decodeURL(url, !!spec ? spec : this._store);
   }
 
   /**
@@ -254,7 +263,7 @@ export default class Store {
         if (needsRedraw) {
           const dataObj = {};
           this._observable.filter(el => el.value != null).forEach(el => (dataObj[el.id] = el.value))
-          fn(dataObj);
+          this._callback(dataObj);
         }
       })
       .catch((err) => {

@@ -31,14 +31,28 @@ const findElementInObservable = (propId, observable) => {
 /**
  * Formats the jsonSpec into a valid store
  * @param {Array} jsonSpec
+ * @param {String|Object} initialState
  * @returns {Array} a valid store
  */
-const createStore = (jsonSpec) => {
+const createStore = (jsonSpec, initialState) => {
+
+  // Check if initialState is valid
+  let parsedState = initialState ? initialState : {};
+  if (typeof initialState === "string") {
+    try {
+      parsedState = decodeURL(initialState, jsonSpec);
+    } catch (e) {
+      throw new Error("initialState is not a valid url");
+    }
+  } else if (typeof initialState !== "object") {
+    parsedState = {}
+  }
+
   return jsonSpec.map((el) => {
     return {
       id: el.id,
       label: el.label,
-      value: el.default,
+      value: el.default || parsedState.find(st => st.id === el.id)?.value || null,
       loading: false,
       showed: true,
       emitEvt: false,
@@ -170,18 +184,18 @@ const getActionsValues = (el, newState, getValues, obs, jsonSpec) => {
 const exportStoreEncodedURL = (obs) => {
   const parsedStore = obs.map((el, index) => {
     return { id: el.id, value: el.value, index: index }
-  }).filter(el => el.value);
+  }).filter(el => el.value != null);
 
   return window.btoa(parsedStore.map(el => `${el.index}=${el.value}`).join("&"))
 };
 
 /**
- * It takes a URL, decodes it, splits it into an array, maps the array into an object, and then returns
- * the object
- * @param url - The encoded URL that you want to decode.
- * @returns An array of objects with the id and value of each element in the store.
+ * It takes a url, decodes it, splits it into an array, maps over the array and returns an object with
+ * the key and value
+ * @param url - The url that you want to parse
+ * @returns An array of objects with the key and value of the decoded url
  */
-const decodeURL = (url, store) => {
+const parseUrl = (url) => {
   const decoded = window.atob(url);
   const decodedArray = decoded.split("&");
 
@@ -191,20 +205,27 @@ const decodeURL = (url, store) => {
     if (Number.isInteger(Number(value)))
       return { id: key, value: Number(value) };
     return { id: key, value: value };
-
   });
+  return decodedObj
+}
 
-  const result = JSON.parse(JSON.stringify(store));
-  decodedObj.forEach(el => {
-    result[el.id].value = el.value;
-  });
-
-  return Object.keys(result).map(key => {
-    return {
-      id: result[key].id,
-      value: result[key].value
-    }
-  });
+/**
+ * It takes a URL, decodes it, and returns the equivalent Object of key/values
+ * @param url - The encoded URL that you want to decode.
+ * @returns An object with key/values decoded from the URL.
+ */
+const decodeURL = (url, spec) => {
+  try {
+    const decodedObj = parseUrl(url);
+    return decodedObj.map(obj => {
+      return {
+        id: spec[obj.id].id,
+        value: obj.value,
+      }
+    });
+  } catch (error) {
+    throw new Error(`Error parsing URL: ${error}`)
+  }
 }
 
 export default {
@@ -219,5 +240,6 @@ export default {
   getActionsValues,
   getStoreKeyValues,
   decodeURL,
+  parseUrl,
   exportStoreEncodedURL
 };
