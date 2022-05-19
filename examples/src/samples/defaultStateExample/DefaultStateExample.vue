@@ -3,24 +3,12 @@
     <v-row>
       <v-col v-if="store" cols="12">
         <v-row>
-          <m-selector
-            :store="store"
-            id="SPATIAL_AGGREGATION"
-            :i18n="$t"
-            @change="changed"
-          >
+          <m-selector :store="store" id="SPATIAL_AGGREGATION" :i18n="$t">
           </m-selector>
-          <m-selector
-            :store="store"
-            id="TEMPORAL_AGGREGATION"
-            :i18n="$t"
-            @change="changed"
-          >
+          <m-selector :store="store" id="TEMPORAL_AGGREGATION" :i18n="$t">
           </m-selector>
-          <m-selector :store="store" id="SPATIAL_FILTER" @change="changed">
-          </m-selector>
-          <m-selector :store="store" id="TEMPORAL_FILTER" @change="changed">
-          </m-selector>
+          <m-selector :store="store" id="SPATIAL_FILTER"> </m-selector>
+          <m-selector :store="store" id="TEMPORAL_FILTER"> </m-selector>
           <m-date-filter :store="store" id="DATE_FILTER"></m-date-filter>
         </v-row>
         <v-divider class="ma-10"></v-divider>
@@ -30,6 +18,10 @@
     </v-row>
     <v-btn @click="updateState()">Update</v-btn>
     <v-btn @click="updateCustomState()">Update custom callback</v-btn>
+    <br />
+    <span v-if="changeEventDetected"
+      >Last change event detected: {{ changeEventDetected }}</span
+    >
   </v-container>
 </template>
 <script>
@@ -65,6 +57,7 @@ export default {
       implementacion: null,
       storeContent: null,
       customText: null,
+      changeEventDetected: null,
     };
   },
   async mounted() {
@@ -74,6 +67,8 @@ export default {
 
     await this.updateState();
     this.redirect();
+
+    document.addEventListener("change", this.handleChangeEvent);
   },
   methods: {
     async updateState() {
@@ -87,10 +82,6 @@ export default {
         this.customText = "I am custom";
       });
     },
-    changed(res) {
-      console.log("holis", res);
-      this.redirect();
-    },
     redirect() {
       console.log(this.store.objFromObservable);
       // this.$router.replace({
@@ -98,6 +89,17 @@ export default {
       //   query: this.store.objFromObservable,
       // });
     },
+    handleChangeEvent(event) {
+      this.changeEventDetected = {
+        changedElement: event.detail.id,
+        newValue: event.detail.value,
+      };
+      console.log("holis", event.detail);
+      this.redirect();
+    },
+  },
+  beforeDestroy() {
+    document.removeEventListener("change", this.handleChangeEvent);
   },
 };
 </script>

@@ -203,11 +203,7 @@ import {
 ```
 
 ```html
-  <m-selector 
-    :store="store" 
-    id="SPATIAL_AGGREGATION" 
-    @change="doSomethingWhenChanged"> 
-  </m-selector>
+  <m-selector :store="store" id="SPATIAL_AGGREGATION"> </m-selector>
 ```
 
 | name                | type    | default   | description                                                                                                                     |
