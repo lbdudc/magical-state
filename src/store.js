@@ -235,7 +235,7 @@ export default class Store {
     Promise.all(act)
       .then((res) => {
         // Emitting event selector changed
-        const customEvt = utils.createCustomEvent("change", { id: el.id, value: el.value, store: this._store });
+        const customEvt = utils.createCustomEvent("change", { id: el.id, value: newVal, store: this._store });
         document.dispatchEvent(customEvt);
 
         // If the element has a redraw property, call the callback funct

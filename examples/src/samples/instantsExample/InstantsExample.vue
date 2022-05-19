@@ -14,6 +14,10 @@
           </v-col>
         </v-row>
         <v-divider class="ma-10"></v-divider>
+        <span v-if="changeEventDetected"
+          >Last change event detected: {{ changeEventDetected }}</span
+        >
+        <br />
         <span>{{ storeContent }}</span>
       </v-col>
     </v-row>
@@ -39,6 +43,7 @@ export default {
       implementacion: null,
       storeContent: null,
       showMSInfo: false,
+      changeEventDetected: null,
     };
   },
   mounted() {
@@ -49,6 +54,10 @@ export default {
   },
   methods: {
     handleChangeEvent(event) {
+      this.changeEventDetected = {
+        changedElement: event.detail.id,
+        newValue: event.detail.value,
+      };
       console.log("holis", event.detail);
     },
   },

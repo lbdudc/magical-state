@@ -18,6 +18,10 @@
     </v-row>
     <v-btn @click="updateState()">Update</v-btn>
     <v-btn @click="updateCustomState()">Update custom callback</v-btn>
+    <br />
+    <span v-if="changeEventDetected"
+      >Last change event detected: {{ changeEventDetected }}</span
+    >
   </v-container>
 </template>
 <script>
@@ -53,6 +57,7 @@ export default {
       implementacion: null,
       storeContent: null,
       customText: null,
+      changeEventDetected: null,
     };
   },
   async mounted() {
@@ -85,6 +90,10 @@ export default {
       // });
     },
     handleChangeEvent(event) {
+      this.changeEventDetected = {
+        changedElement: event.detail.id,
+        newValue: event.detail.value,
+      };
       console.log("holis", event.detail);
       this.redirect();
     },
