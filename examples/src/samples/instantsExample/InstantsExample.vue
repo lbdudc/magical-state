@@ -3,22 +3,21 @@
     <v-row>
       <v-col v-if="store" cols="12">
         <v-row>
-          <MDateFilter
-            id="DATE_FILTER"
-            :store="store"
-            :i18n="$t"
-            @change="changed"
-          />
+          <MDateFilter id="DATE_FILTER" :store="store" :i18n="$t" />
         </v-row>
         <v-row>
-          <MListSelector id="INSTANT_FILTER" :store="store" @change="changed" />
+          <MListSelector id="INSTANT_FILTER" :store="store" />
         </v-row>
         <v-row>
           <v-col cols="12">
-            <MTimeline id="INSTANT_FILTER" :store="store" @change="changed" />
+            <MTimeline id="INSTANT_FILTER" :store="store" />
           </v-col>
         </v-row>
         <v-divider class="ma-10"></v-divider>
+        <span v-if="changeEventDetected"
+          >Last change event detected: {{ changeEventDetected }}</span
+        >
+        <br />
         <span>{{ storeContent }}</span>
       </v-col>
     </v-row>
@@ -44,17 +43,26 @@ export default {
       implementacion: null,
       storeContent: null,
       showMSInfo: false,
+      changeEventDetected: null,
     };
   },
   mounted() {
-    this.store = new Store(jsonSpec, getValues, (storeContent) => {
+    this.store = new Store(jsonSpec, getValues, null, (storeContent) => {
       this.storeContent = storeContent;
     });
+    document.addEventListener("change", this.handleChangeEvent);
   },
   methods: {
-    changed(res) {
-      console.log("holis", res);
+    handleChangeEvent(event) {
+      this.changeEventDetected = {
+        changedElement: event.detail.id,
+        newValue: event.detail.value,
+      };
+      console.log("holis", event.detail);
     },
+  },
+  beforeDestroy() {
+    document.removeEventListener("change", this.handleChangeEvent);
   },
 };
 </script>
