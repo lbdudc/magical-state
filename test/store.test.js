@@ -29,7 +29,7 @@ describe("Store", () => {
       })
     }
 
-    const store = new Store(jsonSpec, getValues, () => { });
+    const store = new Store(jsonSpec, getValues, null, () => { });
 
     expect(store).toBeDefined();
     expect(store.jsonSpec).toBe(jsonSpec);
@@ -38,7 +38,7 @@ describe("Store", () => {
 
   it("should throw error if store is not correct", () => {
     expect(() => {
-      const store = new Store(null, () => { }, () => { });
+      new Store(null, () => { }, null, () => { });
     }).toThrowError("jsonSpec is not defined");
   });
 })
