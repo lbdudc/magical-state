@@ -31,6 +31,18 @@ export default class Store {
   }
 
   /**
+   * It takes a URL and returns an object with the URL's components
+   * @param {String} url - The URL to parse.
+   * @returns an object with the URL's components
+   */
+  static parseUrl(url, jsonSpec) {
+    const parsed = utils.decodeURL(url, jsonSpec);
+    const dataObj = {};
+    parsed.filter(el => el.value != null).forEach(el => (dataObj[el.id] = el.value))
+    return dataObj;
+  }
+
+  /**
    * Returns the actual state of the store, formated like an object
    * (its going to be used to send this as query params to update the URL)
    */
