@@ -49,10 +49,12 @@ const createStore = (jsonSpec, initialState) => {
   }
 
   return jsonSpec.map((el) => {
+    const res = parsedState.find((state) => state.id === el.id);
+
     return {
       id: el.id,
       label: el.label,
-      value: el.default != null ? el.default : null || parsedState.find(st => st.id === el.id).value || null,
+      value: el.default != null ? el.default : null || res != null ? res.value : null || null,
       loading: false,
       showed: true,
       type: el.type,
