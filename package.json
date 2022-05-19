@@ -4,7 +4,7 @@
   "description": "Library that manages the global state of a series of defined selectors",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
   },
   "repository": {
     "type": "git",
@@ -14,7 +14,11 @@
     "@nx-js/observer-util": "4.2.2"
   },
   "devDependencies": {
-    "eslint": "^7.26.0"
+    "@babel/core": "^7.17.12",
+    "@babel/preset-env": "^7.17.12",
+    "babel-jest": "^28.1.0",
+    "eslint": "^7.26.0",
+    "jest-environment-jsdom": "^28.1.0"
   },
   "eslintConfig": {
     "root": true,
