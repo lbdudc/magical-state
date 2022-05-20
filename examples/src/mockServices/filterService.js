@@ -13,7 +13,7 @@ const months = ["JANUARY", "FEBRUAY", "MARCH"];
 
 async function getSpatialFilterItems(filter) {
   await sleep(2000);
-  switch (filter) {
+  switch (filter["SPATIAL_AGGREGATION"]) {
     case 1:
       return new Promise((resolve) => {
         resolve(comunities);
@@ -31,7 +31,7 @@ async function getSpatialFilterItems(filter) {
 
 async function getTemporalFilterItems(filter) {
   await sleep(2000);
-  switch (filter) {
+  switch (filter["TEMPORAL_AGGREGATION"]) {
     case 1:
       return new Promise((resolve) => {
         resolve(years);

@@ -12,6 +12,7 @@
   {
     "id": "TEMPORAL_AGGREGATION",
     "label": "Temporal Aggregation",
+    "setItemsOnMounted": true,
     "group": "Aggregation",
     "actions": [
       "TEMPORAL_FILTER"

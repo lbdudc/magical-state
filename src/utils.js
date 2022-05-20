@@ -97,10 +97,32 @@ const deleteObservable = (observable) => {
  * @returns list of objects
  */
 const getStoreKeyValues = (store) => {
-  return store.map((el) => {
-    return { id: el.id, value: el.value };
+  const dataObj = {};
+  store.forEach(el => {
+    dataObj[el.id] = el.value
   });
+  return dataObj;
 };
+
+/**
+ * It takes an id, a json spec, and an observable, and returns an object with the key-value pairs of
+ * the root elements of the json spec
+ * @param id - the id of the element that was clicked
+ * @param jsonSpec - the json spec that was passed in
+ * @param obs - the observable object
+ * @returns An object with the key value pairs of the root elements
+ */
+const getKeyValueRootElements = (id, jsonSpec, obs) => {
+  const dataObj = {};
+  dataObj[id] = findElementInObservable(id, obs).value;
+  jsonSpec.forEach(el => {
+    const foundEl = el.actions.find(item => item === id)
+    const foundObsEl = findElementInObservable(el.id, obs)
+    if (foundEl)
+      dataObj[el.id] = foundObsEl.value
+  })
+  return dataObj
+}
 
 /**
  * Checks if the element has required elements with null values
@@ -154,7 +176,7 @@ const getActionsValues = (el, newState, getValues, obs, jsonSpec) => {
         // const obsItem = utils.findElementInObservable(el, this._observable);
         const res = await getValues(
           action,
-          el.value,
+          getKeyValueRootElements(el.id, jsonSpec, obs),
           getStoreKeyValues(obs)
         );
         // Setear el value del hijo si se encuentra en la lista de items que les pasamos
@@ -244,6 +266,7 @@ export default {
   resetDependedSelectors,
   getActionsValues,
   getStoreKeyValues,
+  getKeyValueRootElements,
   decodeURL,
   parseUrl,
   exportStoreEncodedURL,

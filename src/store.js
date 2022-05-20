@@ -135,7 +135,10 @@ export default class Store {
     el.loading = true;
 
     // Await for the implementation to get the items
-    const res = await this._getValues(el.id);
+    const res = await this._getValues(
+      el.id,
+      utils.getKeyValueRootElements(el.id, this._jsonSpec, this._observable)
+    );
 
     // Check if the element needs to set in value the first item retrieved
     this._setDefaultFirstItem(el, res);
@@ -173,7 +176,10 @@ export default class Store {
       // first check if we can change de value (appears in the items)
       const selector = utils.findElementInObservable(el.id, this._observable);
       set.push(new Promise(async (resolve) => {
-        const res = await this._getValues(el.id);
+        const res = await this._getValues(
+          el.id,
+          utils.getKeyValueRootElements(el.id, this._jsonSpec, this._observable)
+        );
         selector.items = res;
         if ((selector.items && selector.items.find(item => item.value === el.value)) || selector.type === "date") {
           selector.value = el.value;
@@ -211,7 +217,6 @@ export default class Store {
 
     // Reset values of the depending selectors (if has any)
     utils.resetDependedSelectors(propId, this._jsonSpec, this._observable);
-
     // For each children, create a new Promise calling the update function
     const act = [];
     actions.forEach((el) => {
@@ -222,7 +227,6 @@ export default class Store {
         this._jsonSpec,
         this._observable
       );
-
       if (requiredFields) {
         act.push(
           new Promise(async (resolve, reject) => {
@@ -237,7 +241,7 @@ export default class Store {
             obsItem.loading = true;
             const res = await this._getValues(
               el,
-              newVal,
+              utils.getKeyValueRootElements(el, this._jsonSpec, this._observable),
               utils.getStoreKeyValues(this._observable)
             );
 

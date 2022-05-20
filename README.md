@@ -119,7 +119,7 @@ export default async (propId, params, store) =>  {
 
 `propId:` Name of the selector from which we want to retrieve the possible values ​​to populate the selector.
 
-`params:` Name of the value returned by the parent selector.
+`params:` Object with related key/values.
 
 `store`:  Object with {id1: value1, id2: value2, ... } representing actual state of the store.
 
