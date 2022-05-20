@@ -57,7 +57,7 @@ const createStore = (jsonSpec, initialState) => {
       value: el.default != null ? el.default : null || res != null ? res.value : null || null,
       loading: false,
       showed: true,
-      type: el.type,
+      type: el.type || "select",
       default: el.default,
       group: el.group || null,
       redraw: el.redraw || false,
