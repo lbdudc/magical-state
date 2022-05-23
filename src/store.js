@@ -181,23 +181,28 @@ export default class Store {
     this._state.loading = true;
     let set = [];
 
-    Object.keys(newState).forEach(async (key) => {
+    this._observable.forEach(async (el) => {
       // first check if we can change de value (appears in the items)
-      const selector = utils.findElementInObservable(key, this._observable);
+      const selector = utils.findElementInObservable(el.id, this._observable);
       set.push(new Promise(async (resolve) => {
         const res = await this._getValues(
-          key,
-          utils.getKeyValueRootElements(key, this._jsonSpec, this._observable)
+          el.id,
+          utils.getKeyValueRootElements(el.id, this._jsonSpec, this._observable)
         );
         selector.items = res;
-        if ((selector.items && selector.items.find(item => item.value === newState[key])) || selector.type === "date") {
-          selector.value = newState[key];
+
+        // Value is in the new State, or is default
+        const newStateObjValue = newState[el.id];
+        const newVal = newStateObjValue != null ? newStateObjValue : el.default
+
+        if ((selector.items && selector.items.find(item => item.value === newVal)) || selector.type === "date") {
+          selector.value = newVal;
         } else {
           selector.value = null;
         }
-        const event = utils.createCustomEvent("itemsLoaded", { id: key });
+        const event = utils.createCustomEvent("itemsLoaded", { id: el.id });
         document.dispatchEvent(event);
-        await (utils.getActionsValues(key, newState, this._getValues, this._observable, this._jsonSpec));
+        await (utils.getActionsValues(el.id, newState, this._getValues, this._observable, this._jsonSpec));
         resolve();
       })
       )
