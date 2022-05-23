@@ -128,24 +128,6 @@ const getKeyValueRootElements = (id, jsonSpec, obs) => {
 };
 
 /**
- * Checks if the element has required elements with null values
- * @param {String} element
- * @param {Object} jsonSpec
- * @param {Object} obs
- * @returns false if the element has required elements with null values
- */
-const isElementInRequiredField = (element, jsonSpec, obs) => {
-  const childElement = findJsonSpecElement(element, jsonSpec);
-  if (childElement.required != null) {
-    for (let index = 0; index < childElement.required.length; index++) {
-      const element = childElement.required[index];
-      if (findElementInObservable(element, obs).value == null) return false;
-    }
-  }
-  return true;
-};
-
-/**
  * Resets the value of the selectors that have required this element
  * @param {String} element
  * @param {Object} jsonSpec
@@ -277,7 +259,6 @@ export default {
   createStore,
   createObservable,
   deleteObservable,
-  isElementInRequiredField,
   resetDependedSelectors,
   getActionsValues,
   getStoreKeyValues,
