@@ -20,7 +20,8 @@ export default class Store {
     this._store = utils.createStore(this._jsonSpec, initialState);
     this._observable = utils.createObservable(this._store);
     // If initialState is defined, we have to set a new state
-    if (initialState != null) {
+
+    if (utils.isValidState(initialState)) {
       this.setState(this._decodeURL(initialState, this.jsonSpec), false);
     } else {
       this._populateStore();
@@ -45,10 +46,9 @@ export default class Store {
    * @returns an object with the URL's components
    */
   static parseUrl(url, jsonSpec) {
-    const parsed = utils.decodeURL(url, jsonSpec);
-    const dataObj = {};
-    parsed.filter(el => el.value != null).forEach(el => (dataObj[el.id] = el.value))
-    return dataObj;
+    if (url == null || url === "")
+      return {}
+    return utils.decodeURL(url, jsonSpec);
   }
 
   /**
@@ -172,25 +172,26 @@ export default class Store {
   async setState(newState, executeCallback, customCallback) {
     this._state.loading = true;
     let set = [];
-    newState.forEach(async (el) => {
+
+    Object.keys(newState).forEach(async (key) => {
       // first check if we can change de value (appears in the items)
-      const selector = utils.findElementInObservable(el.id, this._observable);
+      const selector = utils.findElementInObservable(key, this._observable);
       set.push(new Promise(async (resolve) => {
         const res = await this._getValues(
-          el.id,
-          utils.getKeyValueRootElements(el.id, this._jsonSpec, this._observable)
+          key,
+          utils.getKeyValueRootElements(key, this._jsonSpec, this._observable)
         );
         selector.items = res;
-        if ((selector.items && selector.items.find(item => item.value === el.value)) || selector.type === "date") {
-          selector.value = el.value;
+        if ((selector.items && selector.items.find(item => item.value === newState[key])) || selector.type === "date") {
+          selector.value = newState[key];
         } else {
           selector.value = null;
         }
-        await (utils.getActionsValues(el, newState, this._getValues, this._observable, this._jsonSpec))
+        await (utils.getActionsValues(key, newState, this._getValues, this._observable, this._jsonSpec))
         resolve()
       })
       )
-    })
+    });
 
     return Promise.all(set).then(() => {
       this._state.loading = false;

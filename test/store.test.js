@@ -59,7 +59,7 @@ describe("Store", () => {
       expect(el.showed).toBe(true);
       expect(el.type).toBe(jsonSpec[index].type || "select");
       expect(el.default).toBe(jsonSpec[index].default);
-      expect(el.group).toBe(jsonSpec[index].group || null);
+      expect(el.group).toBe(jsonSpec[index].group || undefined);
       expect(el.redraw).toBe(jsonSpec[index].redraw || false);
       expect(el.setDefaultFirstItem).toBe(jsonSpec[index].setDefaultFirstItem || false);
       expect(el.setItemsOnMounted).toBe(jsonSpec[index].setItemsOnMounted || false);
