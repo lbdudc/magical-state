@@ -30,20 +30,11 @@ import { Store } from "../../../../../index";
 import { MSelector, MDateFilter } from "../../../../../vue2-components";
 import getValues from "./getters";
 
-const initialState = [
-  {
-    id: "SPATIAL_FILTER",
-    value: 2,
-  },
-  {
-    id: "SPATIAL_AGGREGATION",
-    value: 3,
-  },
-  {
-    id: "DATE_FILTER",
-    value: "2019-01-01",
-  },
-];
+const initialState = {
+  SPATIAL_FILTER: 2,
+  SPATIAL_AGGREGATION: 3,
+  DATE_FILTER: "2019-01-01",
+};
 
 export default {
   name: "DefaultStateExample",
@@ -61,11 +52,15 @@ export default {
     };
   },
   async mounted() {
-    this.store = new Store(jsonSpec, getValues, null, (storeContent) => {
-      this.storeContent = storeContent;
-    });
+    this.store = new Store(
+      jsonSpec,
+      getValues,
+      initialState,
+      (storeContent) => {
+        this.storeContent = storeContent;
+      }
+    );
 
-    await this.updateState();
     this.redirect();
 
     document.addEventListener("change", this.handleChangeEvent);
