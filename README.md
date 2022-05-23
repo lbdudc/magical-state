@@ -41,8 +41,7 @@ Steps to follow are:
 1. Define [`specification.json`](#define-a-specificationjson-file)
 2. Define how to [retrieve values to the selectors](#add-the-implementation-of-fetching-data)
 3. Create an [store](#create-the-store)
-4. [Change the current status](#update-the-selectors-state-optional) of the store
-5. Add the [.vue components (optional)](#add-component-selectors-optional)
+4. Add the [.vue components (optional)](#add-component-selectors-optional)
 
 ### Define a `specification.json` file
 
@@ -164,33 +163,6 @@ this.store = new Store(jsonSpec,
   console.log(`Your current state is: [${currentState}]`);
 });
 ```
-
-### Update the selectors state (optional)
-
-You can change the current status of the selected values of the store by calling the `setState` method of the store.
-
-```js
-   this.store.setState(newState, executeCallback , customCallback);
-```
-
-**newState**: Object with the key/values of the identifiers of the selectors (defined into de spec.json) and the values to be set.
-
-```json
-   [
-    {
-      "id": "SPATIAL_AGGREGATION",
-      "value": "PROVINCE"
-    },
-    {
-      "id": "SPATIAL_FILTER",
-      "value": "A CORUÑA"
-    }
-   ]
-```
-
-**executeCallback:** Boolean. If true, the callback defined in the store will be executed.
-
-**customCallback:** Function. If you want you can execute a custom callback instead of the callback defined when defined the store.
 
 ### Add component selectors (optional)
 

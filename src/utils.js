@@ -10,6 +10,13 @@ const checkJsonSpec = (jsonSpec) => {
   }
 };
 
+const isValidState = (state) => {
+  if (state == null) return false;
+  if (typeof state === "string" && state === "") return false;
+  if (typeof state === "object" && Object.keys(state).length === 0 && Object.getPrototypeOf(state) !== Object.prototype) return false;
+  return true;
+}
+
 /**
  * Finds an elemenet in the jsonSpec
  * @param {String} propId
@@ -35,35 +42,35 @@ const findElementInObservable = (propId, observable) => {
  * @returns {Array} a valid store
  */
 const createStore = (jsonSpec, initialState) => {
-
   // Check if initialState is valid
-  let parsedState = initialState ? initialState : [];
-  if (typeof initialState === "string") {
+  let parsedState = initialState;
+  if (isValidState(initialState)) {
     try {
       parsedState = decodeURL(initialState, jsonSpec);
-    } catch (e) {
-      throw new Error("initialState is not a valid url");
     }
-  } else if (typeof initialState !== "object") {
-    parsedState = []
+    catch (e) {
+      console.error(`Error creating the store: ${e}`);
+      parsedState = {};
+    }
+  } else {
+    parsedState = {};
   }
 
   return jsonSpec.map((el) => {
-    const res = parsedState.find((state) => state.id === el.id);
-
+    const res = parsedState[el.id];
     return {
       id: el.id,
       label: el.label,
-      value: el.default != null ? el.default : null || res != null ? res.value : null || null,
+      value:
+        res != null ? res : el.default != null ? el.default : null,
       loading: false,
       showed: true,
       type: el.type || "select",
       default: el.default,
-      group: el.group || null,
-      redraw: el.redraw || false,
-      setDefaultFirstItem: el.setDefaultFirstItem || false,
-      setItemsOnMounted:
-        el.setItemsOnMounted && el.setItemsOnMounted === true ? true : false,
+      group: el.group,
+      redraw: el.redraw === true,
+      setDefaultFirstItem: el.setDefaultFirstItem === true,
+      setItemsOnMounted: el.setItemsOnMounted && el.setItemsOnMounted === true,
       items: [],
     };
   });
@@ -75,11 +82,8 @@ const createStore = (jsonSpec, initialState) => {
  * @returns a Proxy of the object
  */
 const createObservable = (store) => {
-  let obsStore = null;
-  obsStore = observable(store);
-  observe(() => {
-    JSON.stringify(obsStore);
-  });
+  let obsStore = observable(store);
+  observe(() => JSON.stringify(obsStore));
   return obsStore;
 };
 
@@ -98,8 +102,8 @@ const deleteObservable = (observable) => {
  */
 const getStoreKeyValues = (store) => {
   const dataObj = {};
-  store.forEach(el => {
-    dataObj[el.id] = el.value
+  store.forEach((el) => {
+    dataObj[el.id] = el.value;
   });
   return dataObj;
 };
@@ -115,14 +119,13 @@ const getStoreKeyValues = (store) => {
 const getKeyValueRootElements = (id, jsonSpec, obs) => {
   const dataObj = {};
   dataObj[id] = findElementInObservable(id, obs).value;
-  jsonSpec.forEach(el => {
-    const foundEl = el.actions.find(item => item === id)
-    const foundObsEl = findElementInObservable(el.id, obs)
-    if (foundEl)
-      dataObj[el.id] = foundObsEl.value
-  })
-  return dataObj
-}
+  jsonSpec.forEach((el) => {
+    const foundEl = el.actions.find((item) => item === id);
+    const foundObsEl = findElementInObservable(el.id, obs);
+    if (foundEl) dataObj[el.id] = foundObsEl.value;
+  });
+  return dataObj;
+};
 
 /**
  * Checks if the element has required elements with null values
@@ -150,11 +153,11 @@ const isElementInRequiredField = (element, jsonSpec, obs) => {
  */
 const resetDependedSelectors = (element, jsonSpec, obs) => {
   const el = findJsonSpecElement(element, jsonSpec);
-  el.actions.forEach(child => {
+  el.actions.forEach((child) => {
     const childElement = findElementInObservable(child, obs);
     childElement.value = undefined;
     childElement.items = [];
-  })
+  });
 };
 
 /**
@@ -167,26 +170,30 @@ const resetDependedSelectors = (element, jsonSpec, obs) => {
  * @param {Array} jsonSpec jsonSpec of the store
  * @returns a promise that resolves when all the children are fullfilled
  */
-const getActionsValues = (el, newState, getValues, obs, jsonSpec) => {
+const getActionsValues = (id, newState, getValues, obs, jsonSpec) => {
   const act = [];
-  findJsonSpecElement(el.id, jsonSpec).actions.forEach(async (action) => {
+  findJsonSpecElement(id, jsonSpec).actions.forEach(async (action) => {
     act.push(
       new Promise(async (resolve, reject) => {
         // Get the element of the observable child
         // const obsItem = utils.findElementInObservable(el, this._observable);
         const res = await getValues(
           action,
-          getKeyValueRootElements(el.id, jsonSpec, obs),
+          getKeyValueRootElements(id, jsonSpec, obs),
           getStoreKeyValues(obs)
         );
         // Setear el value del hijo si se encuentra en la lista de items que les pasamos
-        const foundChild = newState.find(child => child.id === action);
+        const foundChild = newState[action];
         // Set items and check if set value can be setted
         findElementInObservable(action, obs).items = res;
-        if (foundChild) {
-          const elem = findElementInObservable(foundChild.id, obs)
-          if ((elem.items && elem.items.find(item => item.value === foundChild.value)) || elem.type === "date") {
-            elem.value = foundChild.value
+        if (foundChild != null) {
+          const elem = findElementInObservable(action, obs);
+          if (
+            (elem.items &&
+              elem.items.find((item) => item.value === newState[action])) ||
+            elem.type === "date"
+          ) {
+            elem.value = newState[action];
           } else {
             elem.value = null;
           }
@@ -196,7 +203,7 @@ const getActionsValues = (el, newState, getValues, obs, jsonSpec) => {
     );
   });
   return Promise.all(act);
-}
+};
 
 /**
  * It takes the store, maps it to an array of objects with the id, value, and index of each element,
@@ -205,11 +212,15 @@ const getActionsValues = (el, newState, getValues, obs, jsonSpec) => {
  * @returns A string of the store's values, encoded in base64.
  */
 const exportStoreEncodedURL = (obs) => {
-  const parsedStore = obs.map((el, index) => {
-    return { id: el.id, value: el.value, index: index }
-  }).filter(el => el.value != null);
+  const parsedStore = obs
+    .map((el, index) => {
+      return { id: el.id, value: el.value, index: index };
+    })
+    .filter((el) => el.value != null);
 
-  return window.btoa(parsedStore.map(el => `${el.index}=${el.value}`).join("&"))
+  return window.btoa(
+    parsedStore.map((el) => `${el.index}=${el.value}`).join("&")
+  );
 };
 
 /**
@@ -222,15 +233,18 @@ const parseUrl = (url) => {
   const decoded = window.atob(url);
   const decodedArray = decoded.split("&");
 
-  const decodedObj = decodedArray.map(el => {
+  const decodedObj = decodedArray.map((el) => {
     const [key, value] = el.split("=");
+    if (key == null || value == null) {
+      return {};
+    }
     // Check if the value is an integer, else return string
     if (Number.isInteger(Number(value)))
       return { id: key, value: Number(value) };
     return { id: key, value: value };
   });
-  return decodedObj
-}
+  return decodedObj;
+};
 
 /**
  * It takes a URL, decodes it, and returns the equivalent Object of key/values
@@ -240,23 +254,24 @@ const parseUrl = (url) => {
 const decodeURL = (url, spec) => {
   try {
     const decodedObj = parseUrl(url);
-    return decodedObj.map(obj => {
-      return {
-        id: spec[obj.id].id,
-        value: obj.value,
-      }
+    const dataObj = {};
+    decodedObj.forEach((obj) => {
+      dataObj[spec[obj.id].id] = obj.value;
     });
+    return dataObj;
   } catch (error) {
-    throw new Error(`Error parsing URL: ${error}`)
+    console.error(`Error parsing URL: ${error}`);
+    return {};
   }
-}
+};
 
 const createCustomEvent = (nameEvent, detail) => {
   return new CustomEvent(nameEvent, { detail: detail });
-}
+};
 
 export default {
   checkJsonSpec,
+  isValidState,
   findJsonSpecElement,
   findElementInObservable,
   createStore,
@@ -270,5 +285,5 @@ export default {
   decodeURL,
   parseUrl,
   exportStoreEncodedURL,
-  createCustomEvent
+  createCustomEvent,
 };
