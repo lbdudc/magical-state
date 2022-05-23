@@ -19,8 +19,9 @@
     "@babel/preset-env": "^7.17.12",
     "babel-jest": "^28.1.0",
     "eslint": "^7.26.0",
-    "jest-environment-jsdom": "^28.1.0",
     "husky": "^8.0.0",
+    "jest": "^28.1.0",
+    "jest-environment-jsdom": "^28.1.0",
     "vite": "^2.9.8"
   },
   "eslintConfig": {

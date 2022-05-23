@@ -3,6 +3,7 @@
     "id": "SPATIAL_AGGREGATION",
     "label": "Spatial Aggregation",
     "redraw": true,
+    "setItemsOnMounted": true,
     "actions": [
       "SPATIAL_FILTER"
     ]
@@ -10,10 +11,8 @@
   {
     "id": "SPATIAL_FILTER",
     "label": "Spatial Filter",
+    "setDefaultFirstItem": true,
     "actions": [],
-    "redraw": true,
-    "required": [
-      "SPATIAL_AGGREGATION"
-    ]
+    "redraw": true
   }
 ]
