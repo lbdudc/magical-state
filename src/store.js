@@ -19,10 +19,16 @@ export default class Store {
     utils.checkJsonSpec(this._jsonSpec);
     this._store = utils.createStore(this._jsonSpec, initialState);
     this._observable = utils.createObservable(this._store);
-    // If initialState is defined, we have to set a new state
 
+    // If initialState is defined, we have to set a new state
     if (utils.isValidState(initialState)) {
-      this.setState(this._decodeURL(initialState, this.jsonSpec), false);
+      if (typeof initialState === "string") {
+        // If the new state is a string, we have to decode it first
+        this.setState(this._decodeURL(initialState, this.jsonSpec), false);
+      } else {
+        this.setState(initialState, false);
+      }
+      // If not, we populate the store with the default values
     } else {
       this._populateStore();
     }

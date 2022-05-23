@@ -13,7 +13,7 @@ const checkJsonSpec = (jsonSpec) => {
 const isValidState = (state) => {
   if (state == null) return false;
   if (typeof state === "string" && state === "") return false;
-  if (typeof state === "object" && Object.keys(state).length === 0 && Object.getPrototypeOf(state) !== Object.prototype) return false;
+  if (typeof state === "object" && Object.getPrototypeOf(state) !== Object.prototype) return false;
   return true;
 }
 
@@ -45,13 +45,9 @@ const createStore = (jsonSpec, initialState) => {
   // Check if initialState is valid
   let parsedState = initialState;
   if (isValidState(initialState)) {
-    try {
+    // If it is a string, we have to decode it
+    if (typeof initialState === "string")
       parsedState = decodeURL(initialState, jsonSpec);
-    }
-    catch (e) {
-      console.error(`Error creating the store: ${e}`);
-      parsedState = {};
-    }
   } else {
     parsedState = {};
   }
