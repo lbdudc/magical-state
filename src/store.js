@@ -152,8 +152,7 @@ export default class Store {
     // Set the items into the selector and ends the loading state
     el.items = res;
     el.loading = false;
-    const event = utils.createCustomEvent("itemsLoaded", { id: el.id });
-    document.dispatchEvent(event);
+    utils.dispatchCustomEvent("itemsLoaded", utils.createUIObject(el));
 
     // If the element has a redraw property and does not have children,
     // call the callback funct
@@ -200,9 +199,8 @@ export default class Store {
         } else {
           selector.value = null;
         }
-        const event = utils.createCustomEvent("itemsLoaded", { id: el.id });
-        document.dispatchEvent(event);
-        await (utils.getActionsValues(el.id, newState, this._getValues, this._observable, this._jsonSpec));
+        utils.dispatchCustomEvent("itemsLoaded", utils.createUIObject(selector));
+        await (utils.getActionsValues(key, newState, this._getValues, this._observable, this._jsonSpec));
         resolve();
       })
       )
@@ -259,8 +257,7 @@ export default class Store {
           obsItem.items = res;
           this._setDefaultFirstItem(obsItem, res);
           obsItem.loading = false;
-          const event = utils.createCustomEvent("itemsLoaded", { id: obsItem.id });
-          document.dispatchEvent(event);
+          utils.dispatchCustomEvent("itemsLoaded", utils.createUIObject(obsItem));
           resolve(res);
         })
       );
@@ -271,8 +268,7 @@ export default class Store {
     Promise.all(act)
       .then((res) => {
         // Emitting event selector changed
-        const customEvt = utils.createCustomEvent("change", { id: el.id, value: newVal, store: this._store });
-        document.dispatchEvent(customEvt);
+        utils.dispatchCustomEvent("change", { id: el.id, value: newVal, store: this._store });
 
         // If the element has a redraw property, call the callback funct
         if (needsRedraw) {
@@ -298,5 +294,16 @@ export default class Store {
       // If we update the value of the selector, we need to call its updated event
       this.change(observable.id, items[0].value);
     }
+  }
+
+  /**
+   * Returns a list of objects that contains the basic information about every observable element 
+   * so they can be displayed on the UI
+   * @returns A list of objects
+   */
+  getUI() {
+    return this._observable.map((el) => {
+      return utils.createUIObject(el);
+    })
   }
 }

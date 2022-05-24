@@ -9,35 +9,59 @@ const cb = (state) => {
 const store = new Store(spec, getValues, null, cb);
 
 
-let crearSelect = (spec) => {
-  const s = document.createElement("select");
-  s.id = spec.id;
-  s.label = spec.label;
+let createSelector = (selector) => {
+  let s = document.createElement("select");
+  s.id = selector.id;
+  s.label = selector.label;
   s.addEventListener("input", (v) => {
     store.change(s.id, v.target.value)
   })
   document.getElementById("app").appendChild(s);
 }
 
+let createDatePicker = (selector) => {
+  let input = document.createElement('input');
+  input.id = selector.id;
+  input.label = selector.label;
+  input.type = 'date';
+  if (selector?.value) {
+    input.value = selector.value;
+  }
+  input.addEventListener("input", (v) => {
+    store.change(input.id, v.target.value)
+  })
+  const container = document.getElementById("app");
+  container.appendChild(input);
+}
+
 function populateSelector(event) {
-  const selectorId = event.detail.id;
-  const selector = store.getSelector(selectorId);
-  let hSelec = document.getElementById(selectorId);
+  const { id, type, items, value } = event.detail;
+  let hSelec = document.getElementById(id);
   while (hSelec.options.length > 0) {
     hSelec.remove(0);
   }
-  selector.items.forEach(option => {
-    const o = document.createElement("option");
-    o.value = option.value;
-    o.innerText = option.label;
-    hSelec.options.add(o);
-  });
+  if (type == 'select') {
+    items.forEach(option => {
+      const o = document.createElement("option");
+      o.value = option.value;
+      o.innerText = option.label;
+      hSelec.options.add(o);
+    });
+  }
 
-  hSelec.value = selector.value;
+  hSelec.value = value;
 }
 
 document.addEventListener("itemsLoaded", populateSelector);
 
-store.observable.forEach(select =>
-  crearSelect(select)
+store.getUI().forEach(selector => {
+  switch (selector.type) {
+    case "select":
+      createSelector(selector);
+      break;
+    case "date":
+      createDatePicker(selector);
+      break;
+  }
+}
 );
