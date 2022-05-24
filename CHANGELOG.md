@@ -2,6 +2,15 @@
 
 <!--- next entry here -->
 
+## 0.8.0
+2022-05-24
+
+### Features
+
+- added ui object on store and a date picker in vanilla js example (3ce20a18d915b27f4e896bac5f8b658ff7dfacc6)
+- Added separate i18nItems / i18nLabel functions to mSelector (caab73040864facaf69b54f6164187a6916371b7)
+- Added disabled property to mSelector and mAutocomplete (f893d5830e5285c28a70e3460d10ec690a0c6d4e)
+
 ## 0.7.0
 2022-05-24
 
