@@ -11,7 +11,7 @@
           :color="color"
           :deletable-chips="deletableChips"
           :dense="dense"
-          :disabled="item.loading || store.state.loading"
+          :disabled="item.loading || store.state.loading || disabled"
           :filled="filled"
           :flat="flat"
           :hint="hint"
@@ -66,6 +66,11 @@ export default {
       default: null,
     },
     clearable: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
+    disabled: {
       type: Boolean,
       required: false,
       default: false,
