@@ -14,5 +14,20 @@
     "setDefaultFirstItem": true,
     "actions": [],
     "redraw": true
+  },
+  {
+    "id": "DATE_FILTER",
+    "label": "Date Filter",
+    "type": "date",
+    "actions": [
+      "INSTANT_FILTER"
+    ]
+  },
+  {
+    "id": "INSTANT_FILTER",
+    "setItemsOnMounted": false,
+    "setDefaultFirstItem": true,
+    "actions": [],
+    "redraw": true
   }
 ]

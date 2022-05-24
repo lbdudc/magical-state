@@ -243,8 +243,30 @@ const decodeURL = (url, spec) => {
   }
 };
 
-const createCustomEvent = (nameEvent, detail) => {
-  return new CustomEvent(nameEvent, { detail: detail });
+/**
+ * Takes an element of the observable and returns an object that contains only the 
+ * necessary information for it to be displayed
+ * @param {Object} element of the observable
+ * @returns an object to display the element on the ui
+ */
+const createUIObject = (element) => {
+  return {
+    id: element.id,
+    label: element.label,
+    value: element.value,
+    type: element.type,
+    items: element.items
+  }
+}
+
+/**
+ * Creates and dispatches a custom event
+ * @param {String} nameEvent - name of the event
+ * @param {Object} detail - the object to pass with the event
+ */
+const dispatchCustomEvent = (nameEvent, detail) => {
+  const customEvent = new CustomEvent(nameEvent, { detail: detail });
+  document.dispatchEvent(customEvent);
 };
 
 export default {
@@ -262,5 +284,6 @@ export default {
   decodeURL,
   parseUrl,
   exportStoreEncodedURL,
-  createCustomEvent,
+  dispatchCustomEvent,
+  createUIObject
 };
