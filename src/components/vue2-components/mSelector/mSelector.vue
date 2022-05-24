@@ -11,12 +11,12 @@
           :color="color"
           :deletable-chips="deletableChips"
           :dense="dense"
-          :disabled="item.loading || store.state.loading"
+          :disabled="item.loading || store.state.loading || disabled"
           :filled="filled"
           :flat="flat"
           :hint="hint"
           :item-color="itemColor"
-          :item-text="(el) => i18Label(el.label)"
+          :item-text="(el) => i18Items(el.label)"
           :items="item.items"
           :label="i18Label(item.label)"
           :loading="item.loading || store.state.loading"
@@ -55,12 +55,22 @@ export default {
       required: false,
       default: null,
     },
-    i18n: {
+    i18nLabel: {
+      type: Function,
+      required: false,
+      default: null,
+    },
+    i18nItems: {
       type: Function,
       required: false,
       default: null,
     },
     clearable: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
+    disabled: {
       type: Boolean,
       required: false,
       default: false,
@@ -169,6 +179,10 @@ export default {
   methods: {
     i18Label(label) {
       if (label) return this.i18n ? this.i18n(label) : label;
+      return "";
+    },
+    i18Items(text) {
+      if (text) return this.i18nItems ? this.i18nItems(text) : text;
       return "";
     },
   },
