@@ -2,6 +2,23 @@
 
 <!--- next entry here -->
 
+## 0.7.0
+2022-05-24
+
+### Features
+
+- added events and eventListeners to handle changes on selectors (32cdc0abce230b00b5e46105fc64fb43376a0653)
+- added event listener removal (57c65457d77dd577e1dae59c85dfa45363f4f240)
+- Added new method to parse encoded URL (06d0188a99d6dbeb14a287d96b7f72b1acd30122)
+- Added new param on store constructor, to set a initial state (with an encoded URL or an object) (6f5bc851f74d5707ba46416f9b838ade33a3a63e)
+- Changed the second param on GetValues function, now retireves object with key/values of related elements (33fd2909e75920e7eca2aa25077682266a8bf5ca)
+
+### Fixes
+
+- Added new basic tests with jest (cc8f41230934edd9721eceeb6ae6d6fb00d3ada3)
+- Changed returning value in the callback function (5d2515df67150b54f64f6833e62b8446e3dc6907)
+- Updated parse/encodeURL methods, now returning proper object / fixed import object when creating the store (7c769369388d4326165a361e9a4c93d3952338c4)
+
 ## 0.6.0
 2022-05-13
 
