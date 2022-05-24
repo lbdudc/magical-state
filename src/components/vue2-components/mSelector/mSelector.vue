@@ -178,7 +178,7 @@ export default {
   },
   methods: {
     i18Label(label) {
-      if (label) return this.i18n ? this.i18n(label) : label;
+      if (label) return this.i18nLabel ? this.i18nLabel(label) : label;
       return "";
     },
     i18Items(text) {
