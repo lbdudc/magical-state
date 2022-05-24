@@ -200,7 +200,7 @@ export default class Store {
           selector.value = null;
         }
         utils.dispatchCustomEvent("itemsLoaded", utils.createUIObject(selector));
-        await (utils.getActionsValues(key, newState, this._getValues, this._observable, this._jsonSpec));
+        await (utils.getActionsValues(el.id, newState, this._getValues, this._observable, this._jsonSpec));
         resolve();
       })
       )
@@ -297,7 +297,7 @@ export default class Store {
   }
 
   /**
-   * Returns a list of objects that contains the basic information about every observable element 
+   * Returns a list of objects that contains the basic information about every observable element
    * so they can be displayed on the UI
    * @returns A list of objects
    */
