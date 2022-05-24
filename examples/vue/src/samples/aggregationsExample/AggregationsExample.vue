@@ -7,6 +7,7 @@
           <m-selector :store="store" id="TEMPORAL_AGGREGATION"> </m-selector>
           <m-selector :store="store" id="SPATIAL_FILTER"> </m-selector>
           <m-selector :store="store" id="TEMPORAL_FILTER"> </m-selector>
+          <m-date-filter :store="store" id="DATE_FILTER"> </m-date-filter>
         </v-row>
         <v-divider class="ma-10"></v-divider>
         <v-row>
@@ -37,14 +38,14 @@
 <script>
 import jsonSpec from "./specification.json";
 import { Store } from "../../../../../index";
-import { MSelector } from "../../../../../vue2-components";
-
+import { MSelector, MDateFilter } from "../../../../../vue2-components";
 import getValues from "./getters";
 
 export default {
   name: "AggregationsExample",
   components: {
     MSelector,
+    MDateFilter,
   },
   data: function () {
     return {
