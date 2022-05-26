@@ -264,7 +264,7 @@ export default class Store {
           );
 
           // Set the items into the selector and end the loading state
-          obsItem.value = obsItem.default || undefined;
+          obsItem.value = obsItem.default || null;
           obsItem.items = res;
           this._setDefaultFirstItem(obsItem, res);
           obsItem.loading = false;
