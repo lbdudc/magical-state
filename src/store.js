@@ -113,18 +113,18 @@ export default class Store {
     let newItems = [];
 
     // If there are no items in the selector, we force getValues
-    if ((obs.items == null || obs.items.length != 0) && (obs.type === "select")) {
+    if ((obs.items == null || obs.items.length == 0) && (obs.type === "select")) {
       newItems = await this._getValues(id);
+    }
 
-      if (
-        (obs.items && obs.items.find(el => el.id = value) != null) ||
-        (newItems && newItems.find(el => el.id = value) != null) ||
-        (obs.type === "date") ||
-        (value == null)) {
+    if (
+      (obs.items && obs.items.find(el => el.id = value) != null) ||
+      (newItems && newItems.find(el => el.id = value) != null) ||
+      (obs.type === "date") ||
+      (value == null)) {
 
-        obs.value = value;
-        this.change(obs.id, value);
-      }
+      obs.value = value;
+      this.change(obs.id, value);
     }
   }
 
