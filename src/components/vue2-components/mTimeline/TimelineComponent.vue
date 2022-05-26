@@ -10,7 +10,7 @@
             v-if="storeElement.items.length != 0"
             :sliderSteps="tickLabels.length"
             :sliderTickLabels="tickLabels"
-            :sliderActualTime="storeElement.value"
+            :sliderActualTime="selectedVal"
             :sliderColor="'secondary'"
             @change="changeSliderValue"
             @nextValue="changeSliderValue('next')"
@@ -23,6 +23,8 @@
           <MTimelineControls
             :isPaused="isPaused"
             :speedSelected="speedSelected"
+            :sliderActualTime="selectedVal"
+            :sliderSteps="tickLabels.length"
             :label="'Speed'"
             @changeSpeed="updateSpeedSelected"
             @play="playTimeline"
@@ -40,6 +42,7 @@
 <script>
 import MTimelineControls from "./TimelineControls";
 import MTimelineSlider from "./TimelineSlider";
+import { raw } from "@nx-js/observer-util";
 
 const BASE_SPEED = 1000;
 
@@ -53,7 +56,7 @@ export default {
     return {
       // setInterval for playing
       playInterval: null,
-
+      selectedVal: null,
       // Controls
       isPaused: true,
       speedSelected: 1,
@@ -82,11 +85,14 @@ export default {
   },
   computed: {
     storeElement() {
-      return this.store.observable.find((el) => el.id === this.id);
+      return this.store.getSelector(this.id);
     },
     tickLabels() {
       return this.storeElement.items.map((el) => el.label);
     },
+  },
+  mounted() {
+    document.addEventListener("change", this.setSelectedVal);
   },
   methods: {
     /**
@@ -117,25 +123,57 @@ export default {
     startInterval() {
       // TODO, esta funcion tendrá que elegir un nuevo rango para mostrar
       this.playInterval = setInterval(() => {
-        this.store.change(this.id, ++this.storeElement.value);
         // If value reaches end, we probably have to recover new data (API Fetch)
-        if (this.storeElement.value === this.storeElement.items.length - 1) {
-          this.store.change(this.id, 0);
+        if (this.selectedVal === this.storeElement.items.length - 1) {
+          this.stopTimeline();
+        } else {
+          ++this.selectedVal;
+          this.store.change(
+            this.id,
+            this.storeElement.items[this.selectedVal].value
+          );
         }
       }, BASE_SPEED / this.speedSelected);
     },
     changeSliderValue(val) {
       if (val === "next") {
-        if (this.storeElement.value < this.tickLabels.length - 1) {
-          this.store.change(this.id, ++this.storeElement.value);
+        if (this.selectedVal + 1 <= this.tickLabels.length - 1) {
+          ++this.selectedVal;
+          this.store.change(
+            this.id,
+            this.storeElement.items[this.selectedVal].value
+          );
         }
       } else if (val === "prev") {
-        if (this.storeElement.value > 0) {
-          this.store.change(this.id, --this.storeElement.value);
+        if (this.selectedVal > 0) {
+          --this.selectedVal;
+          this.store.change(
+            this.id,
+            this.storeElement.items[this.selectedVal].value
+          );
         }
       } else {
-        this.storeElement.value = val ? val : 0;
-        this.store.change(this.id, this.storeElement.value);
+        this.selectedVal = val ? val : 0;
+        this.store.change(
+          this.id,
+          this.storeElement.items[this.selectedVal].value
+        );
+      }
+    },
+    setSelectedVal(event) {
+      if (event.detail.id === this.id) {
+        if (Array.isArray(raw(event).detail.value)) {
+          const eventValue = raw(event).detail.value;
+          this.selectedVal = this.storeElement.items.findIndex(
+            (el) =>
+              eventValue.length === el.value.length &&
+              eventValue.every((value, index) => value === el.value[index])
+          );
+        } else {
+          this.selectedVal = this.storeElement.items.findIndex(
+            (el) => el.value === event.detail.value
+          );
+        }
       }
     },
   },

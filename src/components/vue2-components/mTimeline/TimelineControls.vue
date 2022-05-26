@@ -5,14 +5,24 @@
         <v-row no-gutters>
           <v-col cols="6">
             <v-btn icon>
-              <v-icon color="primary" @click="play" :disabled="!isPaused"
+              <v-icon
+                color="primary"
+                @click="play"
+                :disabled="
+                  !sliderSteps ||
+                  !isPaused ||
+                  sliderActualTime === sliderSteps - 1
+                "
                 >mdi-play</v-icon
               >
             </v-btn>
           </v-col>
           <v-col cols="6">
             <v-btn icon>
-              <v-icon color="error darken-1" @click="stop" :disabled="isPaused"
+              <v-icon
+                color="error darken-1"
+                @click="stop"
+                :disabled="isPaused || sliderActualTime === sliderSteps - 1"
                 >mdi-stop</v-icon
               >
             </v-btn>
@@ -73,6 +83,14 @@ export default {
     label: {
       type: String,
       default: "Speed",
+    },
+    sliderActualTime: {
+      type: Number,
+      default: null,
+    },
+    sliderSteps: {
+      type: Number,
+      default: null,
     },
   },
   methods: {

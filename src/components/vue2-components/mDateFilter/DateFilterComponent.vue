@@ -100,7 +100,7 @@ export default {
   },
   computed: {
     storeElement() {
-      return this.store.observable.find((el) => el.id === this.id);
+      return this.store.getSelector(this.id);
     },
   },
   methods: {

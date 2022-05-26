@@ -173,7 +173,7 @@ export default {
   },
   computed: {
     item() {
-      return this.store.observable.find((el) => el.id === this.id);
+      return this.store.getSelector(this.id);
     },
   },
   methods: {
