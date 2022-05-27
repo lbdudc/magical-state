@@ -2,6 +2,14 @@ import { Store } from "../index";
 
 describe("Store", () => {
 
+  beforeAll(() => {
+    jest.spyOn(global.console, 'error').mockImplementation(() => { });
+  })
+
+  afterAll(() => {
+    global.console.error.mockRestore();
+  });
+
   const jsonSpec = [
     {
       "id": "DATE_FILTER",
@@ -23,8 +31,12 @@ describe("Store", () => {
   ]
 
   const getValues = (id, value, store) => {
-    return new Promise(resolve, reject => {
-      resolve([])
+    return new Promise((resolve, reject) => {
+      if (id != null) {
+        resolve([])
+      } else {
+        reject()
+      }
     })
   }
 
@@ -65,5 +77,13 @@ describe("Store", () => {
       expect(el.setItemsOnMounted).toBe(jsonSpec[index].setItemsOnMounted || false);
     });
   });
+
+  it("should trigger a the getValues method correctly", () => {
+
+    const store = new Store(jsonSpec, getValues, null, () => { });
+
+    expect(store.triggerGetValues("INSTANT_FILTER")).resolves.toStrictEqual([]);
+    expect(store.triggerGetValues()).rejects.toBe(undefined);
+  })
 
 })

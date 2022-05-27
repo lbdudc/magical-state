@@ -27,7 +27,8 @@ Examples of usage [here](#import--export-store-url)
 ### Change the state of the store
 
 - ```change(String propId, Any newVal): void```: Changes the value of the selector with the given id.
-- ```setState(Array<{String id, Any value}> newState, Boolean executeCallback, Function customCallback)```: Sets the state of the store, second param specifies if want to execute the redraw method, or a custom one (third param). (not recommended, better to use the newState in the constructor of the store)
+- ```triggerGetValues(String id): Promise<Any>```: Triggers the getValues method of the selector with the given id.
+- ```(deprecated) setState(Array<{String id, Any value}> newState, Boolean executeCallback, Function customCallback)```: Sets the state of the store, second param specifies if want to execute the redraw method, or a custom one (third param). (not recommended, better to use the newState in the constructor of the store)
 - ```setSelector(String selectorId, Any newVal)```: Changes the value of the selector with the given id.
 - ```getSelector(String selectorId): Proxy```: Returns the value of the selector with the given id).
 - ```(getter) objFromObservable: Array<{String id, Any value}>```: Returns a copy of the actual state of the store.

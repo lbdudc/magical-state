@@ -104,6 +104,21 @@ export default class Store {
   }
 
   /**
+   * It's a function that returns a promise that resolves to the result of calling the `_getValues`
+   * function
+   * @param id - The id of the form you want to get the values from.
+   * @returns the result of the async function.
+   */
+  async triggerGetValues(id) {
+    try {
+      return await this._getValues(id);
+    } catch (err) {
+      console.error(`Error on getValues method: ${err}`);
+      throw err;
+    }
+  }
+
+  /**
    * Sets the value of a selector
    * @param id - the id of the selector
    * @param value - The value to be set
