@@ -2,6 +2,18 @@
 
 <!--- next entry here -->
 
+## 0.9.0
+2022-05-27
+
+### Features
+
+- added tests for dispatched events (6e83807ae4fe0f371b4e40a1d85d8007476db18a)
+- Added triggerGetValues(id) method (7eb90ca8d3613671aaa488d8d4bb184368c5ae4f)
+
+### Fixes
+
+- Fixed store setSelector method (242e321309b1f10f387edebdfdfd110220252570)
+
 ## 0.8.0
 2022-05-24
 
