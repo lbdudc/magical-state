@@ -191,7 +191,7 @@ export default class Store {
 
       const dataObj = {};
       this._observable.filter(el => el.value != null).forEach(el => (dataObj[el.id] = el.value))
-      this._callback(dataObj);
+      this._callback(dataObj).then(() => utils.dispatchCustomEvent("redrawFullfilled"));
     }
   }
 
@@ -238,7 +238,7 @@ export default class Store {
         const fn = customCallback || this._callback;
         const dataObj = {};
         this._observable.filter(el => el.value != null).forEach(el => (dataObj[el.id] = el.value))
-        fn(dataObj);
+        fn(dataObj).then(() => utils.dispatchCustomEvent("redrawFullfilled"));;
       }
     });
   }
@@ -247,12 +247,13 @@ export default class Store {
    * Calls the callbacks of the elements that depend on the element that has changed
    * @param {String} propId
    * @param {Any} newVal
+   * @param {Boolean} needsRedraw
    */
-  async change(propId, newVal) {
+  async change(propId, newVal, needsRedraw = true) {
     // Get the element of the jsonSpec
     const el = utils.findJsonSpecElement(propId, this._jsonSpec);
     const actions = el.actions;
-    let needsRedraw = el.redraw;
+    let hasRedrawProp = el.redraw;
     const obs = utils.findElementInObservable(propId, this._observable);
     obs.value = newVal;
 
@@ -266,8 +267,8 @@ export default class Store {
           // Get the element of the observable child
           const obsItem = utils.findElementInObservable(el, this._observable);
 
-          // If a child need to be redrawn, we set the needsRedraw property to true for later
-          if (obsItem.redraw) needsRedraw = true;
+          // If a child need to be redrawn, we set the hasRedrawProp property to true for later
+          if (obsItem.redraw && obsItem.setDefaultFirstItem) hasRedrawProp = true;
 
           // Set the loading state of the child to true
           // Await for the implementation to get the items
@@ -281,7 +282,7 @@ export default class Store {
           // Set the items into the selector and end the loading state
           obsItem.value = obsItem.default || null;
           obsItem.items = res;
-          this._setDefaultFirstItem(obsItem, res);
+          this._setDefaultFirstItem(obsItem, res, false);
           obsItem.loading = false;
           utils.dispatchCustomEvent("itemsLoaded", utils.createUIObject(obsItem));
           resolve(res);
@@ -297,10 +298,10 @@ export default class Store {
         utils.dispatchCustomEvent("change", { id: el.id, value: newVal, store: this._store });
 
         // If the element has a redraw property, call the callback funct
-        if (needsRedraw) {
+        if (hasRedrawProp && needsRedraw) {
           const dataObj = {};
           this._observable.filter(el => el.value != null).forEach(el => (dataObj[el.id] = el.value))
-          this._callback(dataObj);
+          this._callback(dataObj).then(() => utils.dispatchCustomEvent("redrawFullfilled", { id: el.id }));;
         }
       })
       .catch((err) => {
@@ -314,11 +315,11 @@ export default class Store {
    * @param {Object} observable
    * @param {Array} items
    */
-  _setDefaultFirstItem(observable, items) {
+  _setDefaultFirstItem(observable, items, needsRedraw) {
     if (observable.setDefaultFirstItem && items && items.length > 0) {
       observable.value = items[0].value;
       // If we update the value of the selector, we need to call its updated event
-      this.change(observable.id, items[0].value);
+      this.change(observable.id, items[0].value, needsRedraw);
     }
   }
 

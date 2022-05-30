@@ -48,7 +48,11 @@ export default {
   },
   mounted() {
     this.store = new Store(jsonSpec, getValues, null, (storeContent) => {
-      this.storeContent = storeContent;
+      return new Promise(async (resolve) => {
+        await delay(1500);
+        this.storeContent = storeContent;
+        resolve();
+      });
     });
     document.addEventListener("change", this.handleChangeEvent);
   },
@@ -65,4 +69,7 @@ export default {
     document.removeEventListener("change", this.handleChangeEvent);
   },
 };
+function delay(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
 </script>

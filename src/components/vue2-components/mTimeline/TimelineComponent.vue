@@ -8,9 +8,11 @@
         <v-col cols="12" md="9" lg="9">
           <MTimelineSlider
             v-if="storeElement.items.length != 0"
+            :isPaused="isPaused"
+            :isLoading="isLoading"
             :sliderSteps="tickLabels.length"
             :sliderTickLabels="tickLabels"
-            :sliderActualTime="storeElement.value"
+            :sliderActualTime="index"
             :sliderColor="'secondary'"
             @change="changeSliderValue"
             @nextValue="changeSliderValue('next')"
@@ -22,7 +24,10 @@
         <v-col cols="12" md="3" lg="3">
           <MTimelineControls
             :isPaused="isPaused"
+            :isLoading="isLoading"
             :speedSelected="speedSelected"
+            :sliderActualTime="index"
+            :sliderSteps="tickLabels.length"
             :label="'Speed'"
             @changeSpeed="updateSpeedSelected"
             @play="playTimeline"
@@ -51,12 +56,11 @@ export default {
   name: "MagicalTimeline",
   data() {
     return {
-      // setInterval for playing
-      playInterval: null,
-
       // Controls
       isPaused: true,
       speedSelected: 1,
+      isLoading: false,
+      fullfillPromise: null,
     };
   },
   props: {
@@ -82,11 +86,34 @@ export default {
   },
   computed: {
     storeElement() {
-      return this.store.observable.find((el) => el.id === this.id);
+      return this.store.getSelector(this.id);
     },
     tickLabels() {
       return this.storeElement.items.map((el) => el.label);
     },
+    index: {
+      get() {
+        return this.storeElement.sharedProps.index;
+      },
+      set(newVal) {
+        this.storeElement.sharedProps.index = newVal;
+      },
+    },
+  },
+  mounted() {
+    this.selector = this.store.getSelector(this.id);
+    this.selector.sharedProps.index = 0;
+    //This event will trigger after the store has called the callback function specified on its instantiation
+    document.addEventListener(
+      "redrawFullfilled",
+      this.redrawFullfilledReceived
+    );
+  },
+  beforeDestroy() {
+    document.removeEventListener(
+      "redrawFullfilled",
+      this.redrawFullfilledReceived
+    );
   },
   methods: {
     /**
@@ -95,8 +122,7 @@ export default {
     updateSpeedSelected(newSpeed) {
       this.speedSelected = newSpeed;
       // If speed changes while playing, play with the new speed selected
-      if (!this.isPaused && this.playInterval) {
-        clearInterval(this.playInterval);
+      if (!this.isPaused) {
         this.startInterval();
       }
     },
@@ -104,40 +130,81 @@ export default {
      * Start and stop buttons
      */
     playTimeline() {
-      this.isPaused = !this.isPaused;
+      this.isPaused = false;
       this.startInterval();
     },
     stopTimeline() {
-      this.isPaused = !this.isPaused;
-      clearInterval(this.playInterval);
+      this.isPaused = true;
     },
     /**
      * Starts an interval to be playing, with the actual speed selected
      */
-    startInterval() {
+    async startInterval() {
       // TODO, esta funcion tendrá que elegir un nuevo rango para mostrar
-      this.playInterval = setInterval(() => {
-        this.store.change(this.id, ++this.storeElement.value);
-        // If value reaches end, we probably have to recover new data (API Fetch)
-        if (this.storeElement.value === this.storeElement.items.length - 1) {
-          this.store.change(this.id, 0);
+      // If value reaches end, we probably have to recover new data (API Fetch)
+      let isLastElement = false;
+      while (
+        !this.isPaused &&
+        !isLastElement &&
+        this.index <= this.storeElement.items.length - 2
+      ) {
+        //Wait for the current time interval (based on the selected speed) and the reception of the "redrawFullfilled" event
+        await Promise.all([
+          delay(BASE_SPEED / this.speedSelected),
+          this.changeStoreElementValuePromise(),
+        ]);
+        if (
+          this.index != this.storeElement.items.length - 1 &&
+          !this.isPaused
+        ) {
+          ++this.storeElement.sharedProps.index;
+        } else {
+          isLastElement = true;
         }
-      }, BASE_SPEED / this.speedSelected);
+        this.fullfillPromise = null;
+      }
+      if (!this.isPaused) {
+        this.stopTimeline();
+      }
     },
     changeSliderValue(val) {
       if (val === "next") {
-        if (this.storeElement.value < this.tickLabels.length - 1) {
-          this.store.change(this.id, ++this.storeElement.value);
+        if (this.index + 1 <= this.tickLabels.length - 1) {
+          ++this.index;
+          this.callStoreChange();
         }
       } else if (val === "prev") {
-        if (this.storeElement.value > 0) {
-          this.store.change(this.id, --this.storeElement.value);
+        if (this.index > 0) {
+          --this.index;
+          this.callStoreChange();
         }
       } else {
-        this.storeElement.value = val ? val : 0;
-        this.store.change(this.id, this.storeElement.value);
+        this.index = val ? val : 0;
+        this.callStoreChange();
+      }
+    },
+    changeStoreElementValuePromise() {
+      return new Promise((resolve) => {
+        this.isLoading = true;
+        this.fullfillPromise = resolve;
+        this.store.change(
+          this.id,
+          this.storeElement.items[this.index + 1].value
+        );
+      });
+    },
+    callStoreChange() {
+      this.store.change(this.id, this.storeElement.items[this.index].value);
+    },
+    redrawFullfilledReceived(event) {
+      if (event.detail.id === this.id && this.fullfillPromise) {
+        this.isLoading = false;
+        this.fullfillPromise();
       }
     },
   },
 };
+function delay(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
 </script>

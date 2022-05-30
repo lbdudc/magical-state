@@ -1,21 +1,25 @@
 <template>
-  <v-list v-if="store">
-    <v-list-item-group
-      v-if="!storeElement.loading"
-      v-model="storeElement.value"
-      @change="store.change(storeElement.id, storeElement.value)"
-    >
-      <v-list-item v-for="(item, index) in storeElement.items" :key="index">
-        <v-list-item-title>{{ item.label }}</v-list-item-title>
-      </v-list-item>
-    </v-list-item-group>
-    <v-progress-circular
-      v-else
-      indeterminate
-      color="primary"
-    ></v-progress-circular>
-  </v-list>
-  <span v-else class="text-center">No data available</span>
+  <div>
+    <v-list v-if="store">
+      <v-list-item-group
+        v-if="!storeElement.loading"
+        v-model="index"
+        @change="selectedValChanged"
+        mandatory
+      >
+        <v-list-item v-for="(item, index) in storeElement.items" :key="index">
+          <v-list-item-title>{{ item.label }}</v-list-item-title>
+        </v-list-item>
+      </v-list-item-group>
+      <v-progress-circular
+        v-else
+        indeterminate
+        color="primary"
+      ></v-progress-circular>
+    </v-list>
+    <span v-else class="text-center">No data available</span>
+    {{ "holis" + index }}
+  </div>
 </template>
 
 <script>
@@ -37,15 +41,29 @@ export default {
       default: null,
     },
   },
+  mounted() {
+    this.index = 0;
+  },
   computed: {
     storeElement() {
-      return this.store.observable.find((el) => el.id === this.id);
+      return this.store.getSelector(this.id);
+    },
+    index: {
+      get() {
+        return this.storeElement.sharedProps.index;
+      },
+      set(newVal) {
+        this.storeElement.sharedProps.index = newVal;
+      },
     },
   },
   methods: {
     i18Label(label) {
       if (label) return this.i18n ? this.i18n(label) : label;
       return "";
+    },
+    selectedValChanged() {
+      this.store.change(this.id, this.storeElement.items[this.index].value);
     },
   },
 };

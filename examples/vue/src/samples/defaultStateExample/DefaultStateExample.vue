@@ -57,7 +57,10 @@ export default {
       getValues,
       initialState,
       (storeContent) => {
-        this.storeContent = storeContent;
+        return new Promise(async (resolve) => {
+          this.storeContent = storeContent;
+          resolve();
+        });
       }
     );
 

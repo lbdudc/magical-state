@@ -62,7 +62,10 @@ export default {
       getValues,
       this.importExportValue,
       (storeContent) => {
-        this.storeContent = storeContent;
+        return new Promise(async (resolve) => {
+          this.storeContent = storeContent;
+          resolve();
+        });
       }
     );
   },
