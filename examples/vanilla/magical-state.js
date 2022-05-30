@@ -30,7 +30,6 @@ export default async (propId, params) => {
     case "INSTANT_FILTER":
       const date = new Date(params.DATE_FILTER);
       const today = new Date();
-      console.log(today.getDate() - 5)
       if (date > today.setDate(today.getDate() - 5)) {
         return await [{
           value: [2022, 3, 31, 15, 20],

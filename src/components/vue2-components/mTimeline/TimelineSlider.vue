@@ -1,5 +1,6 @@
 <template>
   <v-slider
+    :class="isDisabled ? 'noClick' : ''"
     v-if="sliderTickLabels"
     v-bind:value="sliderActualTime"
     :tickLabels="sliderTickLabels"
@@ -61,16 +62,29 @@ export default {
       type: String,
       default: "mdi-chevron-left",
     },
+    isLoading: {
+      type: Boolean,
+      default: false,
+    },
+    isPaused: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  computed: {
+    isDisabled() {
+      return !this.isPaused && this.isLoading;
+    },
   },
   methods: {
     changeValue(val) {
-      this.$emit("change", val);
+      if (this.isPaused && !this.isLoading) this.$emit("change", val);
     },
     nextValue(val) {
-      this.$emit("nextValue", val);
+      if (this.isPaused && !this.isLoading) this.$emit("nextValue", val);
     },
     previousValue(val) {
-      this.$emit("prevValue", val);
+      if (this.isPaused && !this.isLoading) this.$emit("prevValue", val);
     },
   },
 };
@@ -79,5 +93,9 @@ export default {
 <style lang="css" scoped>
 ::v-deep .v-input__icon {
   height: 50px;
+}
+
+.noClick {
+  pointer-events: none;
 }
 </style>

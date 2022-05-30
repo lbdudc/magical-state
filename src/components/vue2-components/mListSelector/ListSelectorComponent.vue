@@ -1,26 +1,28 @@
 <template>
-  <v-list v-if="store">
-    <v-list-item-group
-      v-if="!storeElement.loading"
-      v-model="selectedVal"
-      @change="selectedValChanged"
-    >
-      <v-list-item v-for="(item, index) in storeElement.items" :key="index">
-        <v-list-item-title>{{ item.label }}</v-list-item-title>
-      </v-list-item>
-    </v-list-item-group>
-    <v-progress-circular
-      v-else
-      indeterminate
-      color="primary"
-    ></v-progress-circular>
-  </v-list>
-  <span v-else class="text-center">No data available</span>
+  <div>
+    <v-list v-if="store">
+      <v-list-item-group
+        v-if="!storeElement.loading"
+        v-model="index"
+        @change="selectedValChanged"
+        mandatory
+      >
+        <v-list-item v-for="(item, index) in storeElement.items" :key="index">
+          <v-list-item-title>{{ item.label }}</v-list-item-title>
+        </v-list-item>
+      </v-list-item-group>
+      <v-progress-circular
+        v-else
+        indeterminate
+        color="primary"
+      ></v-progress-circular>
+    </v-list>
+    <span v-else class="text-center">No data available</span>
+    {{ "holis" + index }}
+  </div>
 </template>
 
 <script>
-import { raw } from "@nx-js/observer-util";
-
 export default {
   name: "MagicalListSelector",
   props: {
@@ -39,18 +41,21 @@ export default {
       default: null,
     },
   },
-  data() {
-    return {
-      selectedVal: null,
-    };
+  mounted() {
+    this.index = 0;
   },
   computed: {
     storeElement() {
       return this.store.getSelector(this.id);
     },
-  },
-  mounted() {
-    document.addEventListener("change", this.setSelectedVal);
+    index: {
+      get() {
+        return this.storeElement.sharedProps.index;
+      },
+      set(newVal) {
+        this.storeElement.sharedProps.index = newVal;
+      },
+    },
   },
   methods: {
     i18Label(label) {
@@ -58,24 +63,7 @@ export default {
       return "";
     },
     selectedValChanged() {
-      this.store.change(
-        this.id,
-        this.storeElement.items[this.selectedVal].value
-      );
-    },
-    setSelectedVal(event) {
-      if (event.detail.id === this.id) {
-        if (Array.isArray(raw(event).detail.value)) {
-          const eventValue = raw(event).detail.value;
-          this.selectedVal = this.storeElement.items.findIndex((el) =>
-            eventValue.every((value, index) => value === el.value[index])
-          );
-        } else {
-          this.selectedVal = this.storeElement.items.findIndex(
-            (el) => el.value === event.detail.value
-          );
-        }
-      }
+      this.store.change(this.id, this.storeElement.items[this.index].value);
     },
   },
 };

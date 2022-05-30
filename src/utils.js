@@ -57,12 +57,15 @@ const createStore = (jsonSpec, initialState) => {
     return {
       id: el.id,
       label: el.label,
+      default: el.default,
+      type: el.type || "select",
       value:
         res != null ? res : el.default != null ? el.default : null,
+      sharedProps: {
+        index: null
+      },
       loading: false,
       showed: true,
-      type: el.type || "select",
-      default: el.default,
       group: el.group,
       redraw: el.redraw === true,
       setDefaultFirstItem: el.setDefaultFirstItem === true,

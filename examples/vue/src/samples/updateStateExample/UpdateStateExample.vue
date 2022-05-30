@@ -44,7 +44,10 @@ export default {
   },
   async mounted() {
     this.store = new Store(jsonSpec, getValues, null, (storeContent) => {
-      this.storeContent = storeContent;
+      return new Promise(async (resolve) => {
+        this.storeContent = storeContent;
+        resolve();
+      });
     });
   },
   methods: {

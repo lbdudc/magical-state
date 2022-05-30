@@ -11,7 +11,7 @@
   {
     "id": "INSTANT_FILTER",
     "setItemsOnMounted": false,
-    "setDefaultFirstItem": false,
+    "setDefaultFirstItem": true,
     "actions": [],
     "redraw": true
   }

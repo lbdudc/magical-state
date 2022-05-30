@@ -176,7 +176,7 @@ export default class Store {
 
       const dataObj = {};
       this._observable.filter(el => el.value != null).forEach(el => (dataObj[el.id] = el.value))
-      this._callback(dataObj);
+      this._callback(dataObj).then(() => utils.dispatchCustomEvent("redrawFullfilled"));
     }
   }
 
@@ -223,7 +223,7 @@ export default class Store {
         const fn = customCallback || this._callback;
         const dataObj = {};
         this._observable.filter(el => el.value != null).forEach(el => (dataObj[el.id] = el.value))
-        fn(dataObj);
+        fn(dataObj).then(() => utils.dispatchCustomEvent("redrawFullfilled"));;
       }
     });
   }
@@ -253,7 +253,7 @@ export default class Store {
           const obsItem = utils.findElementInObservable(el, this._observable);
 
           // If a child need to be redrawn, we set the hasRedrawProp property to true for later
-          if (obsItem.redraw) hasRedrawProp = true;
+          if (obsItem.redraw && obsItem.setDefaultFirstItem) hasRedrawProp = true;
 
           // Set the loading state of the child to true
           // Await for the implementation to get the items
@@ -286,7 +286,7 @@ export default class Store {
         if (hasRedrawProp && needsRedraw) {
           const dataObj = {};
           this._observable.filter(el => el.value != null).forEach(el => (dataObj[el.id] = el.value))
-          this._callback(dataObj);
+          this._callback(dataObj).then(() => utils.dispatchCustomEvent("redrawFullfilled", { id: el.id }));;
         }
       })
       .catch((err) => {
