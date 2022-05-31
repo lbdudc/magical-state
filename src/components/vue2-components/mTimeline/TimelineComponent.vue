@@ -28,10 +28,14 @@
             :speedSelected="speedSelected"
             :sliderActualTime="index"
             :sliderSteps="tickLabels.length"
+            :instantSelectorButtonLabel="instantSelectorButtonLabel"
             :label="'Speed'"
+            :hasInstantSelectorFunction="instantSelectorFunction != null"
+            :i18n="i18n"
             @changeSpeed="updateSpeedSelected"
             @play="playTimeline"
             @stop="stopTimeline"
+            @now="setValueToNow"
           />
         </v-col>
       </v-row>
@@ -77,6 +81,15 @@ export default {
       type: Function,
       required: false,
       default: null,
+    },
+    instantSelectorFunction: {
+      type: Function,
+      required: false,
+      default: null,
+    },
+    instantSelectorButtonLabel: {
+      type: String,
+      required: true,
     },
     availableSpeeds: {
       type: Array,
@@ -200,6 +213,14 @@ export default {
       if (event.detail.id === this.id && this.fullfillPromise) {
         this.isLoading = false;
         this.fullfillPromise();
+      }
+    },
+    setValueToNow() {
+      if (this.instantSelectorFunction) {
+        this.instantSelectorFunction();
+      } else {
+        this.index = this.storeElement.items.length - 1;
+        this.callStoreChange();
       }
     },
   },

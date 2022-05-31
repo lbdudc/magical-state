@@ -10,7 +10,15 @@
         </v-row>
         <v-row>
           <v-col cols="12">
-            <MTimeline id="INSTANT_FILTER" :store="store" />
+            <MTimeline
+              id="INSTANT_FILTER"
+              :store="store"
+              :i18n="$t"
+              :instantSelectorFunction="mockSelectorF"
+              :instantSelectorButtonLabel="
+                $t('timeline.instantSelectorButtonLabel')
+              "
+            />
           </v-col>
         </v-row>
         <v-divider class="ma-10"></v-divider>
@@ -63,6 +71,9 @@ export default {
         newValue: event.detail.value,
       };
       console.log("holis", event.detail);
+    },
+    mockSelectorF() {
+      console.log("mocking behaviour");
     },
   },
   beforeDestroy() {
