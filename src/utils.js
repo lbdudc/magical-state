@@ -71,6 +71,7 @@ const createStore = (jsonSpec, initialState) => {
       setDefaultFirstItem: el.setDefaultFirstItem === true,
       setItemsOnMounted: el.setItemsOnMounted && el.setItemsOnMounted === true,
       items: [],
+      isMultiple: false,
     };
   });
 };

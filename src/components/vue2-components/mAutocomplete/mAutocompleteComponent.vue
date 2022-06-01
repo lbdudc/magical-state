@@ -173,7 +173,7 @@ export default {
   },
   computed: {
     item() {
-      return this.store.find;
+      return this.store.getSelector(this.id);
     },
   },
   methods: {

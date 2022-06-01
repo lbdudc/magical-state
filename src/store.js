@@ -19,7 +19,6 @@ export default class Store {
     utils.checkJsonSpec(this._jsonSpec);
     this._store = utils.createStore(this._jsonSpec, initialState);
     this._observable = utils.createObservable(this._store);
-
     // If initialState is defined, we have to set a new state
     if (utils.isValidState(initialState)) {
       if (typeof initialState === "string") {
@@ -255,7 +254,7 @@ export default class Store {
     const actions = el.actions;
     let hasRedrawProp = el.redraw;
     const obs = utils.findElementInObservable(propId, this._observable);
-    obs.value = newVal;
+    obs.value = obs.isMultiple && !Array.isArray(newVal) ? [newVal] : newVal;
 
     // Reset values of the depending selectors (if has any)
     utils.resetDependedSelectors(propId, this._jsonSpec, this._observable);
@@ -288,7 +287,6 @@ export default class Store {
           resolve(res);
         })
       );
-
     });
 
     // Await for all the promises in the children to be resolved
@@ -317,7 +315,6 @@ export default class Store {
    */
   _setDefaultFirstItem(observable, items, needsRedraw) {
     if (observable.setDefaultFirstItem && items && items.length > 0) {
-      observable.value = items[0].value;
       // If we update the value of the selector, we need to call its updated event
       this.change(observable.id, items[0].value, needsRedraw);
     }
@@ -332,5 +329,15 @@ export default class Store {
     return this._observable.map((el) => {
       return utils.createUIObject(el);
     })
+  }
+
+  /**
+   * Sets the element identified by propId as a selector that works with multiple values
+   * @param {*} propId 
+   */
+  setElementAsMultipleSelector(propId) {
+    const obsItem = utils.findElementInObservable(propId, this._observable);
+    obsItem.isMultiple = true;
+    obsItem.value = [obsItem.value];
   }
 }

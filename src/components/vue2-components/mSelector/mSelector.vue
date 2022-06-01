@@ -171,6 +171,11 @@ export default {
       default: false,
     },
   },
+  created() {
+    if (this.multiple) {
+      this.store.setElementAsMultipleSelector("SPATIAL_AGGREGATION");
+    }
+  },
   computed: {
     item() {
       return this.store.getSelector(this.id);
