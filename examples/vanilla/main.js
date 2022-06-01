@@ -3,8 +3,11 @@ import getValues from "./magical-state";
 import { Store } from "../../index.js";
 
 const cb = (state) => {
-  console.log("Updated state");
-  console.log(state);
+  return new Promise(async (resolve) => {
+    console.log("Updated state");
+    console.log(state);
+    resolve();
+  });
 }
 const store = new Store(spec, getValues, null, cb);
 

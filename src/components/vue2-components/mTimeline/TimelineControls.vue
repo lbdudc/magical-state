@@ -38,6 +38,19 @@
           item-value="value"
           outlined
         ></v-select>
+        <v-btn
+          @click="setValueToNow"
+          :disabled="
+            isLoading ||
+            !sliderSteps ||
+            !isPaused ||
+            sliderActualTime === sliderSteps - 1
+          "
+        >
+          <span>
+            {{ instantSelectorButtonLabel }}
+          </span>
+        </v-btn>
       </v-col>
     </v-row>
   </v-toolbar>
@@ -53,6 +66,16 @@ export default {
     isLoading: {
       type: Boolean,
       default: false,
+    },
+    i18n: {
+      type: Function,
+      required: false,
+      default: null,
+    },
+    instantSelectorButtonLabel: {
+      type: String,
+      required: false,
+      default: null,
     },
     availableSpeeds: {
       type: Array,
@@ -105,6 +128,13 @@ export default {
     },
     stop() {
       this.$emit("stop");
+    },
+    setValueToNow() {
+      this.$emit("now");
+    },
+    i18Label(label) {
+      if (label) return this.i18n ? this.i18n(label) : label;
+      return "";
     },
   },
 };
