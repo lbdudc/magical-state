@@ -6,7 +6,9 @@
     "setItemsOnMounted": true,
     "setDefaultFirstItem": true,
     "type": "multiple",
-    "default": 1,
+    "default": [
+      1
+    ],
     "actions": [
       "SPATIAL_FILTER"
     ]

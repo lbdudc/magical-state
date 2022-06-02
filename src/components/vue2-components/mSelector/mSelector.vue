@@ -20,7 +20,7 @@
           :items="item.items"
           :label="i18Label(item.label)"
           :loading="item.loading || store.state.loading"
-          :multiple="multiple"
+          :multiple="item.type === 'multiple'"
           :outlined="outlined"
           :persistent-hint="persistentHint"
           :prepend-icon="prependIcon"
@@ -81,11 +81,6 @@ export default {
       default: false,
     },
     dense: {
-      type: Boolean,
-      required: false,
-      default: false,
-    },
-    multiple: {
       type: Boolean,
       required: false,
       default: false,
@@ -170,11 +165,6 @@ export default {
       required: false,
       default: false,
     },
-  },
-  created() {
-    if (this.multiple) {
-      this.store.setElementAsMultipleSelector("SPATIAL_AGGREGATION");
-    }
   },
   computed: {
     item() {

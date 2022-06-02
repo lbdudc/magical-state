@@ -3,8 +3,7 @@
     <v-row>
       <v-col cols="12">
         <v-row>
-          <m-selector :store="store" id="SPATIAL_AGGREGATION" :multiple="true">
-          </m-selector>
+          <m-selector :store="store" id="SPATIAL_AGGREGATION"> </m-selector>
           <m-selector :store="store" id="TEMPORAL_AGGREGATION"> </m-selector>
           <m-selector :store="store" id="SPATIAL_FILTER"> </m-selector>
           <m-selector :store="store" id="TEMPORAL_FILTER"> </m-selector>
@@ -54,7 +53,7 @@ export default {
       implementacion: null,
       storeContent: null,
       showStore: false,
-      importExportValue: null,
+      importExportValue: "MD0xLDI=",
     };
   },
   mounted() {

@@ -3,13 +3,19 @@
     <v-row>
       <v-col v-if="store" cols="12">
         <v-row>
-          <m-autocomplete :store="store" id="SPATIAL_AGGREGATION">
-          </m-autocomplete>
+          <m-autocomplete
+            :store="store"
+            id="SPATIAL_AGGREGATION"
+          ></m-autocomplete>
           <m-autocomplete :store="store" id="SPATIAL_FILTER"> </m-autocomplete>
         </v-row>
         <v-divider class="ma-10"></v-divider>
       </v-col>
     </v-row>
+    <v-btn @click="store.setSelector('SPATIAL_AGGREGATION', [2, 3])"
+      >set selector</v-btn
+    >
+    <span>set spatial aggregation to 2 and 3</span>
   </v-container>
 </template>
 <script>

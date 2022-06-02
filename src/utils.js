@@ -38,29 +38,16 @@ const findElementInObservable = (propId, observable) => {
 /**
  * Formats the jsonSpec into a valid store
  * @param {Array} jsonSpec
- * @param {String|Object} initialState
  * @returns {Array} a valid store
  */
-const createStore = (jsonSpec, initialState) => {
-  // Check if initialState is valid
-  let parsedState = initialState;
-  if (isValidState(initialState)) {
-    // If it is a string, we have to decode it
-    if (typeof initialState === "string")
-      parsedState = decodeURL(initialState, jsonSpec);
-  } else {
-    parsedState = {};
-  }
-
+const createStore = (jsonSpec) => {
   return jsonSpec.map((el) => {
-    const res = parsedState[el.id];
     return {
       id: el.id,
       label: el.label,
       default: el.default,
       type: el.type || "select",
-      value:
-        res != null ? res : el.default != null ? el.default : null,
+      value: el.type === "multiple" ? [] : null,
       sharedProps: {
         index: null
       },
@@ -71,7 +58,6 @@ const createStore = (jsonSpec, initialState) => {
       setDefaultFirstItem: el.setDefaultFirstItem === true,
       setItemsOnMounted: el.setItemsOnMounted && el.setItemsOnMounted === true,
       items: [],
-      isMultiple: false,
     };
   });
 };
@@ -120,7 +106,7 @@ const getKeyValueRootElements = (id, jsonSpec, obs) => {
   const dataObj = {};
   dataObj[id] = findElementInObservable(id, obs).value;
   jsonSpec.forEach((el) => {
-    const foundEl = el.actions.find((item) => item === id);
+    const foundEl = el.actions?.find((item) => item === id);
     const foundObsEl = findElementInObservable(el.id, obs);
     if (foundEl) dataObj[el.id] = foundObsEl.value;
   });
@@ -135,7 +121,7 @@ const getKeyValueRootElements = (id, jsonSpec, obs) => {
  */
 const resetDependedSelectors = (element, jsonSpec, obs) => {
   const el = findJsonSpecElement(element, jsonSpec);
-  el.actions.forEach((child) => {
+  el.actions?.forEach((child) => {
     const childElement = findElementInObservable(child, obs);
     childElement.value = undefined;
     childElement.items = [];
@@ -238,7 +224,10 @@ const decodeURL = (url, spec) => {
     const decodedObj = parseUrl(url);
     const dataObj = {};
     decodedObj.forEach((obj) => {
-      dataObj[spec[obj.id].id] = obj.value;
+      //TODO: encode and decode multiple selectors
+      if (spec[obj.id].type != "multiple") {
+        dataObj[spec[obj.id].id] = obj.value;
+      }
     });
     return dataObj;
   } catch (error) {

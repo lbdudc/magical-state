@@ -1,11 +1,11 @@
 import aggregationService from "../../mockServices/aggregationService";
-import filterService from "../../mockServices/filterService";
+import multipleFilterService from "../../mockServices/multipleFilterService";
 
 export default async (propId, params, store) => {
   switch (propId) {
     case "SPATIAL_AGGREGATION":
       return aggregationService.getSpatialItems();
     case "SPATIAL_FILTER":
-      return filterService.getSpatialFilterItems(params);
+      return multipleFilterService.getSpatialFilterItems(params);
   }
 }
