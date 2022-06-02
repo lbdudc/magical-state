@@ -10,6 +10,8 @@ const provinces = [
 const mobArea = [{ label: "HOOD", value: 1 }, { label: "STREET", value: 2 }];
 const years = [{ label: "2022", value: 2022 }, { label: "2021", value: 2021 }, { label: "2020", value: 2020 }];
 const months = ["JANUARY", "FEBRUAY", "MARCH"];
+const decades = [{ label: "2010-2019", value: 2010 }, { label: "2000-2009", value: 2000 }];
+const lustrum = [{ label: "2010-2014", value: 2010 }, { label: "2015-2019", value: 2015 }];
 
 async function getSpatialFilterItems(filter) {
   await sleep(2000);
@@ -39,6 +41,14 @@ async function getTemporalFilterItems(filter) {
     case 2:
       return new Promise((resolve) => {
         resolve(months);
+      });
+    case 3:
+      return new Promise((resolve) => {
+        resolve(decades);
+      });
+    case 4:
+      return new Promise((resolve) => {
+        resolve(lustrum);
       });
     default:
       return new Promise((resolve) => {
