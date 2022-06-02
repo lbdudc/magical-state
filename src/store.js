@@ -17,9 +17,8 @@ export default class Store {
 
     // TODO check if the jsonSpec is valid
     utils.checkJsonSpec(this._jsonSpec);
-    this._store = utils.createStore(this._jsonSpec, initialState);
+    this._store = utils.createStore(this._jsonSpec);
     this._observable = utils.createObservable(this._store);
-
     // If initialState is defined, we have to set a new state
     if (utils.isValidState(initialState)) {
       if (typeof initialState === "string") {
@@ -172,8 +171,15 @@ export default class Store {
       utils.getKeyValueRootElements(el.id, this._jsonSpec, this._observable)
     );
 
-    // Check if the element needs to set in value the first item retrieved
-    this._setDefaultFirstItem(el, res);
+    // Check if the element needs to set in value the first item retrieved or if it has a default value set on the spec
+    if (el.setDefaultFirstItem) {
+      this._setDefaultFirstItem(el, res);
+    } else {
+      if (el.default != null) {
+        const newVal = el.default;
+        this.change(el.id, newVal, el.redraw);
+      }
+    }
 
     // Set the items into the selector and ends the loading state
     el.items = res;
@@ -218,9 +224,14 @@ export default class Store {
 
         // Value is in the new State, or is default
         const newStateObjValue = newState[el.id];
-        const newVal = newStateObjValue != null ? newStateObjValue : el.default
-
-        if ((selector.items && selector.items.find(item => item.value === newVal)) || selector.type === "date") {
+        const newVal = newStateObjValue != null ? newStateObjValue : el.default;
+        const isItem = selector.items?.find(item =>
+          !Array.isArray(newVal) ?
+            item.value === newVal
+            :
+            newVal.includes(item.value)
+        )
+        if ((selector.items && isItem) || selector.type === "date") {
           selector.value = newVal;
         } else {
           selector.value = null;
@@ -255,13 +266,13 @@ export default class Store {
     const actions = el.actions;
     let hasRedrawProp = el.redraw;
     const obs = utils.findElementInObservable(propId, this._observable);
-    obs.value = newVal;
+    obs.value = obs.type === 'multiple' && !Array.isArray(newVal) ? [newVal] : newVal;
 
     // Reset values of the depending selectors (if has any)
     utils.resetDependedSelectors(propId, this._jsonSpec, this._observable);
     // For each children, create a new Promise calling the update function
     const act = [];
-    actions.forEach((el) => {
+    actions?.forEach((el) => {
       act.push(
         new Promise(async (resolve, reject) => {
           // Get the element of the observable child
@@ -288,7 +299,6 @@ export default class Store {
           resolve(res);
         })
       );
-
     });
 
     // Await for all the promises in the children to be resolved
@@ -317,7 +327,6 @@ export default class Store {
    */
   _setDefaultFirstItem(observable, items, needsRedraw) {
     if (observable.setDefaultFirstItem && items && items.length > 0) {
-      observable.value = items[0].value;
       // If we update the value of the selector, we need to call its updated event
       this.change(observable.id, items[0].value, needsRedraw);
     }

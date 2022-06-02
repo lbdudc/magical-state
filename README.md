@@ -55,9 +55,11 @@ To do this we define an array of objects.
 | id                  | string  |           | Identifier of the selector, must be unique                                                                                      |
 | label               | string  | undefined | Label to be placed in the label field of the selector                                                                           |
 | setItemsOnMounted   | boolean | true      | It can be specified if we want the selector to load data when it is rendered for the first time                                 |
-| setDefaultFirstItem | boolean | false     | You can specify if you want the first element to be selected by default when loading the data                                   |
-| redraw              | boolean | false     | If this option is selected. the callback defined in the store will be fired whenever the @change event of the selector is fired |
+| setDefaultFirstItem | boolean | false     | You can specify if you want the first item to be selected by default when loading the data                                   |
+| redraw              | boolean | false     | If this option is selected the callback defined in the store will be fired whenever the @change event of the selector is fired |
 | default             | string   | null        | Name of the default value to be set             | array   | []        | List of identifiers of child selectors, for which an @change event will be fired every time the parent's @change event is fired
+| actions | array | [] | List of identifiers of store elements that need to reload their elements every time the value of this element changes
+| type | string | 'selector' |  The store has in count three types: 'selector', 'date', and 'multiple'.
 
 Example of an `specification.json`
 

@@ -1,7 +1,7 @@
 <template>
   <v-container v-if="store">
     <v-row>
-      <v-col v-if="store" cols="12">
+      <v-col cols="12">
         <v-row>
           <m-selector :store="store" id="SPATIAL_AGGREGATION"> </m-selector>
           <m-selector :store="store" id="TEMPORAL_AGGREGATION"> </m-selector>
@@ -42,7 +42,7 @@ import { MSelector, MDateFilter } from "../../../../../vue2-components";
 import getValues from "./getters";
 
 export default {
-  name: "AggregationsExample",
+  name: "SelectorsExample",
   components: {
     MSelector,
     MDateFilter,
@@ -53,7 +53,7 @@ export default {
       implementacion: null,
       storeContent: null,
       showStore: false,
-      importExportValue: "MD0yJjI9Mg==",
+      importExportValue: "MD0xLDI=",
     };
   },
   mounted() {

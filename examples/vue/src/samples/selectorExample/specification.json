@@ -5,7 +5,10 @@
     "group": "Aggregation",
     "setItemsOnMounted": true,
     "setDefaultFirstItem": true,
-    "default": 1,
+    "type": "multiple",
+    "default": [
+      1
+    ],
     "actions": [
       "SPATIAL_FILTER"
     ]
@@ -22,7 +25,6 @@
   {
     "id": "SPATIAL_FILTER",
     "label": "Spatial Filter",
-    "setItemsOnMounted": true,
     "actions": []
   },
   {

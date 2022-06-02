@@ -1,0 +1,21 @@
+[
+  {
+    "id": "SPATIAL_AGGREGATION",
+    "label": "Spatial Aggregation",
+    "group": "Aggregation",
+    "type": "multiple",
+    "setItemsOnMounted": true,
+    "setDefaultFirstItem": true,
+    "default": [
+      3
+    ],
+    "actions": [
+      "SPATIAL_FILTER"
+    ]
+  },
+  {
+    "id": "SPATIAL_FILTER",
+    "label": "Spatial Filter",
+    "deafult": 1
+  }
+]

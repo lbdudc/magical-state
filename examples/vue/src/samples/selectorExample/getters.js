@@ -1,5 +1,6 @@
 import aggregationService from "../../mockServices/aggregationService";
 import filterService from "../../mockServices/filterService";
+import multipleFilterService from "@/mockServices/multipleFilterService";
 
 export default async (propId, params, store) => {
   switch (propId) {
@@ -10,6 +11,6 @@ export default async (propId, params, store) => {
     case "TEMPORAL_FILTER":
       return filterService.getTemporalFilterItems(params);
     case "SPATIAL_FILTER":
-      return filterService.getSpatialFilterItems(params);
+      return multipleFilterService.getSpatialFilterItems(params);
   }
 }
