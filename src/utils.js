@@ -107,7 +107,7 @@ const getKeyValueRootElements = (id, jsonSpec, obs) => {
   const dataObj = {};
   dataObj[id] = findElementInObservable(id, obs).value;
   jsonSpec.forEach((el) => {
-    const foundEl = el.actions?.find((item) => item === id);
+    const foundEl = el.actions.find((item) => item === id);
     const foundObsEl = findElementInObservable(el.id, obs);
     if (foundEl) dataObj[el.id] = foundObsEl.value;
   });
@@ -122,7 +122,7 @@ const getKeyValueRootElements = (id, jsonSpec, obs) => {
  */
 const resetDependedSelectors = (element, jsonSpec, obs) => {
   const el = findJsonSpecElement(element, jsonSpec);
-  el.actions?.forEach((child) => {
+  el.actions.forEach((child) => {
     const childElement = findElementInObservable(child, obs);
     childElement.value = undefined;
     childElement.items = [];
