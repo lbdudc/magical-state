@@ -2,6 +2,18 @@
 
 <!--- next entry here -->
 
+## 0.10.0
+2022-06-03
+
+### Features
+
+- changes on timeline and list selectors to work agains storeElement values instead of indices (af1eb868312c22c86a6f959cb9b495ecccb4bbb0)
+- added promises to control slider's advance pace (ebfbd7c7dcdd3f4cc32384b6d60a0d727b0a7270)
+- added 'now' button with option to pass a custom function (3f1815242e786fe3944ecc2bf4061bd6fc5a391d)
+- added type 'multiple' to specification to work with multiple value selectors (a553d50904a1039c166158c58f281617dd21a187)
+- added set store element items functionality (c512efc281e8b6267101d49ab94134989f41793b)
+- Added @change event to the components (a2f1cf6472415522f7c419628cbaf61e0518ea04)
+
 ## 0.9.0
 2022-05-27
 
