@@ -55,7 +55,7 @@ export default {
   props: {
     store: {
       type: Object,
-      required: true,
+      required: false,
     },
     id: {
       type: String,
@@ -100,12 +100,19 @@ export default {
   },
   computed: {
     storeElement() {
+      if (this.store == null)
+        return {
+          loading: true,
+          disabled: true,
+          value: null,
+        };
       return this.store.getSelector(this.id);
     },
   },
   methods: {
-    daySelected(pickedDate) {
-      this.store.change(this.id, pickedDate);
+    async daySelected(pickedDate) {
+      await this.store.change(this.id, pickedDate);
+      this.$emit("change", { id: this.id, val: pickedDate });
     },
     i18Label(label) {
       if (label) return this.i18n ? this.i18n(label) : label;

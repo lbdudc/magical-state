@@ -1,5 +1,5 @@
 <template>
-  <v-container class="ma-0 pa-0" v-if="store">
+  <v-container class="ma-0 pa-0">
     <v-row no-gutters>
       <v-col cols="12">
         <v-select
@@ -30,7 +30,7 @@
           :solo="solo"
           item-value="value"
           v-model="item.value"
-          @change="store.change(item.id, item.value)"
+          @change="change(item.id, item.value)"
         ></v-select>
       </v-col>
     </v-row>
@@ -43,7 +43,7 @@ export default {
   props: {
     store: {
       type: Object,
-      required: true,
+      required: false,
     },
     id: {
       type: String,
@@ -168,6 +168,14 @@ export default {
   },
   computed: {
     item() {
+      if (this.store == null)
+        return {
+          loading: true,
+          id: null,
+          disabled: true,
+          value: null,
+          items: [],
+        };
       return this.store.getSelector(this.id);
     },
   },
@@ -179,6 +187,10 @@ export default {
     i18Items(text) {
       if (text) return this.i18nItems ? this.i18nItems(text) : text;
       return "";
+    },
+    async change(id, val) {
+      await this.store.change(id, val);
+      this.$emit("change", { id, val });
     },
   },
 };

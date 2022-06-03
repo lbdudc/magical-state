@@ -30,7 +30,7 @@
           :solo="solo"
           item-value="value"
           v-model="item.value"
-          @change="store.change(item.id, item.value)"
+          @change="change(item.id, item.value)"
         ></v-autocomplete>
       </v-col>
     </v-row>
@@ -179,6 +179,10 @@ export default {
     i18Items(text) {
       if (text) return this.i18nItems ? this.i18nItems(text) : text;
       return "";
+    },
+    async change(id, val) {
+      await this.store.change(id, val);
+      this.$emit("change", { id, val });
     },
   },
 };
