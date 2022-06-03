@@ -225,17 +225,21 @@ export default class Store {
         // Value is in the new State, or is default
         const newStateObjValue = newState[el.id];
         const newVal = newStateObjValue != null ? newStateObjValue : el.default;
-        const isItem = selector.items?.find(item =>
-          !Array.isArray(newVal) ?
-            item.value === newVal
-            :
-            newVal.includes(item.value)
-        )
-        if ((selector.items && isItem) || selector.type === "date") {
-          selector.value = newVal;
+
+        if (selector.type === "date") {
+          selector.value = newVal
+        } else if (selector.items != null) {
+          const isItem = selector.items.find(item =>
+            !Array.isArray(newVal) ?
+              item.value === newVal
+              :
+              newVal.includes(item.value)
+          )
+          selector.value = isItem != null ? newVal : null;
         } else {
           selector.value = null;
         }
+
         utils.dispatchCustomEvent("itemsLoaded", utils.createUIObject(selector));
         await (utils.getActionsValues(el.id, newState, this._getValues, this._observable, this._jsonSpec));
         resolve();
