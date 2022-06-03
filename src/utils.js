@@ -225,8 +225,8 @@ const decodeURL = (url, spec) => {
     const dataObj = {};
     decodedObj.forEach((obj) => {
       //TODO: encode and decode multiple selectors
-      if (spec[obj.id]?.type != "multiple") {
-        dataObj[spec[obj.id]?.id] = obj.value;
+      if (spec[obj.id] != null && spec[obj.id].type != "multiple") {
+        dataObj[spec[obj.id].id] = obj.value;
       }
     });
     return dataObj;
