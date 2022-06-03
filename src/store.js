@@ -276,7 +276,7 @@ export default class Store {
     utils.resetDependedSelectors(propId, this._jsonSpec, this._observable);
     // For each children, create a new Promise calling the update function
     const act = [];
-    actions?.forEach((el) => {
+    actions.forEach((el) => {
       act.push(
         new Promise(async (resolve, reject) => {
           // Get the element of the observable child
@@ -349,7 +349,7 @@ export default class Store {
 
   /**
    * Sets the items of the specified store element to the parameter 'values'
-   * @param {String} id 
+   * @param {String} id
    * @param {Array} values new values to set
    * @param {Boolean} useSpecConfig flag that indicates if the store should check the spec to set a value or not
    */
