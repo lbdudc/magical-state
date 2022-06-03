@@ -191,7 +191,7 @@ export default class Store {
     if (
       el.redraw &&
       el._setDefaultFirstItem &&
-      utils.findJsonSpecElement(propId, this._jsonSpec).actions.length === 0
+      el.actions.length === 0
     ) {
       this._state.loading = false;
 
@@ -252,8 +252,8 @@ export default class Store {
       if (executeCallback) {
         const fn = customCallback || this._callback;
         const dataObj = {};
-        this._observable.filter(el => el.value != null).forEach(el => (dataObj[el.id] = el.value))
-        fn(dataObj).then(() => utils.dispatchCustomEvent("redrawFullfilled"));;
+        this._observable.filter(el => el.value != null).forEach(el => (dataObj[el.id] = el.value));
+        fn(dataObj).then(() => utils.dispatchCustomEvent("redrawFullfilled"));
       }
     });
   }
@@ -267,7 +267,6 @@ export default class Store {
   async change(propId, newVal, needsRedraw = true) {
     // Get the element of the jsonSpec
     const el = utils.findJsonSpecElement(propId, this._jsonSpec);
-    const actions = el.actions;
     let hasRedrawProp = el.redraw;
     const obs = utils.findElementInObservable(propId, this._observable);
     obs.value = obs.type === 'multiple' && !Array.isArray(newVal) ? [newVal] : newVal;
@@ -276,7 +275,7 @@ export default class Store {
     utils.resetDependedSelectors(propId, this._jsonSpec, this._observable);
     // For each children, create a new Promise calling the update function
     const act = [];
-    actions.forEach((el) => {
+    obs.actions.forEach((el) => {
       act.push(
         new Promise(async (resolve, reject) => {
           // Get the element of the observable child
