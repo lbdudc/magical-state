@@ -19,6 +19,8 @@
     <v-btn @click="getUrl()">Get URL</v-btn>
     <v-btn @click="setUrl()">Set URL</v-btn>
     <v-btn @click="updateState()">Update State</v-btn>
+    <v-btn @click="setTemporalItems()">set temp agg items w spec</v-btn>
+    <v-btn @click="setTemporalItemsNoSpec()">set temp agg items w/o spec</v-btn>
   </v-container>
 </template>
 <script>
@@ -27,6 +29,11 @@ import { Store } from "../../../../../index";
 import { MSelector, MDateFilter } from "../../../../../vue2-components";
 
 import getValues from "./getters";
+
+const newItems = [
+  { label: "DECADE", value: 3 },
+  { label: "LUSTRUM", value: 4 },
+];
 
 export default {
   name: "DefaultStateExample",
@@ -62,6 +69,12 @@ export default {
     async updateState() {
       const enc = window.location.search;
       await this.store.importStoreEncodedURL(enc.substring(1));
+    },
+    setTemporalItems() {
+      this.store.setItems("TEMPORAL_AGGREGATION", newItems, true);
+    },
+    setTemporalItemsNoSpec() {
+      this.store.setItems("TEMPORAL_AGGREGATION", newItems, false);
     },
   },
 };

@@ -342,4 +342,27 @@ export default class Store {
       return utils.createUIObject(el);
     })
   }
+
+  /**
+   * Sets the items of the specified store element to the parameter 'values'
+   * @param {String} id 
+   * @param {Array} values new values to set
+   * @param {Boolean} useSpecConfig flag that indicates if the store should check the spec to set a value or not
+   */
+  setItems(id, values, useSpecConfig) {
+    const el = utils.findElementInObservable(id, this._observable);
+    el.items = values;
+    if (useSpecConfig) {
+      const specEl = utils.findJsonSpecElement(id, this._jsonSpec);
+      if (specEl.setDefaultFirstItem) {
+        this._setDefaultFirstItem(el, values, el.redraw);
+      } else {
+        if (specEl.default != null) {
+          this.change(id, el.default, specEl.redraw);
+        }
+      }
+    } else {
+      this.change(id, null, false);
+    }
+  }
 }

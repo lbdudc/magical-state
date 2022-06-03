@@ -12,6 +12,8 @@
   {
     "id": "TEMPORAL_AGGREGATION",
     "label": "Temporal Aggregation",
+    "setDefaultFirstItem": true,
+    "default": 4,
     "group": "Aggregation",
     "actions": [
       "TEMPORAL_FILTER"
