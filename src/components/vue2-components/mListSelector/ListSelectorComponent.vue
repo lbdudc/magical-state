@@ -62,8 +62,13 @@ export default {
       if (label) return this.i18n ? this.i18n(label) : label;
       return "";
     },
-    selectedValChanged() {
-      this.store.change(this.id, this.storeElement.items[this.index].value);
+    async selectedValChanged() {
+      await this.store.change(
+        this.id,
+        this.storeElement.items[this.index].value
+      );
+      const { id, value } = this.storeElement;
+      this.$emit("change", { id, value });
     },
   },
 };

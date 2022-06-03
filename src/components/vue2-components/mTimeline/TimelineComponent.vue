@@ -180,20 +180,26 @@ export default {
         this.stopTimeline();
       }
     },
-    changeSliderValue(val) {
+    async changeSliderValue(val) {
       if (val === "next") {
         if (this.index + 1 <= this.tickLabels.length - 1) {
           ++this.index;
-          this.callStoreChange();
+          await this.callStoreChange();
+          const { id, value } = this.storeElement;
+          this.$emit("next", { id, value });
         }
       } else if (val === "prev") {
         if (this.index > 0) {
           --this.index;
-          this.callStoreChange();
+          await this.callStoreChange();
+          const { id, value } = this.storeElement;
+          this.$emit("prev", { id, value });
         }
       } else {
         this.index = val ? val : 0;
-        this.callStoreChange();
+        await this.callStoreChange();
+        const { id, value } = this.storeElement;
+        this.$emit("change", { id, value });
       }
     },
     changeStoreElementValuePromise() {
@@ -206,7 +212,7 @@ export default {
         );
       });
     },
-    callStoreChange() {
+    async callStoreChange() {
       this.store.change(this.id, this.storeElement.items[this.index].value);
     },
     redrawFullfilledReceived(event) {
