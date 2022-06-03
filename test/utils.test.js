@@ -1,4 +1,3 @@
-import utils from "../src/utils";
 import { createStore, Store } from "../index";
 
 let store;

@@ -14,8 +14,8 @@ describe("Store", () => {
     {
       "id": "DATE_FILTER",
       "label": "Date filter",
-      "setItemsOnMounted": false,
-      "setDefaultFirstItem": false,
+      "setItemsOnMounted": true,
+      "setDefaultFirstItem": true,
       "actions": [
         "INSTANT_FILTER"
       ]
