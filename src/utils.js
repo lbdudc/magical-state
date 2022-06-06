@@ -107,9 +107,11 @@ const getKeyValueRootElements = (id, jsonSpec, obs) => {
   const dataObj = {};
   dataObj[id] = findElementInObservable(id, obs).value;
   jsonSpec.forEach((el) => {
-    const foundEl = el.actions.find((item) => item === id);
-    const foundObsEl = findElementInObservable(el.id, obs);
-    if (foundEl) dataObj[el.id] = foundObsEl.value;
+    if (el.actions != null) {
+      const foundEl = el.actions.find((item) => item === id);
+      const foundObsEl = findElementInObservable(el.id, obs);
+      if (foundEl) dataObj[el.id] = foundObsEl.value;
+    }
   });
   return dataObj;
 };
@@ -122,11 +124,13 @@ const getKeyValueRootElements = (id, jsonSpec, obs) => {
  */
 const resetDependedSelectors = (element, jsonSpec, obs) => {
   const el = findJsonSpecElement(element, jsonSpec);
-  el.actions.forEach((child) => {
-    const childElement = findElementInObservable(child, obs);
-    childElement.value = undefined;
-    childElement.items = [];
-  });
+  if (el.actions != null) {
+    el.actions.forEach((child) => {
+      const childElement = findElementInObservable(child, obs);
+      childElement.value = undefined;
+      childElement.items = [];
+    });
+  }
 };
 
 /**
@@ -141,36 +145,39 @@ const resetDependedSelectors = (element, jsonSpec, obs) => {
  */
 const getActionsValues = (id, newState, getValues, obs, jsonSpec) => {
   const act = [];
-  findJsonSpecElement(id, jsonSpec).actions.forEach(async (action) => {
-    act.push(
-      new Promise(async (resolve, reject) => {
-        // Get the element of the observable child
-        // const obsItem = utils.findElementInObservable(el, this._observable);
-        const res = await getValues(
-          action,
-          getKeyValueRootElements(id, jsonSpec, obs),
-          getStoreKeyValues(obs)
-        );
-        // Setear el value del hijo si se encuentra en la lista de items que les pasamos
-        const foundChild = newState[action];
-        // Set items and check if set value can be setted
-        findElementInObservable(action, obs).items = res;
-        if (foundChild != null) {
-          const elem = findElementInObservable(action, obs);
-          if (
-            (elem.items &&
-              elem.items.find((item) => item.value === newState[action])) ||
-            elem.type === "date"
-          ) {
-            elem.value = newState[action];
-          } else {
-            elem.value = null;
+  const specActions = findJsonSpecElement(id, jsonSpec).actions;
+  if (specActions != null) {
+    specActions.forEach(async (action) => {
+      act.push(
+        new Promise(async (resolve, reject) => {
+          // Get the element of the observable child
+          // const obsItem = utils.findElementInObservable(el, this._observable);
+          const res = await getValues(
+            action,
+            getKeyValueRootElements(id, jsonSpec, obs),
+            getStoreKeyValues(obs)
+          );
+          // Setear el value del hijo si se encuentra en la lista de items que les pasamos
+          const foundChild = newState[action];
+          // Set items and check if set value can be setted
+          findElementInObservable(action, obs).items = res;
+          if (foundChild != null) {
+            const elem = findElementInObservable(action, obs);
+            if (
+              (elem.items &&
+                elem.items.find((item) => item.value === newState[action])) ||
+              elem.type === "date"
+            ) {
+              elem.value = newState[action];
+            } else {
+              elem.value = null;
+            }
           }
-        }
-        resolve(res);
-      })
-    );
-  });
+          resolve(res);
+        })
+      );
+    });
+  }
   return Promise.all(act);
 };
 
