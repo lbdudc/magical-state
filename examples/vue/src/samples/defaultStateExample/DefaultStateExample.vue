@@ -76,8 +76,11 @@ export default {
     updateCustomState() {
       this.storeContent = null;
       this.store.setState(initialState, true, () => {
-        console.log(this.store._observable);
-        this.customText = "I am custom";
+        return new Promise((resolve) => {
+          console.log(this.store._observable);
+          this.customText = "I am custom";
+          resolve();
+        });
       });
     },
     redirect() {
