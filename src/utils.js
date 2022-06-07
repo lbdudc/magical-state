@@ -245,7 +245,7 @@ const decodeURL = (url, spec) => {
 };
 
 /**
- * Takes an element of the observable and returns an object that contains only the 
+ * Takes an element of the observable and returns an object that contains only the
  * necessary information for it to be displayed
  * @param {Object} element of the observable
  * @returns an object to display the element on the ui
