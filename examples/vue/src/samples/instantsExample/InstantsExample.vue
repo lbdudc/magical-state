@@ -34,7 +34,7 @@
 
 <script>
 import jsonSpec from "./specification.json";
-import { Store } from "../../../../../index";
+import { createStore } from "../../../../../index";
 import {
   MDateFilter,
   MListSelector,
@@ -54,14 +54,18 @@ export default {
       changeEventDetected: null,
     };
   },
-  mounted() {
-    this.store = new Store(jsonSpec, getValues, null, (storeContent) => {
-      return new Promise(async (resolve) => {
-        await delay(1500);
-        this.storeContent = storeContent;
-        resolve();
-      });
-    });
+  async mounted() {
+    this.store = await createStore(
+      jsonSpec,
+      getValues,
+      null,
+      (storeContent) => {
+        return new Promise((resolve) => {
+          this.storeContent = storeContent;
+          resolve();
+        });
+      }
+    );
     document.addEventListener("change", this.handleChangeEvent);
   },
   methods: {

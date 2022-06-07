@@ -19,6 +19,11 @@ export default class Store {
     utils.checkJsonSpec(this._jsonSpec);
     this._store = utils.createStore(this._jsonSpec);
     this._observable = utils.createObservable(this._store);
+
+    this.loadStore(initialState)
+  }
+
+  async loadStore(initialState) {
     // If initialState is defined, we have to set a new state
     if (utils.isValidState(initialState)) {
       if (typeof initialState === "string") {
@@ -32,6 +37,7 @@ export default class Store {
       this._populateStore();
     }
   }
+
 
   get jsonSpec() {
     return this._jsonSpec;
@@ -148,12 +154,23 @@ export default class Store {
    * we call the update function
    */
   async _populateStore() {
+    const promises = []
     this._observable.forEach(async (el) => {
       if (el.setItemsOnMounted) {
-        await this._updateSelector(el.id);
+        promises.push(new Promise(async (resolve, reject) => {
+          try {
+            const res = await this._updateSelector(el.id);
+            resolve(res)
+          } catch (error) {
+            reject(error)
+          }
+        }))
       }
     });
-    this._state.loading = false;
+    return Promise.all(promises).then((res) => {
+      this._state.loading = false;
+      return res;
+    });
   }
 
   /**
@@ -199,6 +216,8 @@ export default class Store {
       this._observable.filter(el => el.value != null).forEach(el => (dataObj[el.id] = el.value))
       this._callback(dataObj).then(() => utils.dispatchCustomEvent("redrawFullfilled"));
     }
+    return el
+
   }
 
 
