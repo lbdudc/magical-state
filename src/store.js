@@ -19,8 +19,6 @@ export default class Store {
     utils.checkJsonSpec(this._jsonSpec);
     this._store = utils.createStore(this._jsonSpec);
     this._observable = utils.createObservable(this._store);
-
-    this.loadStore(initialState)
   }
 
   async loadStore(initialState) {
@@ -34,10 +32,9 @@ export default class Store {
       }
       // If not, we populate the store with the default values
     } else {
-      this._populateStore();
+      return this._populateStore();
     }
   }
-
 
   get jsonSpec() {
     return this._jsonSpec;
@@ -154,23 +151,25 @@ export default class Store {
    * we call the update function
    */
   async _populateStore() {
-    const promises = []
-    this._observable.forEach(async (el) => {
-      if (el.setItemsOnMounted) {
-        promises.push(new Promise(async (resolve, reject) => {
-          try {
-            const res = await this._updateSelector(el.id);
-            resolve(res)
-          } catch (error) {
-            reject(error)
-          }
-        }))
-      }
-    });
-    return Promise.all(promises).then((res) => {
-      this._state.loading = false;
-      return res;
-    });
+    return new Promise((resolve) => {
+      const promises = []
+      this._observable.forEach(async (el) => {
+        if (el.setItemsOnMounted) {
+          promises.push(new Promise(async (resolve, reject) => {
+            try {
+              const res = await this._updateSelector(el.id);
+              resolve(res)
+            } catch (error) {
+              reject(error)
+            }
+          }))
+        }
+      });
+      Promise.all(promises).then((res) => {
+        this._state.loading = false;
+        resolve(res)
+      });
+    })
   }
 
   /**
@@ -216,8 +215,6 @@ export default class Store {
       this._observable.filter(el => el.value != null).forEach(el => (dataObj[el.id] = el.value))
       this._callback(dataObj).then(() => utils.dispatchCustomEvent("redrawFullfilled"));
     }
-    return el
-
   }
 
 
