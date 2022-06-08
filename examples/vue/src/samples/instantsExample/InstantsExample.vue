@@ -27,6 +27,8 @@
         >
         <br />
         <span>{{ storeContent }}</span>
+        <br />
+        <span>{{ counter }}</span>
       </v-col>
     </v-row>
   </v-container>
@@ -52,6 +54,7 @@ export default {
       storeContent: null,
       showMSInfo: false,
       changeEventDetected: null,
+      counter: 0,
     };
   },
   async mounted() {
@@ -60,8 +63,11 @@ export default {
       getValues,
       null,
       (storeContent) => {
-        return new Promise((resolve) => {
+        return new Promise(async (resolve) => {
           this.storeContent = storeContent;
+          ++this.counter;
+          //should wait this delay before advancing to the next instant
+          //await delay(3000);
           resolve();
         });
       }

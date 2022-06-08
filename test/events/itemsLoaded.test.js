@@ -1,4 +1,4 @@
-import { Store } from "../../index";
+import { createStore } from "../../index";
 
 describe("ItemsLoaded", () => {
   const jsonSpecSimpleAggregation = [{
@@ -47,7 +47,7 @@ describe("ItemsLoaded", () => {
     }
   }
 
-  function assertItemsLoadedEvent(store, done, event, id, expectedItems) {
+  function assertItemsLoadedEvent(store, event, id, expectedItems) {
     const changedElement = store.getSelector(id);
     //asserting event's content
     expect(event.detail.id).toBe(changedElement.id);
@@ -59,54 +59,46 @@ describe("ItemsLoaded", () => {
     //asserting that the element has the correct values
     expect(changedElement.items).toStrictEqual(expectedItems);
     expect(changedElement.value).toBeNull();
-    done();
   }
 
   afterEach(() => {
     document.removeEventListener("itemsLoaded", assertItemsLoadedEvent);
   });
 
-  it("should dispatch event 'itemsLoaded' when setting state", (done) => {
-    const store = new Store(jsonSpecSimpleAggregation, getValues, null, () => { });
+  it("should dispatch event 'itemsLoaded' when setting state", async () => {
+    const store = await createStore(jsonSpecSimpleAggregation, getValues, null, () => { });
     let eventAlreadyReceived = false;
-    setTimeout(() => {
-      document.addEventListener("itemsLoaded", (event) => {
-        if (!eventAlreadyReceived) {
-          assertItemsLoadedEvent(store, done, event, "SPATIAL_AGGREGATION", spatialItems);
-          eventAlreadyReceived = true;
-        }
-      });
-      store.setState([{ id: "SPATIAL_AGGREGATION", value: 3 }], false);
-    }, 1000)
-  })
+    document.addEventListener("itemsLoaded", (event) => {
+      if (!eventAlreadyReceived) {
+        assertItemsLoadedEvent(store, event, "SPATIAL_AGGREGATION", spatialItems);
+        eventAlreadyReceived = true;
+      }
+    });
+    store.setState([{ id: "SPATIAL_AGGREGATION", value: 3 }], false);
+  });
 
-  it("should set items on mounted and dispatch itemsLoaded event", (done) => {
-    const store = new Store(jsonSpecSpatial, getValues, null, () => { });
-    let aggregation = store.getSelector('SPATIAL_AGGREGATION');
+  it("should set items on mounted and dispatch itemsLoaded event", async () => {
+    const store = await createStore(jsonSpecSpatial, getValues, null, () => { });
     let eventAlreadyReceived = false;
-    //expect element to have property loading true since its meant to load items on mounted
-    expect(aggregation.loading).toBe(true);
 
     //wait for items to be loaded before asserting element's properties state
     document.addEventListener("itemsLoaded", (event) => {
       if (!eventAlreadyReceived) {
-        assertItemsLoadedEvent(store, done, event, "SPATIAL_AGGREGATION", spatialItems);
+        assertItemsLoadedEvent(store, event, "SPATIAL_AGGREGATION", spatialItems);
         eventAlreadyReceived = true;
       }
     });
   });
 
-  it("should dispatch itemsLoaded event after loading child's items", (done) => {
-    const store = new Store(jsonSpecSpatial, getValues, null, () => { });
+  it("should dispatch itemsLoaded event after loading child's items", async () => {
+    const store = await createStore(jsonSpecSpatial, getValues, null, () => { });
     let eventAlreadyReceived = false;
-    setTimeout(() => {
-      document.addEventListener("itemsLoaded", (event) => {
-        if (!eventAlreadyReceived) {
-          assertItemsLoadedEvent(store, done, event, "SPATIAL_FILTER", provinces);
-          eventAlreadyReceived = true;
-        }
-      });
-      store.change("SPATIAL_AGGREGATION", 2);
-    }, 1000)
+    document.addEventListener("itemsLoaded", (event) => {
+      if (!eventAlreadyReceived) {
+        assertItemsLoadedEvent(store, event, "SPATIAL_FILTER", provinces);
+        eventAlreadyReceived = true;
+      }
+    });
+    store.change("SPATIAL_AGGREGATION", 2);
   })
 })

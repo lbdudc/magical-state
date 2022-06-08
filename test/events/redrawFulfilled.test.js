@@ -1,4 +1,4 @@
-import { Store } from "../../index";
+import { createStore, Store } from "../../index";
 
 describe("redrawFulfilled", () => {
   const jsonSpecSpatial = [
@@ -31,40 +31,35 @@ describe("redrawFulfilled", () => {
     })
   }
 
-  function assertRedrawFulfilledEvent(done, event, cb, timesToBeDispatched) {
-    //asserting event's content
-    expect(event.detail).toBeNull();
-    setTimeout(() => {
-      expect(cb).toHaveBeenCalledTimes(timesToBeDispatched);
-      done();
-    }, 2000);
+  function assertRedrawFullfilledEvent(cb, timesToBeDispatched) {
+    //asserting event's number of calls
+    expect(cb).toHaveBeenCalledTimes(timesToBeDispatched);
   }
 
   afterEach(() => {
-    document.removeEventListener("redrawFulfilled", assertRedrawFulfilledEvent);
+    document.removeEventListener("redrawFullfilled", assertRedrawFullfilledEvent);
   });
 
-  it("should dispatch event 'redrawFulfilled' only once on value change", (done) => {
+  it("should dispatch event 'redrawFullfilled' only once on value change", async () => {
     const mockCallback = jest.fn(() => { return Promise.resolve() });
     // we use a spec with two elements setting their values by default to check that the event is dispatched twice
-    const store = new Store(jsonSpecSpatial, getValues, null, mockCallback);
-    document.addEventListener("redrawFulfilled", (event) => {
-      assertRedrawFulfilledEvent(done, event, mockCallback, 1);
+    const store = await createStore(jsonSpecSpatial, getValues, null, mockCallback);
+    document.addEventListener("redrawFullfilled", (event) => {
+      assertRedrawFullfilledEvent(mockCallback, 1);
     });
   })
 
-  it("should dispatch event 'redrawfulfilled' on setState", (done) => {
+  it("should dispatch event 'redrawfullfilled' on setState", async () => {
     const mockCallback = jest.fn(() => { return Promise.resolve() });
-    const store = new Store(jsonSpecSpatial, getValues, null, () => {
+    const store = await createStore(jsonSpecSpatial, getValues, null, () => {
       return Promise.resolve()
     });
     const newValues = [{ id: "SPATIAL_AGGREGATION", value: 0 }, { id: "SPATIAL_FILTER", value: "mock2" }];
 
-    setTimeout(() => {
-      store.setState(newValues, true, mockCallback);
-      document.addEventListener("redrawFulfilled", (event) => {
-        assertRedrawFulfilledEvent(done, event, mockCallback, 1);
-      });
-    }, 1000);
+    store.setState(newValues, true, mockCallback);
+    document.addEventListener("redrawFullfilled", () => {
+      assertRedrawFullfilledEvent(mockCallback, 1);
+    });
+
   })
 });

@@ -41,7 +41,11 @@ describe("change", () => {
     }
   }
 
-  function assertChangeEvent(store, done, event) {
+  afterEach(() => {
+    document.removeEventListener("change", assertChangeEvent);
+  });
+
+  function assertChangeEvent(store, event) {
     const filter = store.getSelector('SPATIAL_FILTER');
     let aggregation = store.getSelector('SPATIAL_AGGREGATION');
 
@@ -52,12 +56,7 @@ describe("change", () => {
     //asserting event's values
     expect(event.detail.id).toBe(aggregation.id);
     expect(event.detail.value).toStrictEqual(aggregation.items[0].value);
-    done();
   }
-
-  afterEach(() => {
-    document.removeEventListener("change", assertChangeEvent);
-  });
 
   it("should dispatch 'change' event on value establishment and set properties on element's actions", async () => {
     const store = await createStore(jsonSpecSpatial, getValues, null, () => { });
