@@ -2,6 +2,13 @@
 
 <!--- next entry here -->
 
+## 0.11.0
+2022-06-08
+
+### Features
+
+- Added new async constructor "createStore" (f81ba5318c7ed3152153cfe8d8c9016ff0e200c1)
+
 ## 0.10.0
 2022-06-03
 
