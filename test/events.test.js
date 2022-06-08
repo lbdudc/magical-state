@@ -1,4 +1,4 @@
-import { Store } from "../index";
+import { Store, createStore } from "../index";
 
 describe("Store", () => {
   //use of variable since events trigger multiple times on different observable elements
@@ -43,7 +43,7 @@ describe("Store", () => {
     }
   }
 
-  function assertItemsLoadedEvent(store, done, event) {
+  function assertItemsLoadedEvent(store, event) {
     if (!eventAlreadyReceived) {
       eventAlreadyReceived = true;
       const aggregation = store.getSelector('SPATIAL_AGGREGATION');
@@ -56,7 +56,6 @@ describe("Store", () => {
       //asserting that the element has the correct values
       expect(aggregation.items).toStrictEqual(spatialItems);
       expect(aggregation.value).toBeNull();
-      done();
     }
   }
 
@@ -84,21 +83,18 @@ describe("Store", () => {
     clearEventListeners();
   });
 
-  it("should set items on mounted and dispatch itemsLoaded event", (done) => {
-    const store = new Store(jsonSpecSpatial, getValues, null, () => { });
-    let aggregation = store.getSelector('SPATIAL_AGGREGATION');
-    //expect element to have property loading true since its meant to load items on mounted
-    expect(aggregation.loading).toBe(true);
+  it("should set items on mounted and dispatch itemsLoaded event", async () => {
+    const store = await createStore(jsonSpecSpatial, getValues, null, () => { });
 
     //wait for items to be loaded before asserting element's properties state
-    document.addEventListener("itemsLoaded", assertItemsLoadedEvent.bind(null, store, done));
+    document.addEventListener("itemsLoaded", assertItemsLoadedEvent.bind(null, store));
   });
 
-  it("should dispatch 'change' event on value establishment and set properties on element's actions", (done) => {
-    const store = new Store(jsonSpecSpatial, getValues, null, () => { });
+  it("should dispatch 'change' event on value establishment and set properties on element's actions", async () => {
+    const store = await createStore(jsonSpecSpatial, getValues, null, () => { });
     let aggregation = store.getSelector('SPATIAL_AGGREGATION');
 
-    document.addEventListener("change", assertChangeEvent.bind(null, store, done));
+    document.addEventListener("change", assertChangeEvent.bind(null, store));
 
     //using timeout instead of eventListener("itemsLoaded", ..) to prevent a loop
     //caused by child's items dispatching the event too after store.change() function call

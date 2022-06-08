@@ -1,5 +1,5 @@
 <template>
-  <v-container v-if="store">
+  <v-container>
     <v-row>
       <v-col cols="12">
         <v-row>
@@ -37,7 +37,7 @@
 
 <script>
 import jsonSpec from "./specification.json";
-import { Store } from "../../../../../index";
+import { createStore } from "../../../../../index";
 import { MSelector, MDateFilter } from "../../../../../vue2-components";
 import getValues from "./getters";
 
@@ -56,8 +56,8 @@ export default {
       importExportValue: "MD0xLDI=",
     };
   },
-  mounted() {
-    this.store = new Store(
+  async mounted() {
+    this.store = await createStore(
       jsonSpec,
       getValues,
       this.importExportValue,

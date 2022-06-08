@@ -1,4 +1,4 @@
-import { Store } from "../index";
+import { createStore } from "../index";
 
 describe("Store", () => {
 
@@ -40,8 +40,8 @@ describe("Store", () => {
     })
   }
 
-  it("should be able to create a store", () => {
-    const store = new Store(jsonSpec, getValues, null, () => { });
+  it("should be able to create a store", async () => {
+    const store = await createStore(jsonSpec, getValues, null, () => { });
 
     expect(store).toBeDefined();
     expect(store).not.toBeNull();
@@ -51,14 +51,12 @@ describe("Store", () => {
   });
 
   it("should throw error if store is not correct", () => {
-    expect(() => {
-      new Store(null, () => { }, null, () => { });
-    }).toThrowError("jsonSpec is not defined");
+    expect(createStore(null, () => { }, null, () => { })).rejects.toThrow("jsonSpec is not defined");
   });
 
-  it("should create a correct observable", () => {
+  it("should create a correct observable", async () => {
 
-    const store = new Store(jsonSpec, getValues, null, () => { });
+    const store = await createStore(jsonSpec, getValues, null, () => { });
     const obs = store.observable;
 
     expect(obs).not.toBeNull();
@@ -66,7 +64,7 @@ describe("Store", () => {
     obs.forEach((el, index) => {
       expect(el.id).toBe(jsonSpec[index].id);
       expect(el.label).toBe(jsonSpec[index].label);
-      expect(el.value).toBe(jsonSpec[index].default != null ? jsonSpec[index].default : null);
+      expect(el.value).toBe(jsonSpec[index].default || null);
       expect(el.loading).toBe(false);
       expect(el.showed).toBe(true);
       expect(el.type).toBe(jsonSpec[index].type || "select");
@@ -78,9 +76,9 @@ describe("Store", () => {
     });
   });
 
-  it("should trigger a the getValues method correctly", () => {
+  it("should trigger a the getValues method correctly", async () => {
 
-    const store = new Store(jsonSpec, getValues, null, () => { });
+    const store = await createStore(jsonSpec, getValues, null, () => { });
 
     expect(store.triggerGetValues("INSTANT_FILTER")).resolves.toStrictEqual([]);
     expect(store.triggerGetValues()).rejects.toBe(undefined);

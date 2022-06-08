@@ -19,6 +19,9 @@ export default class Store {
     utils.checkJsonSpec(this._jsonSpec);
     this._store = utils.createStore(this._jsonSpec);
     this._observable = utils.createObservable(this._store);
+  }
+
+  async loadStore(initialState) {
     // If initialState is defined, we have to set a new state
     if (utils.isValidState(initialState)) {
       if (typeof initialState === "string") {
@@ -29,7 +32,7 @@ export default class Store {
       }
       // If not, we populate the store with the default values
     } else {
-      this._populateStore();
+      return this._populateStore();
     }
   }
 
@@ -148,12 +151,25 @@ export default class Store {
    * we call the update function
    */
   async _populateStore() {
-    this._observable.forEach(async (el) => {
-      if (el.setItemsOnMounted) {
-        await this._updateSelector(el.id);
-      }
-    });
-    this._state.loading = false;
+    return new Promise((resolve) => {
+      const promises = []
+      this._observable.forEach(async (el) => {
+        if (el.setItemsOnMounted) {
+          promises.push(new Promise(async (resolve, reject) => {
+            try {
+              const res = await this._updateSelector(el.id);
+              resolve(res)
+            } catch (error) {
+              reject(error)
+            }
+          }))
+        }
+      });
+      Promise.all(promises).then((res) => {
+        this._state.loading = false;
+        resolve(res)
+      });
+    })
   }
 
   /**

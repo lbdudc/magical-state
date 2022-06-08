@@ -26,7 +26,7 @@
 </template>
 <script>
 import jsonSpec from "./specification.json";
-import { Store } from "../../../../../index";
+import { createStore } from "../../../../../index";
 import { MSelector, MDateFilter } from "../../../../../vue2-components";
 import getValues from "./getters";
 
@@ -52,7 +52,7 @@ export default {
     };
   },
   async mounted() {
-    this.store = new Store(
+    this.store = await createStore(
       jsonSpec,
       getValues,
       initialState,
