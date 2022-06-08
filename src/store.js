@@ -26,9 +26,9 @@ export default class Store {
     if (utils.isValidState(initialState)) {
       if (typeof initialState === "string") {
         // If the new state is a string, we have to decode it first
-        this.setState(this._decodeURL(initialState, this.jsonSpec), false);
+        return this.setState(this._decodeURL(initialState, this.jsonSpec), false);
       } else {
-        this.setState(initialState, false);
+        return this.setState(initialState, false);
       }
       // If not, we populate the store with the default values
     } else {
@@ -202,19 +202,7 @@ export default class Store {
     el.loading = false;
     utils.dispatchCustomEvent("itemsLoaded", utils.createUIObject(el));
 
-    // If the element has a redraw property and does not have children,
-    // call the callback funct
-    if (
-      el.redraw &&
-      el._setDefaultFirstItem &&
-      el.actions.length === 0
-    ) {
-      this._state.loading = false;
-
-      const dataObj = {};
-      this._observable.filter(el => el.value != null).forEach(el => (dataObj[el.id] = el.value))
-      this._callback(dataObj).then(() => utils.dispatchCustomEvent("redrawFullfilled"));
-    }
+    return el;
   }
 
 
@@ -263,14 +251,17 @@ export default class Store {
       )
     });
 
-    return Promise.all(set).then(() => {
-      this._state.loading = false;
-      if (executeCallback) {
-        const fn = customCallback || this._callback;
-        const dataObj = {};
-        this._observable.filter(el => el.value != null).forEach(el => (dataObj[el.id] = el.value));
-        fn(dataObj).then(() => utils.dispatchCustomEvent("redrawFullfilled"));
-      }
+    return new Promise((resolve) => {
+      Promise.all(set).then(() => {
+        this._state.loading = false;
+        if (executeCallback) {
+          const fn = customCallback || this._callback;
+          const dataObj = {};
+          this._observable.filter(el => el.value != null).forEach(el => (dataObj[el.id] = el.value));
+          fn(dataObj).then(() => utils.dispatchCustomEvent("redrawFullfilled"));
+        }
+        resolve();
+      });
     });
   }
 
@@ -329,8 +320,8 @@ export default class Store {
         // If the element has a redraw property, call the callback funct
         if (hasRedrawProp && needsRedraw) {
           const dataObj = {};
-          this._observable.filter(el => el.value != null).forEach(el => (dataObj[el.id] = el.value))
-          this._callback(dataObj).then(() => utils.dispatchCustomEvent("redrawFullfilled", { id: el.id }));;
+          this._observable.filter(el => el.value != null).forEach(el => (dataObj[el.id] = el.value));
+          this._callback(dataObj).then(() => utils.dispatchCustomEvent("redrawFullfilled", { id: el.id }));
         }
       })
       .catch((err) => {

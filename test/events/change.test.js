@@ -1,8 +1,6 @@
-import { Store, createStore } from "../index";
+import { createStore } from "../../index";
 
-describe("Store", () => {
-  //use of variable since events trigger multiple times on different observable elements
-  let eventAlreadyReceived = false;
+describe("change", () => {
 
   const jsonSpecSpatial = [
     {
@@ -43,23 +41,11 @@ describe("Store", () => {
     }
   }
 
-  function assertItemsLoadedEvent(store, event) {
-    if (!eventAlreadyReceived) {
-      eventAlreadyReceived = true;
-      const aggregation = store.getSelector('SPATIAL_AGGREGATION');
-      //asserting event's content
-      expect(event.detail.id).toBe(aggregation.id);
-      expect(event.detail.type).toBe("select");
-      expect(event.detail.items).toStrictEqual(aggregation.items);
-      expect(event.detail.value).toBeNull();
+  afterEach(() => {
+    document.removeEventListener("change", assertChangeEvent);
+  });
 
-      //asserting that the element has the correct values
-      expect(aggregation.items).toStrictEqual(spatialItems);
-      expect(aggregation.value).toBeNull();
-    }
-  }
-
-  function assertChangeEvent(store, done, event) {
+  function assertChangeEvent(store, event) {
     const filter = store.getSelector('SPATIAL_FILTER');
     let aggregation = store.getSelector('SPATIAL_AGGREGATION');
 
@@ -70,25 +56,7 @@ describe("Store", () => {
     //asserting event's values
     expect(event.detail.id).toBe(aggregation.id);
     expect(event.detail.value).toStrictEqual(aggregation.items[0].value);
-    done();
   }
-
-  function clearEventListeners() {
-    document.removeEventListener("itemsLoaded", assertItemsLoadedEvent);
-    document.removeEventListener("change", assertChangeEvent);
-    eventAlreadyReceived = false;
-  }
-
-  afterEach(() => {
-    clearEventListeners();
-  });
-
-  it("should set items on mounted and dispatch itemsLoaded event", async () => {
-    const store = await createStore(jsonSpecSpatial, getValues, null, () => { });
-
-    //wait for items to be loaded before asserting element's properties state
-    document.addEventListener("itemsLoaded", assertItemsLoadedEvent.bind(null, store));
-  });
 
   it("should dispatch 'change' event on value establishment and set properties on element's actions", async () => {
     const store = await createStore(jsonSpecSpatial, getValues, null, () => { });
@@ -96,10 +64,6 @@ describe("Store", () => {
 
     document.addEventListener("change", assertChangeEvent.bind(null, store));
 
-    //using timeout instead of eventListener("itemsLoaded", ..) to prevent a loop
-    //caused by child's items dispatching the event too after store.change() function call
-    setTimeout(() => {
-      store.change('SPATIAL_AGGREGATION', aggregation.items[0].value);
-    }, 2000);
+    store.change('SPATIAL_AGGREGATION', aggregation.items[0].value);
   });
 })
