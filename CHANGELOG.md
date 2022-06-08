@@ -2,6 +2,13 @@
 
 <!--- next entry here -->
 
+## 0.12.0
+2022-06-08
+
+### Features
+
+- Added testing for store dispatched events (785f6e24cf807d8514f900e03e8aaec2f6068787)
+
 ## 0.11.0
 2022-06-08
 
