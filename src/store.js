@@ -212,7 +212,7 @@ export default class Store {
 
   /**
    * Changes the general state of all the selectors passed
-   * @param {Array} newState [{id: selectorId, value: newValue}]
+   * @param {Array} newState {selectorId: newValue}
    * @param {Boolean} executeCallback
    * @param {Function} customCallback
    */
@@ -236,7 +236,7 @@ export default class Store {
 
         if (selector.type === "date") {
           selector.value = newVal
-        } else if (selector.items != null) {
+        } else if (selector.items != null && selector.items.length > 0) {
           const isItem = selector.items.find(item =>
             !Array.isArray(newVal) ?
               item.value === newVal

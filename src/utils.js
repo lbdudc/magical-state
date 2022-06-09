@@ -13,6 +13,7 @@ const checkJsonSpec = (jsonSpec) => {
 const isValidState = (state) => {
   if (state == null) return false;
   if (typeof state === "string" && state === "") return false;
+  if (Array.isArray(state)) return false;
   if (typeof state === "object" && Object.getPrototypeOf(state) !== Object.prototype) return false;
   return true;
 }
