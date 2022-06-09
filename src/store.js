@@ -134,7 +134,7 @@ export default class Store {
     if (
       ((obs.items == null || obs.items.length == 0) && (obs.type === "select"))
       || deep) {
-      newItems = await this._getValues(id);
+      newItems = await this._getValues(id, utils.getKeyValueRootElements(id, this._jsonSpec, this._observable));
     }
 
     if (
