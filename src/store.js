@@ -124,19 +124,22 @@ export default class Store {
    * Sets the value of a selector
    * @param id - the id of the selector
    * @param value - The value to be set
+   * @param deep - If true, it will force to getValues for the selector
    */
-  async setSelector(id, value) {
+  async setSelector(id, value, deep = false) {
     const obs = utils.findElementInObservable(id, this._observable);
     let newItems = [];
 
     // If there are no items in the selector, we force getValues
-    if ((obs.items == null || obs.items.length == 0) && (obs.type === "select")) {
+    if (
+      ((obs.items == null || obs.items.length == 0) && (obs.type === "select"))
+      || deep) {
       newItems = await this._getValues(id);
     }
 
     if (
-      (obs.items && obs.items.find(el => el.id == value) != null) ||
-      (newItems && newItems.find(el => el.id == value) != null) ||
+      (obs.items && obs.items.find(el => el.value == value) != null) ||
+      (newItems && newItems.find(el => el.value == value) != null) ||
       (obs.type === "date") ||
       (value == null)) {
 
