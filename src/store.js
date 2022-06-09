@@ -135,13 +135,14 @@ export default class Store {
     }
 
     if (
-      (obs.items && obs.items.find(el => el.id = value) != null) ||
-      (newItems && newItems.find(el => el.id = value) != null) ||
+      (obs.items && obs.items.find(el => el.id == value) != null) ||
+      (newItems && newItems.find(el => el.id == value) != null) ||
       (obs.type === "date") ||
       (value == null)) {
 
-      obs.value = value;
       this.change(obs.id, value);
+    } else {
+      console.warn(`The value ${value} is not in the selector items, selector with ${id} not setted`);
     }
   }
 
