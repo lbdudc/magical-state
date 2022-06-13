@@ -43,4 +43,12 @@ describe("multipleSelector", () => {
     expect(aggregation.value.sort()).toEqual([2, 1].sort());
     expect()
   });
+
+  it("should set new value through setState when is a multiple selector", async () => {
+    const store = await createStore(jsonSpecMultiple, getValues, null, () => { });
+    const aggregation = store.getSelector("SPATIAL_AGGREGATION");
+
+    await store.setState({ "SPATIAL_AGGREGATION": [3, 2] });
+    expect(aggregation.value).toStrictEqual([3, 2]);
+  })
 })

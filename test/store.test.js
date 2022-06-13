@@ -120,4 +120,18 @@ describe("Store", () => {
     expect(el.items.length).toBe(0);
   })
 
+  it("should throw error callback is not a function on store creation", () => {
+    expect(async () => createStore(simpleJsonSpec, getValues, null, null)).rejects.toThrow("callback is not a function");
+  })
+
+  it("should return expected UI object", async () => {
+    const store = await createStore(simpleJsonSpec, getValues, null, () => { });
+    const obj = store.getUI()[0];
+    expect(obj.id).toBe(simpleJsonSpec[0].id);
+    expect(obj.label).toBe(simpleJsonSpec[0].label);
+    expect(obj.value).toBeNull();
+    expect(obj.type).toBe('select');
+    expect(obj.items.length).toBe(0);
+  })
+
 })

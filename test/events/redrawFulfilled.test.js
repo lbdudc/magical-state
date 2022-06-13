@@ -62,4 +62,16 @@ describe("redrawFulfilled", () => {
     });
 
   })
+
+  it("should dispatch event 'redrawfullfilled' on setState using store callback", async () => {
+    const mockCallback = jest.fn(() => { return Promise.resolve() });
+    const store = await createStore(jsonSpecSpatial, getValues, null, mockCallback);
+    expect(mockCallback).toHaveBeenCalledTimes(1);
+
+    const newValues = [{ id: "SPATIAL_AGGREGATION", value: 0 }, { id: "SPATIAL_FILTER", value: "mock2" }];
+    store.setState(newValues, true);
+    document.addEventListener("redrawFullfilled", () => {
+      assertRedrawFullfilledEvent(mockCallback, 2);
+    });
+  })
 });
