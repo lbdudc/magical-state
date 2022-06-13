@@ -74,7 +74,7 @@ describe("ItemsLoaded", () => {
         eventAlreadyReceived = true;
       }
     });
-    store.setState([{ id: "SPATIAL_AGGREGATION", value: 3 }], false);
+    store.setState({ "SPATIAL_AGGREGATION": 3 }, false);
   });
 
   it("should set items on mounted and dispatch itemsLoaded event", async () => {
