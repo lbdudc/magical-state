@@ -143,8 +143,12 @@ export default class Store {
           obs.items = newItems;
       }
 
+      const isItem =
+        Array.isArray(value) ?
+          value.every(val => obs.items.find(it => it.value === val) != null) :
+          obs.items.find(it => it.value === value) != null;
       if (
-        (obs.items && obs.items.find(el => el.value == value) != null) ||
+        (obs.items && isItem) ||
         (obs.type === "date") ||
         (value == null)) {
         await this.change(obs.id, value);
@@ -243,13 +247,13 @@ export default class Store {
         if (selector.type === "date") {
           selector.value = newVal
         } else if (selector.items != null && selector.items.length > 0) {
-          const isItem = selector.items.find(item =>
-            !Array.isArray(newVal) ?
-              item.value === newVal
-              :
-              newVal.includes(item.value)
-          )
-          selector.value = isItem != null ? newVal : null;
+
+          const isItem =
+            Array.isArray(newVal) ?
+              newVal.every(val => selector.items.find(it => it.value === val) != null) :
+              selector.items.find(it => it.value === newVal) != null;
+
+          selector.value = isItem ? newVal : null;
         } else {
           selector.value = null;
         }

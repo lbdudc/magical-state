@@ -12,7 +12,7 @@
         <v-divider class="ma-10"></v-divider>
       </v-col>
     </v-row>
-    <v-btn @click="store.setSelector('SPATIAL_AGGREGATION', [2, 3])"
+    <v-btn @click="store.setSelector('SPATIAL_AGGREGATION', [3, 2])"
       >set selector</v-btn
     >
     <span>set spatial aggregation to 2 and 3</span>
@@ -20,7 +20,7 @@
 </template>
 <script>
 import jsonSpec from "./specification.json";
-import { Store } from "../../../../../index";
+import { createStore } from "../../../../../index";
 import { MAutocomplete } from "../../../../../vue2-components";
 import getValues from "./getters";
 
@@ -35,13 +35,18 @@ export default {
       implementacion: null,
     };
   },
-  mounted() {
-    this.store = new Store(jsonSpec, getValues, null, (storeContent) => {
-      return new Promise(async (resolve) => {
-        console.log(storeContent);
-        resolve();
-      });
-    });
+  async mounted() {
+    this.store = await createStore(
+      jsonSpec,
+      getValues,
+      null,
+      (storeContent) => {
+        return new Promise(async (resolve) => {
+          console.log(storeContent);
+          resolve();
+        });
+      }
+    );
   },
 };
 </script>

@@ -50,5 +50,28 @@ describe("multipleSelector", () => {
 
     await store.setState({ "SPATIAL_AGGREGATION": [3, 2] });
     expect(aggregation.value).toStrictEqual([3, 2]);
-  })
+  });
+
+  it("should set value to null on setState when the value is not found", async () => {
+    const store = await createStore(jsonSpecMultiple, getValues, null, () => { });
+    const aggregation = store.getSelector("SPATIAL_AGGREGATION");
+
+    await store.setState({ "SPATIAL_AGGREGATION": [3, 8] });
+    expect(aggregation.value).toBeNull();
+  });
+
+  it("should set the value of the selector and set its items", async () => {
+    const store = await createStore(jsonSpecMultiple, getValues, null, () => { });
+    await store.setSelector("SPATIAL_AGGREGATION", [1, 2]);
+    const aggregation = store.getSelector("SPATIAL_AGGREGATION");
+    expect(aggregation.items.sort()).toEqual(spatialItems.sort());
+    expect(aggregation.value.sort()).toEqual([1, 2]);
+  });
+
+  it("should reject setSelector if desired value not found in selector items", async () => {
+    const store = await createStore(jsonSpecMultiple, getValues, null, () => { });
+    expect(store.setSelector("SPATIAL_AGGREGATION", [50])).
+      rejects.toEqual("The value 50 is not in the selector items, selector with SPATIAL_AGGREGATION not setted");
+  });
+
 })
