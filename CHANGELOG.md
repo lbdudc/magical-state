@@ -2,6 +2,24 @@
 
 <!--- next entry here -->
 
+## 0.13.0
+2022-06-15
+
+### Breaking changes
+
+#### changed exports of static method parseUrl (fe0d71949488a2339685cb63fdd18a58943fae3f)
+
+the method parseUrl is now independent from the store class
+
+### Features
+
+- added tests related to stores state (d03bc5267500c098d58a3dfa7ffae53813258a11)
+- added type of newValue check (04f88155282129c51fef1b672829c8ee38c8737b)
+
+### Fixes
+
+- fixed setState's and setSelector's conditionals used to check if the new value is part of the selector items (178a661849ba4d58c260831d4bf2d91df2cae8fb)
+
 ## 0.12.0
 2022-06-08
 
