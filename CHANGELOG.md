@@ -2,6 +2,13 @@
 
 <!--- next entry here -->
 
+## 0.13.1
+2022-06-15
+
+### Fixes
+
+- setting instantSelectorButtonLabel required to false (d5543020ac2799cf990837fba382485326452917)
+
 ## 0.13.0
 2022-06-15
 
