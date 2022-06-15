@@ -89,7 +89,7 @@ export default {
     },
     instantSelectorButtonLabel: {
       type: String,
-      required: true,
+      required: false,
     },
     availableSpeeds: {
       type: Array,
