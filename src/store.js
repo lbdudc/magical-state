@@ -131,6 +131,10 @@ export default class Store {
       const obs = utils.findElementInObservable(id, this._observable);
       let newItems = [];
 
+      if (Array.isArray(value) && obs.type != "multiple") {
+        reject(`Cannot set value of type array on a selector that is not multiple`);
+      }
+
       // If there are no items in the selector or is deep, we force getValues
       if (
         (deep ||
@@ -291,6 +295,10 @@ export default class Store {
       const el = utils.findJsonSpecElement(propId, this._jsonSpec);
       let hasRedrawProp = el.redraw;
       const obs = utils.findElementInObservable(propId, this._observable);
+
+      if (Array.isArray(newVal) && obs.type != "multiple") {
+        reject(`Cannot set value of type array on a selector that is not multiple`);
+      }
       obs.value = obs.type === 'multiple' && !Array.isArray(newVal) ? [newVal] : newVal;
 
       // Reset values of the depending selectors (if has any)

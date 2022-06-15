@@ -157,12 +157,6 @@ describe("storeState", () => {
     expect(aggregation.value).toEqual(spatialItems[0].value);
   });
 
-  it("should reject setSelector if desired value not found in selector items", async () => {
-    const store = await createStore(simpleJsonSpec, getValues, null, () => { });
-    expect(store.setSelector("SPATIAL_AGGREGATION", 50)).
-      rejects.toEqual("The value 50 is not in the selector items, selector with SPATIAL_AGGREGATION not setted");
-  });
-
   it("should set value from the actual selector items", async () => {
     const mockGetValues = jest.fn(() => { return Promise.resolve(spatialItems) });
     const store = await createStore(jsonSpecAggregation, mockGetValues, null, () => { });
