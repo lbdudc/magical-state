@@ -134,4 +134,21 @@ describe("Store", () => {
     expect(obj.items.length).toBe(0);
   })
 
+  it("should reject setSelector if desired value not found in selector items", async () => {
+    const store = await createStore(simpleJsonSpec, getValues, null, () => { });
+    expect(store.setSelector("SPATIAL_AGGREGATION", 50)).
+      rejects.toEqual("The value 50 is not in the selector items, selector with SPATIAL_AGGREGATION not setted");
+  });
+
+  it("should reject change if new value is an array and the selector is not multiple", async () => {
+    const store = await createStore(simpleJsonSpec, getValues, null, () => { });
+    expect(store.change("SPATIAL_AGGREGATION", [1])).
+      rejects.toEqual("Cannot set value of type array on a selector that is not multiple");
+  })
+
+  it("should reject setState if new value is an array and the selector is not multiple", async () => {
+    const store = await createStore(simpleJsonSpec, getValues, null, () => { });
+    expect(store.setSelector("SPATIAL_AGGREGATION", [1, 2]));
+  })
+
 })
