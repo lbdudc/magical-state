@@ -1,4 +1,4 @@
-import { createStore, Store } from "../index";
+import { createStore, parseUrl } from "../index";
 
 let store;
 
@@ -44,7 +44,7 @@ describe("Utils", () => {
 
   it("should be able to decode an URL", () => {
 
-    const parsedUrl = Store.parseUrl("MD0yMDIwLTAxLTAxJjE9MQ==", jsonSpec);
+    const parsedUrl = parseUrl("MD0yMDIwLTAxLTAxJjE9MQ==", jsonSpec);
 
     expect(parsedUrl).toEqual({ DATE_FILTER: '2020-01-01', INSTANT_FILTER: 1 });
   });
