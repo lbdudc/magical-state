@@ -1,6 +1,6 @@
 import spec from "./spec.json";
 import getValues from "./magical-state";
-import { Store } from "../../index.js";
+import { createStore } from "../../index.js";
 
 const cb = (state) => {
   return new Promise(async (resolve) => {
@@ -9,7 +9,7 @@ const cb = (state) => {
     resolve();
   });
 }
-const store = new Store(spec, getValues, null, cb);
+const store = createStore(spec, getValues, null, cb);
 
 
 let createSelector = (selector) => {

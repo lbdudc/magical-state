@@ -229,6 +229,8 @@ const parseUrl = (url) => {
  * @returns An object with key/values decoded from the URL.
  */
 const decodeURL = (url, spec) => {
+  if (url == null || url === "")
+    return {}
   try {
     const decodedObj = parseUrl(url);
     const dataObj = {};

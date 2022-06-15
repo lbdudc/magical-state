@@ -49,17 +49,6 @@ export default class Store {
   }
 
   /**
-   * It takes a URL and returns an object with the URL's components
-   * @param {String} url - The URL to parse.
-   * @returns an object with the URL's components
-   */
-  static parseUrl(url, jsonSpec) {
-    if (url == null || url === "")
-      return {}
-    return utils.decodeURL(url, jsonSpec);
-  }
-
-  /**
    * Returns the actual state of the store, formated like an object
    * (its going to be used to send this as query params to update the URL)
    */
