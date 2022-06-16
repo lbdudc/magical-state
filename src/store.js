@@ -22,18 +22,25 @@ export default class Store {
   }
 
   async loadStore(initialState) {
-    // If initialState is defined, we have to set a new state
-    if (utils.isValidState(initialState)) {
-      if (typeof initialState === "string") {
-        // If the new state is a string, we have to decode it first
-        return this.setState(this._decodeURL(initialState, this.jsonSpec), false);
-      } else {
-        return this.setState(initialState, false);
+    return new Promise(async (resolve, reject) => {
+      try {
+        // If initialState is defined, we have to set a new state
+        if (utils.isValidState(initialState)) {
+          if (typeof initialState === "string") {
+            // If the new state is a string, we have to decode it first
+            await this.setState(this._decodeURL(initialState, this.jsonSpec), false);
+          } else {
+            await this.setState(initialState, false);
+          }
+          // If not, we populate the store with the default values
+        } else {
+          await this._populateStore();
+        }
+        resolve(this);
+      } catch (err) {
+        reject(err);
       }
-      // If not, we populate the store with the default values
-    } else {
-      return this._populateStore();
-    }
+    });
   }
 
   get jsonSpec() {
@@ -137,37 +144,40 @@ export default class Store {
       }
 
       const isItem =
-        Array.isArray(value) ?
-          value.every(val => obs.items.find(it => it.value === val) != null) :
-          obs.items.find(it => it.value === value) != null;
-      if (
-        (obs.items && isItem) ||
-        (obs.type === "date") ||
-        (value == null)) {
-        await this.change(obs.id, value);
+        obs.items != null ?
+          Array.isArray(value) ?
+            value.every(val => obs.items.find(it => it.value === val) != null) :
+            obs.items.find(it => it.value === value) != null
+          : false;
+      if (isItem || (obs.type === "date") || (value == null)) {
+        try {
+          await this.change(obs.id, value);
+        } catch (err) {
+          reject(err);
+        }
         resolve();
       } else {
-        reject(`The value ${value} is not in the selector items, selector with ${id} not setted`);
+        reject(`The value ${value} is not in the selector items, selector with ${id} not set`);
       }
     });
   }
 
   /**
    * Populates the store with the initial values
-   * If the selector has the property "setItemsOnMounted" setted to true,
+   * If the selector has the property "setItemsOnMounted" set to true,
    * we call the update function
    */
   async _populateStore() {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       const promises = []
       this._observable.forEach(async (el) => {
         if (el.setItemsOnMounted) {
           promises.push(new Promise(async (resolve, reject) => {
             try {
               const res = await this._updateSelector(el.id);
-              resolve(res)
+              resolve(res);
             } catch (error) {
-              reject(error)
+              reject(error);
             }
           }))
         }
@@ -175,7 +185,7 @@ export default class Store {
       Promise.all(promises).then((res) => {
         this._state.loading = false;
         resolve(res)
-      });
+      }).catch(err => reject(err));
     })
   }
 
@@ -194,14 +204,11 @@ export default class Store {
       utils.getKeyValueRootElements(el.id, this._jsonSpec, this._observable)
     );
 
-    // Check if the element needs to set in value the first item retrieved or if it has a default value set on the spec
-    if (el.setDefaultFirstItem) {
-      await this._setDefaultFirstItem(el, res);
-    } else {
-      if (el.default != null) {
-        const newVal = el.default;
-        await this.change(el.id, newVal, el.redraw);
-      }
+    // Check if the element needs to set a default value
+    try {
+      await this._setDefaultItem(el, res);
+    } catch (err) {
+      throw err;
     }
 
     // Set the items into the selector and ends the loading state
@@ -315,7 +322,7 @@ export default class Store {
             // Set the items into the selector and end the loading state
             obsItem.value = obsItem.default || null;
             obsItem.items = res;
-            await this._setDefaultFirstItem(obsItem, res, false);
+            await this._setDefaultItem(obsItem, res, false);
             obsItem.loading = false;
             utils.dispatchCustomEvent("itemsLoaded", utils.createUIObject(obsItem));
             resolve(res);
@@ -345,17 +352,37 @@ export default class Store {
   }
 
   /**
-   * Checks if the selector should be setted with the first element of the list
+   * Checks if the selector should be set with the first element of the list
    * then sets it
    * @param {Object} observable
    * @param {Array} items
    */
-  _setDefaultFirstItem(observable, items, needsRedraw) {
-    if (observable.setDefaultFirstItem && items && items.length > 0) {
+  _setDefaultItem(observable, items, needsRedraw) {
+    if (items == null || items.length <= 0) {
+      return Promise.resolve();
+    }
+    if (observable.setDefaultItem != null) {
+      const defVal = observable.setDefaultItem;
+      if (typeof (defVal) === 'number') {
+        return this.change(observable.id, items[defVal].value, needsRedraw);
+      } else {
+        switch (defVal) {
+          case "first":
+            return this.change(observable.id, items[0].value, needsRedraw);
+          case "last":
+            return this.change(observable.id, items[items.length - 1].value, needsRedraw);
+          case "all":
+            return this.change(observable.id, items.map(el => el.value), needsRedraw);
+          default:
+            return Promise.reject(`${defVal} is not a valid option`);
+        }
+      }
+    }
+    else if (observable.setDefaultFirstItem) {
       // If we update the value of the selector, we need to call its updated event
       return this.change(observable.id, items[0].value, needsRedraw);
-    } else {
-      return Promise.resolve();
+    } else if (observable.default != null) {
+      return this.change(observable.id, observable.default, observable.redraw);
     }
   }
 
@@ -380,14 +407,7 @@ export default class Store {
     const el = utils.findElementInObservable(id, this._observable);
     el.items = values;
     if (useSpecConfig) {
-      const specEl = utils.findJsonSpecElement(id, this._jsonSpec);
-      if (specEl.setDefaultFirstItem) {
-        await this._setDefaultFirstItem(el, values, el.redraw);
-      } else {
-        if (specEl.default != null) {
-          await this.change(id, el.default, specEl.redraw);
-        }
-      }
+      await this._setDefaultItem(el, values, el.redraw);
     } else {
       await this.change(id, null, false);
     }

@@ -60,6 +60,7 @@ const createStore = (jsonSpec) => {
       setItemsOnMounted: el.setItemsOnMounted && el.setItemsOnMounted === true,
       items: [],
       actions: el.actions || [],
+      setDefaultItem: el.setDefaultItem || null,
     };
   });
 };
@@ -160,7 +161,7 @@ const getActionsValues = (id, newState, getValues, obs, jsonSpec) => {
           );
           // Setear el value del hijo si se encuentra en la lista de items que les pasamos
           const foundChild = newState[action];
-          // Set items and check if set value can be setted
+          // Set items and check if set value can be set
           findElementInObservable(action, obs).items = res;
           if (foundChild != null) {
             const elem = findElementInObservable(action, obs);
