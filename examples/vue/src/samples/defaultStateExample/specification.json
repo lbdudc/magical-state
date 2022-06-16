@@ -12,7 +12,7 @@
   {
     "id": "TEMPORAL_AGGREGATION",
     "label": "Temporal Aggregation",
-    "setItemsOnMounted": true,
+    "setDefaultItem": "last",
     "group": "Aggregation",
     "actions": [
       "TEMPORAL_FILTER"
@@ -29,6 +29,7 @@
   {
     "id": "TEMPORAL_FILTER",
     "label": "Temporal Filter",
+    "setDefaultItem": "last",
     "redraw": true,
     "actions": []
   },
