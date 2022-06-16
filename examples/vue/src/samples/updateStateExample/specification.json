@@ -12,7 +12,8 @@
   {
     "id": "TEMPORAL_AGGREGATION",
     "label": "Temporal Aggregation",
-    "setDefaultFirstItem": true,
+    "setItemsOnMounted": true,
+    "setDefaultItem": 1,
     "default": 4,
     "group": "Aggregation",
     "actions": [
@@ -22,7 +23,7 @@
   {
     "id": "SPATIAL_FILTER",
     "label": "Spatial Filter",
-    "setDefaultFirstItem": true,
+    "setDefaultItem": "first",
     "actions": [
       "TEMPORAL_FILTER"
     ]

@@ -3,8 +3,7 @@ import utils from "./src/utils";
 
 const createStore = async (jsonSpec, getValues, state, callback) => {
   const st = new Store(jsonSpec, getValues, null, callback);
-  await st.loadStore(state)
-  return st;
+  return st.loadStore(state);
 }
 
 const parseUrl = utils.decodeURL;

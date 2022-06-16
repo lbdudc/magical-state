@@ -5,7 +5,7 @@
     "group": "Aggregation",
     "type": "multiple",
     "setItemsOnMounted": true,
-    "setDefaultFirstItem": true,
+    "setDefaultItem": "all",
     "default": [
       3
     ],
