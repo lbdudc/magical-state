@@ -39,13 +39,9 @@
           outlined
         ></v-select>
         <v-btn
+          v-if="hasInstantSelectorFunction"
           @click="setValueToNow"
-          :disabled="
-            isLoading ||
-            !sliderSteps ||
-            !isPaused ||
-            sliderActualTime === sliderSteps - 1
-          "
+          :disabled="isLoading || !sliderSteps || !isPaused"
         >
           <span>
             {{ instantSelectorButtonLabel }}
@@ -76,6 +72,10 @@ export default {
       type: String,
       required: false,
       default: null,
+    },
+    hasInstantSelectorFunction: {
+      type: Boolean,
+      required: true,
     },
     availableSpeeds: {
       type: Array,
