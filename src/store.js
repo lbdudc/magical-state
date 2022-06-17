@@ -127,7 +127,7 @@ export default class Store {
       const obs = utils.findElementInObservable(id, this._observable);
       let newItems = [];
 
-      if (Array.isArray(value) && obs.type != "multiple") {
+      if (obs.type != "date" && Array.isArray(value) && obs.type != "multiple") {
         reject(`Cannot set value of type array on a selector that is not multiple`);
       }
 
@@ -292,7 +292,7 @@ export default class Store {
       let hasRedrawProp = el.redraw;
       const obs = utils.findElementInObservable(propId, this._observable);
 
-      if (Array.isArray(newVal) && obs.type != "multiple") {
+      if (obs.type != "date" && Array.isArray(newVal) && obs.type != "multiple") {
         reject(`Cannot set value of type array on a selector that is not multiple`);
       }
       obs.value = obs.type === 'multiple' && !Array.isArray(newVal) ? [newVal] : newVal;

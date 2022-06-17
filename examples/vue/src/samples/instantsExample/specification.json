@@ -4,6 +4,7 @@
     "label": "Date filter",
     "setItemsOnMounted": false,
     "setDefaultFirstItem": false,
+    "type": "date",
     "actions": [
       "INSTANT_FILTER"
     ]
@@ -11,6 +12,7 @@
   {
     "id": "INSTANT_FILTER",
     "setItemsOnMounted": false,
+    "type": "date",
     "setDefaultFirstItem": true,
     "actions": [],
     "redraw": true
