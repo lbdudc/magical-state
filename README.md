@@ -4,7 +4,7 @@
 
 ## Introduction
 
-This library manages the global state of a series of selectors that can be easily defined through configuration files.
+This library manages the global state of a series of selectors which have reactive dependencies between each other. These dependencies and the selectors' expected behaviour can be easily defined through a configuration file.
 
 ## Installation
 
@@ -14,118 +14,91 @@ Add the dependency for your proyect into `package.json`
 "magical-state": "git+https://gitlab.lbd.org.es/publico/magical-state.git"
 ```
 
-## Store methods
-
-### Import/Export methods
-
-- ```exportStoreEncodedURL(): String```: Returns an encoded URL with the current state of the store.
-- ```importStoreEncodedURL(url): void```: Parses the URL and sets the state of the store).
-- ```(static) parseUrl(url,jsonSpec): Object<key,value>```: Returns the decoded URL.
-
-Examples of usage [here](#import--export-store-url)
-
-### Change the state of the store
-
-- ```change(String propId, Any newVal): void```: Changes the value of the selector with the given id.
-- ```triggerGetValues(String id): Promise<Any>```: Triggers the getValues method of the selector with the given id.
-- ```(deprecated) setState(Array<{String id, Any value}> newState, Boolean executeCallback, Function customCallback)```: Sets the state of the store, second param specifies if want to execute the redraw method, or a custom one (third param). (not recommended, better to use the newState in the constructor of the store)
-- ```setSelector(String selectorId, Any newVal)```: Changes the value of the selector with the given id.
-- ```getSelector(String selectorId): Proxy```: Returns the value of the selector with the given id).
-- ```(getter) objFromObservable: Array<{String id, Any value}>```: Returns a copy of the actual state of the store.
-
 ## Usage
 
-You can see a more detailed example in the folder `./examples` inside this project.
+To use the library we must create a [store](#create-the-store). For this we will first need to define a specification and a method *getValues* to retrieve the items that will populate each selector.
 
-Steps to follow are:
+### Define a `specification` in json format
 
-1. Define [`specification.json`](#define-a-specificationjson-file)
-2. Define how to [retrieve values to the selectors](#add-the-implementation-of-fetching-data)
-3. Create an [store](#create-the-store)
-4. Add the [.vue components (optional)](#add-component-selectors-optional)
-
-### Define a `specification.json` file
-
-To begin with, we must define in a .json file which selectors we want to create, and the way in which these selectors are related to each other.
-
-To do this we define an array of objects.
+To begin with, we must define in a json the selectors we want to create, the way they are related to each other, and their behaviour. The store will accept the next parameters in the specification:
 
 | name                | type    | default   | description                                                                                                                     |
 |---------------------|---------|-----------|---------------------------------------------------------------------------------------------------------------------------------|
-| id                  | string  |           | Identifier of the selector, must be unique                                                                                      |
-| label               | string  | undefined | Label to be placed in the label field of the selector                                                                           |
-| setItemsOnMounted   | boolean | true      | It can be specified if we want the selector to load data when it is rendered for the first time                                 |
-| setDefaultFirstItem | boolean | false     | You can specify if you want the first item to be selected by default when loading the data                                   |
-| redraw              | boolean | false     | If this option is selected the callback defined in the store will be fired whenever the @change event of the selector is fired |
-| default             | string   | null        | Name of the default value to be set             | array   | []        | List of identifiers of child selectors, for which an @change event will be fired every time the parent's @change event is fired
-| actions | array | [] | List of identifiers of store elements that need to reload their elements every time the value of this element changes
+| id                  | string  |     undefined      | Identifier of the selector, must be unique.                                                                                      |
+| label               | string  | undefined | Label to be placed in the label field of the selector.                                                                           |
+| setItemsOnMounted   | boolean | false      | It can be specified if we want the selector to load data when it is rendered for the first time.                                 |
+| setDefaultItem | string \|\| integer  | undefined     | You can specify 'first', 'last', 'all' or a number that represents the index of the item's array that is meant to be set as default value.                                   |
+| redraw              | boolean | false     | If this option is selected the callback defined passed in store creation will be fired whenever the value of the selector changes |
+| default             | string   | null        | Value to set as default if *setDefaultItem* is not present.            | array   | []        | List of identifiers of child selectors, for which an @change event will be fired every time the parent's @change event is fired
+| actions | array | [] | List of identifiers of store elements that need to reload their elements every time the value of this element changes.
 | type | string | 'selector' |  The store has in count three types: 'selector', 'date', and 'multiple'.
 
-Example of an `specification.json`
+<details>
+  <summary>Example of an specification.json</summary>
+
+#### Specification
+
+This spec will generate two selectors: "COUNTRIES" and "CITIES".
+
+*COUNTRIES* will trigger the *getValues* method on mount and will always set as its default value the first element of the retrieved items. Everytime its value changes *CITIES* will update its values and set as default the last element. Also, since 'redraw' is set to true the callback function will be triggered.
 
 ```json
 [
   {
-    "id": "SPATIAL_AGGREGATION",
-    "label": "Spatial Aggregation",
+    "id": "COUNTRIES",
+    "label": "Countries",
     "setItemsOnMounted": true,
-    "setDefaultFirstItem": true,
+    "setDefaultItem": "first",
     "redraw": true,
-    "default": "PROVINCE",
     "actions": [
       "SPATIAL_FILTER"
     ]
   },
   {
-  "id": "SPATIAL_FILTER",
-  "setDefaultFirstItem": true,
-  "label": "Spatial Filter",
+  "id": "CITIES",
+  "setDefaultItem": "last",
+  "label": "Cities",
   "actions": [],
   }
 ]
 ```
 
----
+</details>
 
-#### **IMPORTANT**
+##### **IMPORTANT**
 
-You must be careful with defining cyclic dependencies between selectors, and that the identifiers of the children are defined in the specification
-
----
+You must be careful with defining cyclic dependencies between selectors, and that the identifiers in the actions are defined in the specification.
 
 ### Add the implementation of fetching data
 
-We must define how we are going to want to retrieve the necessary information to populate each of our selectors.
+We must define how we want to retrieve the necessary information to populate each of our selectors.
 
-To do this, we create a 'getValues' method.
+To do this the store will call the method *getValues* passed on store creation. This method is expected to receive the next parameters in the listed order:
+
+- The identifier of the selector that needs its items to be loaded.
+- A list of key-value elements that contains the current value of the selectors that have dependent selectors (*actions* list not empty).
+- The store.
+
+<details>
+  <summary>Example of a getValues function</summary>
 
 ```js
 export default async (propId, params, store) =>  {
   switch (propId) {
-    case "SPATIAL_AGGREGATION":
-      return aggregationService.getSpatialItems();
-    case "TEMPORAL_AGGREGATION":
-      return aggregationService.getTemporalItems();
-    case "TEMPORAL_FILTER":
-      return filterService.getTemporalFilterItems(params);
-    case "SPATIAL_FILTER":
-      return filterService.getSpatialFilterItems(params);
+    case "COUNTRIES":
+      return countriesService.getCountries();
+    case "CITIES":
+      return citiesService.getCities(params);
   }
 }
 
 ```
 
-`propId:` Name of the selector from which we want to retrieve the possible values ​​to populate the selector.
+</details>
 
-`params:` Object with related key/values.
+##### **IMPORTANT FOR RETURNING VALUES**
 
-`store`:  Object with {id1: value1, id2: value2, ... } representing actual state of the store.
-
----
-
-#### **IMPORTANT FOR RETURNING VALUES**
-
-The function always must return a Promise, and the data must be like:
+The function always must return a Promise, and the retrieved data must have the next format:
 
 ```json
 [
@@ -136,73 +109,102 @@ The function always must return a Promise, and the data must be like:
 ]
 ```
 
----
+Field *label* is only mandatory when using the library's Vue components.
+
+## Store methods
 
 ### Create the store
 
-Into your component (normally a .vue file), import your `specification.json` and your `implementation.js` files,
-additionally you can specify: a state to be set when the store is created (url encoded or an object with key/values), and a custom callback to be executed when the store is updated.
+> ```createStore (jsonSpec: Array, getValues: Function, state: Object|String, callback: Function) : Store```
 
-> **_PARAMS TO BE PASSED:_**  jsonSpec: Array, getValues: Function, state: Object|String, callback: Function
+- *jsonSpec*: the [specification](#define-a-specification-in-json-format) needed to create the desired selectors
+
+- *getValues*: the [fetch](#add-the-implementation-of-fetching-data) data function
+
+- *state*: a state to be set when the store is created (url encoded or an object with key/values)
+
+- *callback*: a *Promise*  to be executed when the store values are updated. The callback function will be triggered everytime a selector that has the *redraw* property to true suffers a value change. Note that if the selector has any related selectors on its actions, the store will wait for their items and default values to be set before triggering the callback.
+
+- *Returns* an instance of the store
+
+<details>
+<summary>Example of store creation</summary>
 
 ```js
 import jsonSpec from "./specification.json";
 import {
-  Store
+  createStore
 } from "./magical-state/index.js";
+import getValues from "./valueGetters";
 
 ...
 ...
 ...
 
-this.store = new Store(jsonSpec, 
-  (propId, params, store) => { return await [{ ... }] },
-  null, 
-  (currentState) => {
-  console.log(`Your current state is: [${currentState}]`);
-});
+const state = {
+  COUNTRIES: 2,
+};
+
+this.store = createStore(
+  jsonSpec,
+  getValues,
+  // will set 2 as default value on selector 'countries' 
+  state, 
+  // the callback receives as a parameter a {id: value} object
+  // that constains the selectors with values not null
+  (storeCurrentState) => {
+    return new Promise(async (resolve) => {
+      console.log(storeContent);
+      resolve();
+    });
+  };
+);
+
+
 ```
 
-### Add component selectors (optional)
+</details>
 
-Then you normally would like to add the m-selector components, given by the library into your `component.vue`
+### Change the state of the store
 
-```js
-import {
-  MSelector,
-} from "./magical-state/vue2-components";
-```
+- ```change(propId: String, newVal: Any, needsRedraw: Boolean): Promise<>```: Changes the value of the selector with the given id. *needsRedraw* prop defaults to true and specifies if the change on the selector's value should trigger the callback, in case the selector has *redraw* to true in the specification.
+- ```triggerGetValues(id: String): Promise<Any>```: Triggers the *getValues* method of the selector with the given id. Returns the promise returned by the implementation of the *getVlues* method passed on store creation.
+- ```setSelector(selectorId: String, newVal: Any, deep: Boolean): Promise<>```: Changes the value of the selector with the given id. If *deep* is true or the selector isn't of type *date* and doesn't have items, *setSelector* will call *getValues* to porpulate the selector's items.  
+- ```setItems(id: String, values: Array, useSpecConfig: Boolean): void```: Sets the items of the specified store element to the parameter *values*. If *useSpecConfig* is true, it will check the spec to set the selector's default value.
 
-```html
-  <m-selector :store="store" id="SPATIAL_AGGREGATION"> </m-selector>
-```
+##### Important when setting a new value on a selector
 
-| name                | type    | default   | description                                                                                                                     |
-|---------------------|---------|-----------|---------------------------------------------------------------------------------------------------------------------------------|
-| store               | Object  |           | The instance of the store created by the library                                                                                |
-| id                  | string  | undefined | Identifier of the selector to be rendered (must coincide with the id defined into the specification.json file)                  |
-| i18n               | Function  | undefined | Function to i18n the labels of the selectors                 |
+Both *change* and *setSelector* functions may reject their returned promises when the value to be set is not found on the selector's items. This is not relevant if the selector has type "date".
+
+### Get the state of the store
+
+- ```getSelector(selectorId: String): Proxy```: Returns the value of the selector with the given id).
+- ```(getter) objFromObservable(): Array<{id: String, value: Any}>```: Returns a copy of the actual state of the store.
+- ```getUI(): Array<{id: String, label: String, value: Any, type: String, items: []}>```: Returns a list of objects that contains the basic information about every observable element so they can be displayed on the UI.
 
 ### Import / Export Store URL
 
-For importing and exporting the store, you can the methods:
+For importing and exporting the store, you can use the methods:
 
 - ```exportStoreEncodedURL(): String```: Returns an encoded URL with the current state of the store.
 - ```importStoreEncodedURL(url): void```: Parses the URL and sets the state of the store).
-- ```(static) parseUrl(url,jsonSpec): Object<key,value>```: Returns the decoded URL, this method can be called without instantiating the store, to parse an URL before store creation.
+- ```(independent from store) parseUrl(url,jsonSpec): Object<key,value>```: Returns the decoded URL, this method can be called without instantiating the store, to parse an URL before store creation.
+
+<details>
+<summary>Example of url import/export</summary>
 
 ```js
 import {
-  Store
+  createStore
 } from "./magical-state/index";
 
 ...
 
-// If you need to access the readable values of an encoded 
+// If you need to access the readable values of an encoded
 //URL, you can use the method:
 const newState = Store.parseUrl(url, jsonSpec);
 
-// You can create the new store with an url encoded or 
+// You can create the new store with an url encoded or
 // with an object with key/values
 const newStateUrl = "MD0yJjI9Mg=="
 const newStateObject = {
@@ -213,22 +215,63 @@ const newStateObject = {
 };
 
 // Examples creating the store
-this.store = new Store(
+this.store = createStore(
   jsonSpec,
   getValues,
   newStateUrl || newStateObject,
-  (storeContent) => { 
+  (storeContent) => {
     console.log("created with new state");
   }
 );
 
 // Then you can import/export the store
-this.store.exportStoreEncodedURL() 
+this.store.exportStoreEncodedURL()
 // returns the encoded URL (MD0yJjI9Mg==)
 
 // set the state of the store with the encoded URL
-this.store.importStoreEncodedURL(newStateUrl); 
+this.store.importStoreEncodedURL(newStateUrl);
+
 ```
+
+</details>
+
+## Store Events
+
+The store will dispatch the next events:
+
+- *redrawFulfilled*: It is dispatched after completing the execution of the callback function.
+
+- *itemsLoaded*: It is dispatched after retrieving the items of a selector through the use of the *getValues* function.
+
+- *change*: Dispatched when a selector has changed its value.
+
+**Important**: To dispatch these events we use [CustomEvent](https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent/CustomEvent) so we can append on them iformation about the store. With each of them an object with the next content is passed:
+
+```js
+{event: 
+  {detail: 
+    {
+      id: String,
+      label: String,
+      value: Any,
+      type: String,
+      items: Array
+    }
+  }
+}
+```
+
+## Independent Methods
+
+```parseUrl(url,jsonSpec): Object<key,value>``` Returns the decoded URL.
+
+## Vue2 Components
+
+The library provides some vue2 components that work against a store. You cand find how to use them at: [vue2-components](/src/components/vue2-components/).
+
+### :pencil:  Examples
+
+Extended examples at: [Examples](/examples).
 
 ## Changelog
 
