@@ -107,9 +107,9 @@ export default class Store {
    * @param id - The id of the form you want to get the values from.
    * @returns the result of the async function.
    */
-  async triggerGetValues(id) {
+  async triggerGetValues(id, params) {
     try {
-      return await this._getValues(id);
+      return await this._getValues(id, params);
     } catch (err) {
       console.error(`Error on getValues method: ${err}`);
       throw err;
@@ -272,9 +272,13 @@ export default class Store {
           const fn = customCallback || this._callback;
           const dataObj = {};
           this._observable.filter(el => el.value != null).forEach(el => (dataObj[el.id] = el.value));
-          fn(dataObj).then(() => utils.dispatchCustomEvent("redrawFullfilled"));
+          fn(dataObj).then(() => {
+            utils.dispatchCustomEvent("redrawFullfilled");
+            resolve()
+          });
+        } else {
+          resolve();
         }
-        resolve();
       });
     });
   }
@@ -302,14 +306,13 @@ export default class Store {
       // For each children, create a new Promise calling the update function
       const act = [];
       obs.actions.forEach((el) => {
+        // Get the element of the observable child
+        const obsItem = utils.findElementInObservable(el, this._observable);
+        // If a child need to be redrawn, we set the hasRedrawProp property to true for later
+        if (obsItem.redraw && obsItem.setDefaultFirstItem) hasRedrawProp = true;
+
         act.push(
           new Promise(async (resolve, reject) => {
-            // Get the element of the observable child
-            const obsItem = utils.findElementInObservable(el, this._observable);
-
-            // If a child need to be redrawn, we set the hasRedrawProp property to true for later
-            if (obsItem.redraw && obsItem.setDefaultFirstItem) hasRedrawProp = true;
-
             // Set the loading state of the child to true
             // Await for the implementation to get the items
             obsItem.loading = true;
@@ -322,7 +325,7 @@ export default class Store {
             // Set the items into the selector and end the loading state
             obsItem.value = obsItem.default || null;
             obsItem.items = res;
-            await this._setDefaultItem(obsItem, res, false);
+            hasRedrawProp = await this._setDefaultItem(obsItem, res, false);
             obsItem.loading = false;
             utils.dispatchCustomEvent("itemsLoaded", utils.createUIObject(obsItem));
             resolve(res);
@@ -342,7 +345,7 @@ export default class Store {
             this._observable.filter(el => el.value != null).forEach(el => (dataObj[el.id] = el.value));
             this._callback(dataObj).then(() => utils.dispatchCustomEvent("redrawFullfilled", { id: el.id }));
           }
-          resolve();
+          resolve(hasRedrawProp);
         })
         .catch((err) => {
           console.error(err);
@@ -358,7 +361,7 @@ export default class Store {
    * @param {Array} items
    */
   _setDefaultItem(observable, items, needsRedraw) {
-    if (items == null || items.length <= 0) {
+    if (observable.type != "date" && (items == null || items.length <= 0)) {
       return Promise.resolve();
     }
     if (observable.setDefaultItem != null) {

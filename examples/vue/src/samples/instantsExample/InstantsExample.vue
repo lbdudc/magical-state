@@ -15,6 +15,8 @@
               :store="store"
               :i18n="$t"
               :instantSelectorFunction="mockSelectorF"
+              @lastItemReached="lastElementReached"
+              @firstItemReached="firstElementReached"
               :instantSelectorButtonLabel="
                 $t('timeline.instantSelectorButtonLabel')
               "
@@ -57,22 +59,30 @@ export default {
       counter: 0,
     };
   },
+  computed: {
+    paginationElement() {
+      return this.store.getSelector("CURRENT_PAGE");
+    },
+    instantsElement() {
+      return this.store.getSelector("INSTANT_FILTER");
+    },
+  },
   async mounted() {
+    document.addEventListener("change", this.handleChangeEvent);
     this.store = await createStore(
       jsonSpec,
       getValues,
       null,
       (storeContent) => {
         return new Promise(async (resolve) => {
+          await delay(2000);
           this.storeContent = storeContent;
           ++this.counter;
           //should wait this delay before advancing to the next instant
-          //await delay(3000);
           resolve();
         });
       }
     );
-    document.addEventListener("change", this.handleChangeEvent);
   },
   methods: {
     handleChangeEvent(event) {
@@ -80,10 +90,26 @@ export default {
         changedElement: event.detail.id,
         newValue: event.detail.value,
       };
-      console.log("holis", event.detail);
     },
     mockSelectorF() {
       console.log("mocking behaviour");
+    },
+    async lastElementReached() {
+      await this.store.setSelector(
+        this.paginationElement.id,
+        this.paginationElement.value + 1
+      );
+      this.instantsElement.sharedProps.index = 0;
+    },
+    async firstElementReached() {
+      if (this.paginationElement.value != 0) {
+        await this.store.setSelector(
+          this.paginationElement.id,
+          this.paginationElement.value - 1
+        );
+        this.instantsElement.sharedProps.index =
+          this.instantsElement.items.length - 1;
+      }
     },
   },
   beforeDestroy() {
