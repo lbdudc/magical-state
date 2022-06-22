@@ -158,7 +158,8 @@ export default {
       while (!this.isPaused) {
         if (this.index == this.storeElement.items.length - 1) {
           await delay(BASE_SPEED / this.speedSelected);
-          this.$emit("lastItemReached");
+          this.$emit("lastItemReached", true);
+          this.stopTimeline();
         } else {
           //Wait for the current time interval (based on the selected speed) and the reception of the "redrawFullfilled" event
           await Promise.all([
@@ -207,6 +208,7 @@ export default {
       });
     },
     async callStoreChange() {
+      this.isLoading = true;
       return this.store.change(
         this.id,
         this.storeElement.items[this.index].value

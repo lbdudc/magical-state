@@ -11,6 +11,7 @@
         <v-row>
           <v-col cols="12">
             <MTimeline
+              ref="timeline"
               id="INSTANT_FILTER"
               :store="store"
               :i18n="$t"
@@ -94,12 +95,15 @@ export default {
     mockSelectorF() {
       console.log("mocking behaviour");
     },
-    async lastElementReached() {
+    async lastElementReached(wasPlaying) {
       await this.store.setSelector(
         this.paginationElement.id,
         this.paginationElement.value + 1
       );
       this.instantsElement.sharedProps.index = 0;
+      if (wasPlaying) {
+        this.$refs.timeline.playTimeline();
+      }
     },
     async firstElementReached() {
       if (this.paginationElement.value != 0) {
