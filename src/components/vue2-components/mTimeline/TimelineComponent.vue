@@ -196,6 +196,7 @@ export default {
         const { id, value } = this.storeElement;
         this.$emit("change", { id, value });
       }
+      this.isLoading = false;
     },
     changeStoreElementValuePromise() {
       return new Promise((resolve) => {
@@ -226,6 +227,7 @@ export default {
       } else {
         this.index = this.storeElement.items.length - 1;
         await this.callStoreChange();
+        this.isLoading = false;
       }
     },
   },
