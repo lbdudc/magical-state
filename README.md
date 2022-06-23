@@ -195,14 +195,14 @@ For importing and exporting the store, you can use the methods:
 
 ```js
 import {
-  createStore
+  createStore, parseUrl
 } from "./magical-state/index";
 
 ...
 
 // If you need to access the readable values of an encoded
 //URL, you can use the method:
-const newState = Store.parseUrl(url, jsonSpec);
+const newState = parseUrl(url, jsonSpec);
 
 // You can create the new store with an url encoded or
 // with an object with key/values
