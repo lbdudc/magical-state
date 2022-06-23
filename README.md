@@ -2,6 +2,23 @@
 
 ![plot](./assets/logo.png)
 
+## Table of contents
+
+- [Introduction](#introduction)
+- [Installation](#installation)
+- [Usage](#usage)
+  - [Specification](#define-a-specification-in-json-format)
+  - [Implementation of fetching data](#add-the-implementation-of-fetching-data)
+- [Store methods](#store-methods)
+  - [Create the store](#create-the-store)
+  - [Change the state of the store](#change-the-state-of-the-store)
+  - [Get the state of the store](#get-the-state-of-the-store)
+  - [Import / Export Store URL](#import-and-export-store-url)
+- [Store Events](#store-events)
+- [Independent Methods](#independent-methods)
+- [Vue Components](/src/components/vue2-components/)
+- [Examples](/examples)
+
 ## Introduction
 
 This library manages the global state of a series of selectors which have reactive dependencies between each other. These dependencies and the selectors' expected behaviour can be easily defined through a configuration file.
@@ -182,7 +199,7 @@ Both *change* and *setSelector* functions may reject their returned promises whe
 - ```(getter) objFromObservable(): Array<{id: String, value: Any}>```: Returns a copy of the actual state of the store.
 - ```getUI(): Array<{id: String, label: String, value: Any, type: String, items: []}>```: Returns a list of objects that contains the basic information about every observable element so they can be displayed on the UI.
 
-### Import / Export Store URL
+### Import and Export Store URL
 
 For importing and exporting the store, you can use the methods:
 
