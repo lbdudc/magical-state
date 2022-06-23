@@ -155,29 +155,20 @@ export default {
     async startInterval() {
       // TODO, esta funcion tendrá que elegir un nuevo rango para mostrar
       // If value reaches end, we probably have to recover new data (API Fetch)
-      let isLastElement = false;
-      while (
-        !this.isPaused &&
-        !isLastElement &&
-        this.index <= this.storeElement.items.length - 2
-      ) {
-        //Wait for the current time interval (based on the selected speed) and the reception of the "redrawFullfilled" event
-        await Promise.all([
-          delay(BASE_SPEED / this.speedSelected),
-          this.changeStoreElementValuePromise(),
-        ]);
-        if (
-          this.index != this.storeElement.items.length - 1 &&
-          !this.isPaused
-        ) {
-          ++this.storeElement.sharedProps.index;
+      while (!this.isPaused) {
+        if (this.index == this.storeElement.items.length - 1) {
+          await delay(BASE_SPEED / this.speedSelected);
+          this.$emit("lastItemReached", true);
+          this.stopTimeline();
         } else {
-          isLastElement = true;
+          //Wait for the current time interval (based on the selected speed) and the reception of the "redrawFullfilled" event
+          await Promise.all([
+            delay(BASE_SPEED / this.speedSelected),
+            this.changeStoreElementValuePromise(),
+          ]);
+          ++this.index;
+          this.fullfillPromise = null;
         }
-        this.fullfillPromise = null;
-      }
-      if (!this.isPaused) {
-        this.stopTimeline();
       }
     },
     async changeSliderValue(val) {
@@ -187,6 +178,8 @@ export default {
           await this.callStoreChange();
           const { id, value } = this.storeElement;
           this.$emit("next", { id, value });
+        } else {
+          this.$emit("lastItemReached");
         }
       } else if (val === "prev") {
         if (this.index > 0) {
@@ -194,6 +187,8 @@ export default {
           await this.callStoreChange();
           const { id, value } = this.storeElement;
           this.$emit("prev", { id, value });
+        } else {
+          this.$emit("firstItemReached");
         }
       } else {
         this.index = val ? val : 0;
@@ -201,6 +196,7 @@ export default {
         const { id, value } = this.storeElement;
         this.$emit("change", { id, value });
       }
+      this.isLoading = false;
     },
     changeStoreElementValuePromise() {
       return new Promise((resolve) => {
@@ -213,7 +209,11 @@ export default {
       });
     },
     async callStoreChange() {
-      this.store.change(this.id, this.storeElement.items[this.index].value);
+      this.isLoading = true;
+      return this.store.change(
+        this.id,
+        this.storeElement.items[this.index].value
+      );
     },
     redrawFullfilledReceived(event) {
       if (event.detail.id === this.id && this.fullfillPromise) {
@@ -221,12 +221,13 @@ export default {
         this.fullfillPromise();
       }
     },
-    setValueToNow() {
+    async setValueToNow() {
       if (this.instantSelectorFunction) {
         this.instantSelectorFunction();
       } else {
         this.index = this.storeElement.items.length - 1;
-        this.callStoreChange();
+        await this.callStoreChange();
+        this.isLoading = false;
       }
     },
   },

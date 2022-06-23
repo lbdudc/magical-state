@@ -6,6 +6,15 @@
     "setDefaultFirstItem": false,
     "type": "date",
     "actions": [
+      "CURRENT_PAGE"
+    ]
+  },
+  {
+    "id": "CURRENT_PAGE",
+    "label": "Current Page",
+    "default": 0,
+    "type": "date",
+    "actions": [
       "INSTANT_FILTER"
     ]
   },
