@@ -95,8 +95,8 @@ The date filter component lets users select a date.
 <summary>Date Filter emits</summary>
 
 |       name       |   param   |                                                                                    description                                                                                    |
-|:----------------:|:---------:|:---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|------------------------------------------|
-|       change       |   Object  | Emitted when the user changes the slider value directly whitout using the 'advance' nor the 'backwards' buttons. The object passed will contain the id of the selector and its value {id, val} |
+|:----------------:|:---------:|:---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|
+|       change       |   Object  | Emitted when the selector suffers a change of value. The object passed will contain the id of the selector and its value {id, val} |
 
 </details>
 
@@ -235,4 +235,4 @@ const availableSpeeds = [
 |       prev       |   Object  | Emitted when the slider goes backwards on the interval when the user clicks the 'backwards' button. The object passed will contain the id of the selector and its value {id, val} |
 |       change       |   Object  | Emitted when the user changes the slider value directly whitout using the 'advance' nor the 'backwards' buttons. The object passed will contain the id of the selector and its value {id, val} |
 
-<details>
+</details>
