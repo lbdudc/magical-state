@@ -236,7 +236,7 @@ export default class Store {
       set.push(new Promise(async (resolve) => {
         const res = await this._getValues(
           el.id,
-          utils.getKeyValueRootElements(el.id, this._jsonSpec, this._observable)
+          newState
         );
         selector.items = res;
 
