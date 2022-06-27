@@ -8,6 +8,7 @@
       <v-btn @click="picked = 'Example3'">Default State</v-btn>
       <v-btn @click="picked = 'Example4'">Update State</v-btn>
       <v-btn @click="picked = 'Example5'">Autocompletes</v-btn>
+      <v-btn @click="picked = 'Example6'">Hour Picker</v-btn>
     </v-row>
   </v-app>
 </template>
@@ -18,6 +19,7 @@ import InstantsExample from "./samples/instantsExample/InstantsExample";
 import DefaultStateExample from "./samples/defaultStateExample/DefaultStateExample";
 import UpdateStateExample from "./samples/updateStateExample/UpdateStateExample";
 import AutocompleteExample from "./samples/autocompleteExample/AutocompleteExample.vue";
+import DateHourExample from "./samples/dateHourPickerExample/DateHourExample.vue";
 
 export default {
   name: "App",
@@ -45,6 +47,8 @@ export default {
           return UpdateStateExample;
         case "Example5":
           return AutocompleteExample;
+        case "Example6":
+          return DateHourExample;
         default:
           return SelectorsExample;
       }
