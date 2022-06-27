@@ -2,18 +2,18 @@
 
 ## Table of contents
 
-- [Table of contents](#table-of-contents)
 - [Usage](#usage)
 - [Common props](#common-props)
 - [Autocomplete Component](#autocomplete-component)
 - [Date Filter Component](#date-filter-component)
 - [List Selector Component](#list-selector-component)
 - [Selector Component](#selector-component)
+- [Text Field Component](#text-field-component)
 - [Timeline Component](#timeline-component)
 
 ## Usage
 
-Import the selectors from the library and define them in components:
+Import the selectors from the library and define them in the components of your .vue file:
 
 ```js
 
@@ -38,11 +38,13 @@ All the components have the next props in common:
 
 |  name |   type   | required | default |                        description                       |
 |:-----:|:--------:|:--------:|:-------:|:--------------------------------------------------------:|
-| *store* |  Object  |   true   |   null  |                 The instance of the store                |
-|   *id*  |  String  |   false  |   null  | Id of the store element that the component works against |
-|  *i18n* | Function |   false  |   null  |     Function used forinternationalization of labels      |
+| store |  Object  |   true   |   null  |                 The instance of the store                |
+|   id  |  String  |   false  |   null  | Id of the store element that the component works against |
+|  i18n | Function |   false  |   null  |     Function used forinternationalization of labels      |
 
 ## Autocomplete Component
+
+The autocomplete component extends the magical selector and adds the ability to filter items.
 
 <details>
 <summary>Autocomplete props</summary>
@@ -74,6 +76,8 @@ All the components have the next props in common:
 
 ## Date Filter Component
 
+The date filter component lets users select a date.
+
 <details>
 <summary>Date Filter props</summary>
 
@@ -98,6 +102,8 @@ All the components have the next props in common:
 
 ## List Selector Component
 
+The list selector component is used to display information in a list from which the user can select an item.
+
 <details>
 <summary>List Selector emits</summary>
 
@@ -108,6 +114,8 @@ All the components have the next props in common:
 </details>
 
 ## Selector Component
+
+Select fields components are used for collecting user provided information from a list of options.
 
 <details>
 <summary>Selector props</summary>
@@ -144,6 +152,35 @@ All the components have the next props in common:
 |       change       |   Object  | Emitted when the selector suffers a change of value. The object passed will contain the id of the selector and its value {id, val} |
 
 </details>
+
+## Text Field Component
+
+Text fields components are used for collecting user provided information.
+
+<details>
+<summary>Text field props</summary>
+
+|       name       |   type  | required | default | description                                                                                                                                                                                                                                                                                                      |
+|:----------------:|:-------:|:--------:|---------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| prependInnerIcon |  String |   false  |   null  |                                                                                                                  Prepends an icon inside the component’s input, uses the same syntax as  v-icon                                                                                                                  |
+|    appendIcon    |  String |   false  |   null  |                                                                                                                         Appends an icon to the component, uses the same syntax as  v-icon                                                                                                                        |
+|       dense      | Boolean |   false  |  false  |                                                                                                                                             Reduces the input height                                                                                                                                             |
+|     disabled     | Boolean |   false  |  false  |                                                                                                                                                 Disable the input                                                                                                                                                |
+|     readonly     | Boolean |   false  |  false  |                                                                                                                                           Puts input in readonly state                                                                                                                                           |
+|       rules      |  Array  |   false  |    []   | Accepts a mixed array of types function, boolean and string. Functions pass an input value as an argument and must return either true / false or a string containing an error message. The input field will enter an error state if a function returns (or any value in the array contains) false or is a string |
+|       type       |  String |   false  |  'text' |                                                                                                                                                  Sets input type                                                                                                                                                 |
+
+</details>
+
+<details>
+<summary>Text field emits</summary>
+
+|       name       |   param   |                                                                                    description                                                                                    |
+|:----------------:|:---------:|:---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|
+|       change       |   Object  | Emitted when the selector suffers a change of value. The object passed will contain the id of the selector and its value {id, val} |
+
+</details>
+
 ## Timeline Component
 
 This component is composed of a slider with dots that represent each item of a selector and some control buttons. These control buttons will allow:
