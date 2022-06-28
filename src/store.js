@@ -236,7 +236,7 @@ export default class Store {
       set.push(new Promise(async (resolve) => {
         const res = await this._getValues(
           el.id,
-          utils.getKeyValueRootElements(el.id, this._jsonSpec, this._observable)
+          newState
         );
         selector.items = res;
 
@@ -302,7 +302,7 @@ export default class Store {
       obs.value = obs.type === 'multiple' && !Array.isArray(newVal) ? [newVal] : newVal;
 
       // Reset values of the depending selectors (if has any)
-      utils.resetDependedSelectors(propId, this._jsonSpec, this._observable);
+      hasRedrawProp = hasRedrawProp || utils.resetDependedSelectors(propId, this._jsonSpec, this._observable);
       // For each children, create a new Promise calling the update function
       const act = [];
       obs.actions.forEach((el) => {
@@ -325,7 +325,7 @@ export default class Store {
             // Set the items into the selector and end the loading state
             obsItem.value = obsItem.default || null;
             obsItem.items = res;
-            hasRedrawProp = await this._setDefaultItem(obsItem, res, false);
+            hasRedrawProp = await this._setDefaultItem(obsItem, res, false) ? true : hasRedrawProp;
             obsItem.loading = false;
             utils.dispatchCustomEvent("itemsLoaded", utils.createUIObject(obsItem));
             resolve(res);
@@ -362,7 +362,7 @@ export default class Store {
    */
   _setDefaultItem(observable, items, needsRedraw) {
     if (observable.type != "date" && (items == null || items.length <= 0)) {
-      return Promise.resolve();
+      return Promise.resolve(false);
     }
     if (observable.setDefaultItem != null) {
       const defVal = observable.setDefaultItem;
@@ -387,6 +387,7 @@ export default class Store {
     } else if (observable.default != null) {
       return this.change(observable.id, observable.default, observable.redraw);
     }
+    return Promise.resolve(false);
   }
 
   /**

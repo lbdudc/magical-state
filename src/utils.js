@@ -126,13 +126,16 @@ const getKeyValueRootElements = (id, jsonSpec, obs) => {
  */
 const resetDependedSelectors = (element, jsonSpec, obs) => {
   const el = findJsonSpecElement(element, jsonSpec);
+  let redraw = false;
   if (el.actions != null) {
     el.actions.forEach((child) => {
       const childElement = findElementInObservable(child, obs);
       childElement.value = undefined;
       childElement.items = [];
+      redraw = redraw || childElement.redraw;
     });
   }
+  return redraw;
 };
 
 /**
