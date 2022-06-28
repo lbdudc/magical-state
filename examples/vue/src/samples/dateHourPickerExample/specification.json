@@ -8,6 +8,7 @@
   {
     "id": "HOUR_PICKER",
     "label": "Hour picker",
-    "type": "date"
+    "type": "date",
+    "redraw": true
   }
 ]

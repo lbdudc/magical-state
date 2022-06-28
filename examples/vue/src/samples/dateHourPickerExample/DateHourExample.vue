@@ -7,6 +7,8 @@
       :rules="[(v) => !!v || 'Date field cannot be empty']"
     />
     <MHourPicker id="HOUR_PICKER" :store="store" :disabled="!disableSelector" />
+    <v-divider></v-divider>
+    {{ storeStatus }}
   </v-container>
 </template>
 <script>
@@ -23,6 +25,7 @@ export default {
   data() {
     return {
       store: null,
+      storeStatus: null,
     };
   },
   async mounted() {
@@ -30,9 +33,9 @@ export default {
       jsonSpec,
       () => Promise.resolve([]),
       null,
-      () =>
+      (store) =>
         new Promise((resolve) => {
-          console.log("callback called");
+          this.storeStatus = store;
           resolve();
         })
     );
