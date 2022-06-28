@@ -100,6 +100,33 @@ The date filter component lets users select a date.
 
 </details>
 
+## Hour Picker Component
+
+The hour pciker component lets users select a day time.
+
+<details>
+<summary>Hour Picker props</summary>
+
+|       name       |   type  | required | default | description                                                                                                                                                                                                                                                                                                      |
+|:----------------:|:-------:|:--------:|---------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| prependInnerIcon | String  |   false  |   null  | Prepends an icon inside the component’s input, uses the same syntax as  v-icon                                                                                                                                                                                                                                   |
+| appendIcon       | String  |   false  |   null  | Appends an icon to the component, uses the same syntax as  v-icon                                                                                                                                                                                                                                                |
+| dense            | Boolean |   false  |   null  | Reduces the input height                                                                                                                                                                                                                                                                                         |
+| disabled         | Boolean |   false  |   null  | Disable the input                                                                                                                                                                                                                                                                                                |
+| readonly         | Boolean |   false  |   null  | Puts input in readonly state                                                                                                                                                                                                                                                                                     |
+| rules            | Array   |   false  |   null  | Accepts a mixed array of types function, boolean and string. Functions pass an input value as an argument and must return either true / false or a string containing an error message. The input field will enter an error state if a function returns (or any value in the array contains) false or is a string |
+
+</details>
+
+<details>
+<summary>Hour Picker emits</summary>
+
+|       name       |   param   |                                                                                    description                                                                                    |
+|:----------------:|:---------:|:---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|
+|       change       |   Object  | Emitted when the selector suffers a change of value. The object passed will contain the id of the selector and its value {id, val} |
+
+</details>
+
 ## List Selector Component
 
 The list selector component is used to display information in a list from which the user can select an item.
