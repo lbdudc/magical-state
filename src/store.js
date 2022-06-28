@@ -302,7 +302,7 @@ export default class Store {
       obs.value = obs.type === 'multiple' && !Array.isArray(newVal) ? [newVal] : newVal;
 
       // Reset values of the depending selectors (if has any)
-      utils.resetDependedSelectors(propId, this._jsonSpec, this._observable);
+      hasRedrawProp = hasRedrawProp || utils.resetDependedSelectors(propId, this._jsonSpec, this._observable);
       // For each children, create a new Promise calling the update function
       const act = [];
       obs.actions.forEach((el) => {
