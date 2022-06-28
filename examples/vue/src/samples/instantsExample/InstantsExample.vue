@@ -76,10 +76,10 @@ export default {
       null,
       (storeContent) => {
         return new Promise(async (resolve) => {
+          //should wait this delay before advancing to the next instant
           await delay(2000);
           this.storeContent = storeContent;
           ++this.counter;
-          //should wait this delay before advancing to the next instant
           resolve();
         });
       }

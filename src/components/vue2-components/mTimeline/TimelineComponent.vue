@@ -32,6 +32,7 @@
             :label="'Speed'"
             :hasInstantSelectorFunction="instantSelectorFunction != null"
             :i18n="i18n"
+            :availableSpeeds="availableSpeeds"
             @changeSpeed="updateSpeedSelected"
             @play="playTimeline"
             @stop="stopTimeline"
