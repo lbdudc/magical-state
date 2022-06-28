@@ -6,22 +6,18 @@
       :store="store"
       :rules="[(v) => !!v || 'Date field cannot be empty']"
     />
-    <MTextField
-      type="time"
-      id="HOUR_PICKER"
-      :store="store"
-      :disabled="!disableSelector"
-    />
+    <MHourPicker id="HOUR_PICKER" :store="store" :disabled="!disableSelector" />
   </v-container>
 </template>
 <script>
 import jsonSpec from "./specification.json";
 import { createStore } from "../../../../../index";
-import { MTextField } from "../../../../../vue2-components";
+import { MHourPicker, MTextField } from "../../../../../vue2-components";
 
 export default {
   name: "DateHourExample",
   components: {
+    MHourPicker,
     MTextField,
   },
   data() {

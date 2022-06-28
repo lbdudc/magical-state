@@ -46,12 +46,9 @@ const getSpecDefaultItem = (id, label, setDefaultFirstItem, setItemsOnMounted, s
 const spatialItems = [{ label: "AUTONOMOUS_COMMUNITY", value: 1 }, { label: "PROVINCE", value: 2 }, { label: "MOCK", value: 3 }];
 
 const getValues = (id, params, store) => {
-  switch (id) {
-    case "SPATIAL_AGGREGATION":
-      return new Promise((resolve) => {
-        resolve(spatialItems);
-      });
-  }
+  return new Promise((resolve) => {
+    resolve(spatialItems);
+  });
 }
 
 describe("storeState", () => {
@@ -73,9 +70,11 @@ describe("storeState", () => {
   });
   describe("setState", () => {
     it("should set the state to the one passed on store creation", async () => {
-      const store = await createStore(jsonSpecAggregation, getValues, { "SPATIAL_AGGREGATION": 3 }, () => { });
+      const store = await createStore(jsonSpecAggregationFilter, getValues, { "SPATIAL_AGGREGATION": 3, "SPATIAL_FILTER": 1 }, () => { });
       const aggregation = store.getSelector("SPATIAL_AGGREGATION");
+      const filter = store.getSelector("SPATIAL_FILTER");
       expect(aggregation.value).toBe(spatialItems[2].value);
+      expect(filter.value).toBe(spatialItems[0].value);
     });
 
     it("should set the state to default if setState value is null", async () => {

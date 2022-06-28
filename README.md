@@ -47,17 +47,17 @@ To begin with, we must define in a json the selectors we want to create, the way
 | setDefaultItem | string \|\| integer  | undefined     | You can specify 'first', 'last', 'all' or a number that represents the index of the item's array that is meant to be set as default value.                                   |
 | redraw              | boolean | false     | If this option is selected the callback defined passed in store creation will be fired whenever the value of the selector changes |
 | default             | string   | null        | Value to set as default if *setDefaultItem* is not present.            | array   | []        | List of identifiers of child selectors, for which an @change event will be fired every time the parent's @change event is fired
-| actions | array | [] | List of identifiers of store elements that need to reload their elements every time the value of this element changes.
+| actions | array | [] | List of identifiers of store elements that need to reload their items every time the value of this element changes.
 | type | string | 'selector' |  The store has in count three types: 'selector', 'date', and 'multiple'.
 
 <details>
-  <summary>Example of an specification.json</summary>
+  <summary>Example of a specification.json</summary>
 
 #### Specification
 
 This spec will generate two selectors: "COUNTRIES" and "CITIES".
 
-*COUNTRIES* will trigger the *getValues* method on mount and will always set as its default value the first element of the retrieved items. Everytime its value changes *CITIES* will update its values and set as default the last element. Also, since 'redraw' is set to true the callback function will be triggered.
+*COUNTRIES* will trigger the *getValues* method on mount and will always set as its default value the first element of the retrieved items. Everytime its value changes *CITIES* will update its items and set as default value the last element. Also, since 'redraw' is set to true the callback function will be triggered.
 
 ```json
 [
@@ -185,7 +185,6 @@ this.store = createStore(
 ### Change the state of the store
 
 - ```change(propId: String, newVal: Any, needsRedraw: Boolean): Promise<>```: Changes the value of the selector with the given id. *needsRedraw* prop defaults to true and specifies if the change on the selector's value should trigger the callback, in case the selector has *redraw* to true in the specification.
-- ```triggerGetValues(id: String): Promise<Any>```: Triggers the *getValues* method of the selector with the given id. Returns the promise returned by the implementation of the *getVlues* method passed on store creation.
 - ```setSelector(selectorId: String, newVal: Any, deep: Boolean): Promise<>```: Changes the value of the selector with the given id. If *deep* is true or the selector isn't of type *date* and doesn't have items, *setSelector* will call *getValues* to porpulate the selector's items.  
 - ```setItems(id: String, values: Array, useSpecConfig: Boolean): void```: Sets the items of the specified store element to the parameter *values*. If *useSpecConfig* is true, it will check the spec to set the selector's default value.
 
@@ -198,6 +197,7 @@ Both *change* and *setSelector* functions may reject their returned promises whe
 - ```getSelector(selectorId: String): Proxy```: Returns the value of the selector with the given id).
 - ```(getter) objFromObservable(): Array<{id: String, value: Any}>```: Returns a copy of the actual state of the store.
 - ```getUI(): Array<{id: String, label: String, value: Any, type: String, items: []}>```: Returns a list of objects that contains the basic information about every observable element so they can be displayed on the UI.
+- ```triggerGetValues(id: String): Promise<Any>```: Triggers the *getValues* method of the selector with the given id. Returns the promise returned by the implementation of the *getVlues* method passed on store creation.
 
 ### Import and Export Store URL
 
