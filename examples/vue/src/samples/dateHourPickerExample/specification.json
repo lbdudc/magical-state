@@ -1,0 +1,14 @@
+[
+  {
+    "id": "DATE_FILTER",
+    "label": "Date filter",
+    "type": "date",
+    "actions": []
+  },
+  {
+    "id": "HOUR_PICKER",
+    "label": "Hour picker",
+    "type": "date",
+    "redraw": true
+  }
+]

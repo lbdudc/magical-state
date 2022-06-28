@@ -146,8 +146,8 @@ export default class Store {
       const isItem =
         obs.items != null ?
           Array.isArray(value) ?
-            value.every(val => obs.items.find(it => it.value === val) != null) :
-            obs.items.find(it => it.value === value) != null
+            value.every(val => obs.items.find(it => it.value == val) != null) :
+            obs.items.find(it => it.value == value) != null
           : false;
       if (isItem || (obs.type === "date") || (value == null)) {
         try {
@@ -250,8 +250,8 @@ export default class Store {
 
           const isItem =
             Array.isArray(newVal) ?
-              newVal.every(val => selector.items.find(it => it.value === val) != null) :
-              selector.items.find(it => it.value === newVal) != null;
+              newVal.every(val => selector.items.find(it => it.value == val) != null) :
+              selector.items.find(it => it.value == newVal) != null;
 
           selector.value = isItem ? newVal : null;
         } else {
@@ -259,7 +259,6 @@ export default class Store {
         }
 
         utils.dispatchCustomEvent("itemsLoaded", utils.createUIObject(selector));
-        await (utils.getActionsValues(el.id, newState, this._getValues, this._observable, this._jsonSpec));
         resolve();
       })
       )

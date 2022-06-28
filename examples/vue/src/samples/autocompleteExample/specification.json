@@ -16,6 +16,6 @@
   {
     "id": "SPATIAL_FILTER",
     "label": "Spatial Filter",
-    "deafult": 1
+    "default": 1
   }
 ]
