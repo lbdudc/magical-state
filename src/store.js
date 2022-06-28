@@ -364,16 +364,19 @@ export default class Store {
     if (observable.type != "date" && (items == null || items.length <= 0)) {
       return Promise.resolve(false);
     }
+    observable.sharedProps.index = 0;
     if (observable.setDefaultItem != null) {
       const defVal = observable.setDefaultItem;
       if (typeof (defVal) === 'number') {
-        return this.change(observable.id, items[defVal].value, needsRedraw);
+        observable.sharedProps.index = defVal;
+        return this.change(observable.id, items[defVal] != null ? items[defVal].value : null, needsRedraw);
       } else {
         switch (defVal) {
           case "first":
-            return this.change(observable.id, items[0].value, needsRedraw);
+            return this.change(observable.id, items[0] != null ? items[0].value : null, needsRedraw);
           case "last":
-            return this.change(observable.id, items[items.length - 1].value, needsRedraw);
+            observable.sharedProps.index = items.length - 1;
+            return this.change(observable.id, items[items.length - 1] != null ? items[items.length - 1].value : null, needsRedraw);
           case "all":
             return this.change(observable.id, items.map(el => el.value), needsRedraw);
           default:
@@ -383,7 +386,7 @@ export default class Store {
     }
     else if (observable.setDefaultFirstItem) {
       // If we update the value of the selector, we need to call its updated event
-      return this.change(observable.id, items[0].value, needsRedraw);
+      return this.change(observable.id, items[0] != null ? items[0].value : null, needsRedraw);
     } else if (observable.default != null) {
       return this.change(observable.id, observable.default, observable.redraw);
     }
