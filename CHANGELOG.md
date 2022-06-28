@@ -2,6 +2,22 @@
 
 <!--- next entry here -->
 
+## 0.14.0
+2022-06-28
+
+### Features
+
+- added setDefaultItem spec parameter and changed methods promises (01f58429c6a213befb199c39ab2185bf3fc3b1e1)
+- removed unwanted condition to disable the 'now' button on the timeline component (f4f11ccb15c9c476a64175ac5e442e14598bbe88)
+- added emits to notify parent component that the slider is set on the last or first element (8b75659ab9a45783f303ddfd4e115473d9652354)
+
+### Fixes
+
+- added conditions to set value when the selector is of type date (878dc5fd997cad9a3ccf5f8d42d94823c264e3ef)
+- changes on documentation content and structure (0ce5d18d39072668389476e6f64382dc60ae1500)
+- changed parameter on getValues call to use the state passed on creation (66f36244eb8d4fb30445409fc552e67b6c1a7792)
+- fixed conditions to trigger the callback (d690f4a9a63cd0d2fa15c912536dff06edfd5490)
+
 ## 0.13.1
 2022-06-15
 
