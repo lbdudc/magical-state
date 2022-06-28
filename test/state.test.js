@@ -31,7 +31,7 @@ const simpleJsonSpec = [{
   "setDefaultFirstItem": true,
 }]
 
-const getSpecDefaultItem = (id, label, setDefaultFirstItem, setItemsOnMounted, setDefaultItem, defaultV, actions) => {
+const getSpecDefaultItem = (id, label, setDefaultFirstItem, setItemsOnMounted, setDefaultItem, defaultV, actions, type) => {
   return [{
     "id": id,
     "label": label,
@@ -40,6 +40,7 @@ const getSpecDefaultItem = (id, label, setDefaultFirstItem, setItemsOnMounted, s
     "setDefaultFirstItem": setDefaultFirstItem,
     "actions": actions,
     "default": defaultV,
+    "type": type,
   }];
 }
 
@@ -189,6 +190,15 @@ describe("storeState", () => {
 
       store.change("SPATIAL_AGGREGATION", 1);
       expect(aggregation.value).toBe(spatialItems[0].value);
+    })
+
+    it("should set value to null when the selector is of type date and it has not items", async () => {
+      const getValuesEmpty = () => Promise.resolve([]);
+      const spec = getSpecDefaultItem("SPATIAL_AGGREGATION", "Spatial Aggregation", true, true, null, null, [], 'date');
+      const store = await createStore(spec, getValuesEmpty, null, () => { });
+      const aggregation = store.getSelector("SPATIAL_AGGREGATION");
+
+      expect(aggregation.value).toBe(null);
     })
 
     it("should update childs items", async () => {
