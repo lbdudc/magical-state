@@ -364,11 +364,12 @@ export default class Store {
     if (observable.type != "date" && (items == null || items.length <= 0)) {
       return Promise.resolve(false);
     }
+    observable.sharedProps.index = 0;
     if (observable.setDefaultItem != null) {
       const defVal = observable.setDefaultItem;
       if (typeof (defVal) === 'number') {
         observable.sharedProps.index = defVal;
-        return this.change(observable.id, items[defVal].value, needsRedraw);
+        return this.change(observable.id, items[defVal] != null ? items[defVal].value : null, needsRedraw);
       } else {
         switch (defVal) {
           case "first":
