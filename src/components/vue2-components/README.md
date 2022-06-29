@@ -228,6 +228,8 @@ This component is composed of a slider with dots that represent each item of a s
 |   instantSelectorFunction  | Function |   false  |   null  | When present the component will have a button that will trigger this function |
 | instantSelectorButtonLabel |  String  |   false  |   null  |            The label that will appear on the above mentioned button           |
 |       availableSpeeds      |   Array  |   false  |   null  |  Array of objects representing the available speeds of the timeline player.   |
+|       disablePlayButton      |   Boolean  |   false  |   false  |  When set to true the play button will be disabled.   |
+|       disableStopButton      |   Boolean  |   false  |   false  |  When set to true the stop button will be disabled.   |
 
 <details>
   <summary>Example of availableSpeeds array</summary>
