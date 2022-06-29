@@ -1,19 +1,265 @@
-### Add component selectors (optional)
+# Vue2-Components
 
-Then you normally would like to add the m-selector components, given by the library into your `component.vue`
+## Table of contents
+
+- [Usage](#usage)
+- [Common props](#common-props)
+- [Autocomplete Component](#autocomplete-component)
+- [Date Filter Component](#date-filter-component)
+- [List Selector Component](#list-selector-component)
+- [Selector Component](#selector-component)
+- [Text Field Component](#text-field-component)
+- [Timeline Component](#timeline-component)
+
+## Usage
+
+Import the selectors from the library and define them in the components of your .vue file:
 
 ```js
-import {
-  MSelector,
-} from "./magical-state/vue2-components";
+
+import { MSelector, MDateFilter } from "magical-state/vue2-components";
+
+...
+...
+
+export default {
+  ...
+  ...
+  components:{ MSelector, MDateFilter }
+  ...
+  ...
+}
+
 ```
 
-```html
-  <m-selector :store="store" id="SPATIAL_AGGREGATION"> </m-selector>
+## Common props
+
+All the components have the next props in common:
+
+|  name |   type   | required | default |                        description                       |
+|:-----:|:--------:|:--------:|:-------:|:--------------------------------------------------------:|
+| store |  Object  |   true   |   null  |                 The instance of the store                |
+|   id  |  String  |   false  |   null  | Id of the store element that the component works against |
+|  i18n | Function |   false  |   null  |     Function used forinternationalization of labels      |
+
+## Autocomplete Component
+
+The autocomplete component extends the magical selector and adds the ability to filter items.
+
+<details>
+<summary>Autocomplete props</summary>
+
+|       name       |   type  | required | default     | description                                                                            |
+|:----------------:|:-------:|:--------:|-------------|----------------------------------------------------------------------------------------|
+|     clearable    | Boolean |   false  | false       | Add input clear functionality, default icon is Material Design Icons  mdi-clear        |
+|     disabled     | Boolean |   false  | false       | Disables the input                                                                     |
+|     outlined     | Boolean |   false  | false       | Applies the outlined style to the input                                                |
+| dense            | Boolean | false    | false       | Reduces the input height                                                               |
+| appendIcon       | String  | false    | "$dropdown" | Appends an icon to the component, uses the same syntax as v-icon                       |
+| appendOuterIcon  | String  | false    | null        | Appends an icon to the outside the component’s input, uses same syntax as v-icon       |
+| prependIcon      | String  | false    | null        | Prepends an icon to the component, uses the same syntax as v-icon                      |
+| prependInnerIcon | String  | false    | null        | Prepends an icon inside the component’s input, uses the same syntax as v-icon          |
+| color            | String  | false    | null        | Applies specified color to the control                                                 |
+| backgroundColor  | String  | false    | null        | Changes the background-color of the input                                              |
+| itemColor        | String  | false    | "primary"   | Sets color of selected items                                                           |
+| chips            | Boolean | false    | false       | Changes display of selections to chips                                                 |
+| smallChips       | Boolean | false    | false       | Changes display of selections to chips with the small property                         |
+| deletableChips   | Boolean | false    | false       | Adds a remove icon to selected chips                                                   |
+| filled           | Boolean | false    | false       | Applies the alternate filled input style                                               |
+| solo             | Boolean | false    | false       | Changes the style of the input                                                         |
+| flat             | Boolean | false    | false       | Removes elevation (shadow) added to element when using the solo or solo-inverted props |
+| reverse          | Boolean | false    | false       | Reverses the input orientation                                                         |
+| hint             | String  | false    | null        | Hint text                                                                              |
+| persistentHint   | Boolean | false    | false       | Forces hint to always be visible                                                       |
+
+</details>
+
+## Date Filter Component
+
+The date filter component lets users select a date.
+
+<details>
+<summary>Date Filter props</summary>
+
+|   name   |   type  | required | default | description                              |
+|:--------:|:-------:|:--------:|---------|------------------------------------------|
+| dense    | Boolean | false    | false   | Reduces the input height                 |
+| label    | String  | false    | false   | Sets input label                         |
+| outlined | Boolean | false    | false   | Applies the outlined style to the input  |
+| filled   | Boolean | false    | false   | Applies the alternate filled input style |
+| color    | String  | false    | null    | Applies specified color to the control   |
+
+</details>
+
+<details>
+<summary>Date Filter emits</summary>
+
+|       name       |   param   |                                                                                    description                                                                                    |
+|:----------------:|:---------:|:---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|
+|       change       |   Object  | Emitted when the selector suffers a change of value. The object passed will contain the id of the selector and its value {id, val} |
+
+</details>
+
+## Hour Picker Component
+
+The hour pciker component lets users select a day time.
+
+<details>
+<summary>Hour Picker props</summary>
+
+|       name       |   type  | required | default | description                                                                                                                                                                                                                                                                                                      |
+|:----------------:|:-------:|:--------:|---------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| prependInnerIcon | String  |   false  |   null  | Prepends an icon inside the component’s input, uses the same syntax as  v-icon                                                                                                                                                                                                                                   |
+| appendIcon       | String  |   false  |   null  | Appends an icon to the component, uses the same syntax as  v-icon                                                                                                                                                                                                                                                |
+| dense            | Boolean |   false  |   null  | Reduces the input height                                                                                                                                                                                                                                                                                         |
+| disabled         | Boolean |   false  |   null  | Disable the input                                                                                                                                                                                                                                                                                                |
+| readonly         | Boolean |   false  |   null  | Puts input in readonly state                                                                                                                                                                                                                                                                                     |
+| rules            | Array   |   false  |   null  | Accepts a mixed array of types function, boolean and string. Functions pass an input value as an argument and must return either true / false or a string containing an error message. The input field will enter an error state if a function returns (or any value in the array contains) false or is a string |
+
+</details>
+
+<details>
+<summary>Hour Picker emits</summary>
+
+|       name       |   param   |                                                                                    description                                                                                    |
+|:----------------:|:---------:|:---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|
+|       change       |   Object  | Emitted when the selector suffers a change of value. The object passed will contain the id of the selector and its value {id, val} |
+
+</details>
+
+## List Selector Component
+
+The list selector component is used to display information in a list from which the user can select an item.
+
+<details>
+<summary>List Selector emits</summary>
+
+|       name       |   param   |                                                                                    description                                                                                    |
+|:----------------:|:---------:|:---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|
+|       change       |   Object  | Emitted when the selector suffers a change of value. The object passed will contain the id of the selector and its value {id, val} |
+
+</details>
+
+## Selector Component
+
+Select fields components are used for collecting user provided information from a list of options.
+
+<details>
+<summary>Selector props</summary>
+
+|       name       |   type  | required | default     | description                                                                      |
+|:----------------:|:-------:|:--------:|-------------|----------------------------------------------------------------------------------|
+| clearable        | Boolean | false    | false       | Add input clear functionality, default icon is Material Design Icons  mdi-clear  |
+| disabled         | Boolean | false    | false       | Disables the input                                                               |
+| outlined         | Boolean | false    | false       | Applies the outlined style to the input                                          |
+| dense            | Boolean | false    | false       | Reduces the input height                                                         |
+| appendIcon       | String  | false    | "$dropdown" | Appends an icon to the component, uses the same syntax as v-icon                 |
+| appendOuterIcon  | String  | false    | null        | Appends an icon to the outside the component’s input, uses same syntax as v-icon |
+| prependIcon      | String  | false    | null        | Prepends an icon to the component, uses the same syntax as  v-icon               |
+| prependInnerIcon | String  | false    | null        | Prepends an icon inside the component’s input, uses the same syntax as  v-icon   |
+| color            | String  | false    | null        | Applies specified color to the control                                           |
+| backgrounColor   | String  | false    | null        | Changes the background-color of the input                                        |
+| itemColor        | String  | false    | "primary"   | Sets color of selected items                                                     |
+| chips            | Boolean | false    | false       | Changes display of selections to chips                                           |
+| smallChips       | Boolean | false    | false       | Changes display of selections to chips with the small property                   |
+| deletableChips   | Boolean | false    | false       | Adds a remove icon to selected chips                                             |
+| filled           | Boolean | false    | false       | Applies the alternate filled input style                                         |
+| solo             | Boolean | false    | false       | Changes the style of the input                                                   |
+| reverse          | Boolean | false    | false       | Reverses the input orientation                                                   |
+| hint             | String  | false    | null        | Hint text                                                                        |
+| persistentHint   | Boolean | false    | false       | Forces hint to always be visible                                                 |
+
+</details>
+
+<details>
+<summary>Selector emits</summary>
+
+|       name       |   param   |                                                                                    description                                                                                    |
+|:----------------:|:---------:|:---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|
+|       change       |   Object  | Emitted when the selector suffers a change of value. The object passed will contain the id of the selector and its value {id, val} |
+
+</details>
+
+## Text Field Component
+
+Text fields components are used for collecting user provided information.
+
+<details>
+<summary>Text field props</summary>
+
+|       name       |   type  | required | default | description                                                                                                                                                                                                                                                                                                      |
+|:----------------:|:-------:|:--------:|---------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| prependInnerIcon |  String |   false  |   null  |                                                                                                                  Prepends an icon inside the component’s input, uses the same syntax as  v-icon                                                                                                                  |
+|    appendIcon    |  String |   false  |   null  |                                                                                                                         Appends an icon to the component, uses the same syntax as  v-icon                                                                                                                        |
+|       dense      | Boolean |   false  |  false  |                                                                                                                                             Reduces the input height                                                                                                                                             |
+|     disabled     | Boolean |   false  |  false  |                                                                                                                                                 Disable the input                                                                                                                                                |
+|     readonly     | Boolean |   false  |  false  |                                                                                                                                           Puts input in readonly state                                                                                                                                           |
+|       rules      |  Array  |   false  |    []   | Accepts a mixed array of types function, boolean and string. Functions pass an input value as an argument and must return either true / false or a string containing an error message. The input field will enter an error state if a function returns (or any value in the array contains) false or is a string |
+|       type       |  String |   false  |  'text' |                                                                                                                                                  Sets input type                                                                                                                                                 |
+
+</details>
+
+<details>
+<summary>Text field emits</summary>
+
+|       name       |   param   |                                                                                    description                                                                                    |
+|:----------------:|:---------:|:---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|
+|       change       |   Object  | Emitted when the selector suffers a change of value. The object passed will contain the id of the selector and its value {id, val} |
+
+</details>
+
+## Timeline Component
+
+This component is composed of a slider with dots that represent each item of a selector and some control buttons. These control buttons will allow:
+
+- Start the reproduction of the current interval of items in the slider. This means that the selected value of the slider will be advancing through the items until it reaches the end.
+
+- Stop the interval player.
+
+- Set the speed of the player.
+
+- Trigger a function passed to the component on its props.
+
+<details>
+<summary>Timeline props</summary>
+
+|            name            |   type   | required | default |                                  description                                  |
+|:--------------------------:|:--------:|:--------:|:-------:|:-----------------------------------------------------------------------------:|
+|   instantSelectorFunction  | Function |   false  |   null  | When present the component will have a button that will trigger this function |
+| instantSelectorButtonLabel |  String  |   false  |   null  |            The label that will appear on the above mentioned button           |
+|       availableSpeeds      |   Array  |   false  |   null  |  Array of objects representing the available speeds of the timeline player.   |
+
+<details>
+  <summary>Example of availableSpeeds array</summary>
+
+The avaliableSpeeds' objects are expected to have two properties: key, used as the label, and value, used to multiply the default speed of 1 second.
+
+```js
+const availableSpeeds = [
+  {
+    key: "1x",
+    value: 1,
+  },
+  {
+    key: "1.5x",
+    value: 1.5,
+  },
+],
+
 ```
 
-| name                | type    | default   | description                                                                                                                     |
-|---------------------|---------|-----------|---------------------------------------------------------------------------------------------------------------------------------|
-| store               | Object  |           | The instance of the store created by the library                                                                                |
-| id                  | string  | undefined | Identifier of the selector to be rendered (must coincide with the id defined into the specification.json file)                  |
-| i18n               | Function  | undefined | Function to i18n the labels of the selectors                 |
+</details>
+</details>
+
+<details>
+<summary>Timeline emits</summary>
+
+|       name       |   param   |                                                                                    description                                                                                    |
+|:----------------:|:---------:|:---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|
+|  lastItemReached |  boolean  |            Emitted when the slider has reached the last item. The flag parameter will be true if the slider was playing and has stopped due to reaching the last item.            |
+| firstItemReached | undefined |                                                               Emitted when the slider has reached the first element.                                                              |
+|       next       |   Object  |     Emitted when the slider advances on the interval when the user clicks the 'advance' button. The object passed will contain the id of the selector and its value {id, val}     |
+|       prev       |   Object  | Emitted when the slider goes backwards on the interval when the user clicks the 'backwards' button. The object passed will contain the id of the selector and its value {id, val} |
+|       change       |   Object  | Emitted when the user changes the slider value directly whitout using the 'advance' nor the 'backwards' buttons. The object passed will contain the id of the selector and its value {id, val} |
+
+</details>

@@ -143,7 +143,7 @@ const resetDependedSelectors = (element, jsonSpec, obs) => {
  * of the element are loaded
  * @param {Object} el root element
  * @param {Array} newState array of the new state to be set
- * @param {Function} impl function to get the items of the selectors
+ * @param {Function} getValues function to get the items of the selectors
  * @param {Object} obs observable of the store
  * @param {Array} jsonSpec jsonSpec of the store
  * @returns a promise that resolves when all the children are fullfilled
