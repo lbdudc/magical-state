@@ -4,25 +4,12 @@
       <v-col cols="6">
         <v-row no-gutters>
           <v-col cols="6">
-            <v-btn
-              @click="play"
-              icon
-              :disabled="
-                isLoading ||
-                !sliderSteps ||
-                !isPaused ||
-                sliderActualTime === sliderSteps - 1
-              "
-            >
+            <v-btn @click="play" icon :disabled="disablePlayButton">
               <v-icon color="primary">mdi-play</v-icon>
             </v-btn>
           </v-col>
           <v-col cols="6">
-            <v-btn
-              icon
-              @click="stop"
-              :disabled="isPaused || sliderActualTime === sliderSteps - 1"
-            >
+            <v-btn icon @click="stop" :disabled="disableStopButton">
               <v-icon color="error darken-1">mdi-stop</v-icon>
             </v-btn>
           </v-col>
@@ -117,6 +104,14 @@ export default {
     sliderSteps: {
       type: Number,
       default: null,
+    },
+    disablePlayButton: {
+      type: Boolean,
+      default: false,
+    },
+    disableStopButton: {
+      type: Boolean,
+      default: false,
     },
   },
   methods: {

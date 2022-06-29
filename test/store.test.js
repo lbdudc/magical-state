@@ -99,7 +99,6 @@ describe("Store", () => {
     expect(selector.default).toEqual(jsonSpec[index].default);
     expect(selector.type).toEqual(jsonSpec[index].type || "select");
     expect(selector.value).toBeNull();
-    expect(selector.sharedProps).toStrictEqual({ index: null });
     expect(selector.loading).toBe(false);
     expect(selector.showed).toBe(true);
     expect(selector.group).toEqual(jsonSpec[index].group);
