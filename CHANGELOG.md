@@ -2,6 +2,19 @@
 
 <!--- next entry here -->
 
+## 0.15.0
+2022-06-29
+
+### Features
+
+- added magical text field selector (2dafc6da1c1d6ba6de26c5d94a0e38ea1d31e061)
+- added hour picker component (f1edc07f5cf2951fba444b45872c770c3487f6ed)
+
+### Fixes
+
+- added documentation for vue components (8363766dcdd3a354d2136f9b1aa3cf349548d3cf)
+- setting selectos value to null when it has no items (3429043030af45925ec06aad9a98ee152dac17f6)
+
 ## 0.14.0
 2022-06-28
 
