@@ -1,13 +1,23 @@
 <template>
   <v-card outlined v-if="store">
-    <v-container
-      class="ma-0 pa-0"
-      v-if="!storeElement.loading && !store.state.loading"
-    >
+    <v-container class="ma-0 pa-0">
       <v-row no-gutters justify="start" align="center">
         <v-col cols="12" md="9" lg="9">
+          <div
+            class="text-center"
+            v-if="storeElement.loading || store.state.loading"
+          >
+            <v-progress-circular
+              indeterminate
+              color="primary"
+            ></v-progress-circular>
+          </div>
           <MTimelineSlider
-            v-if="storeElement.items.length != 0"
+            v-if="
+              !storeElement.loading &&
+              !store.state.loading &&
+              storeElement.items.length != 0
+            "
             :isPaused="isPaused"
             :isLoading="isLoading"
             :sliderSteps="tickLabels.length"
@@ -18,7 +28,15 @@
             @nextValue="changeSliderValue('next')"
             @prevValue="changeSliderValue('prev')"
           />
-          <span v-else class="text-center">No data available</span>
+          <span
+            v-if="
+              !storeElement.loading &&
+              !store.state.loading &&
+              storeElement.items.length == 0
+            "
+            class="text-center"
+            >No data available</span
+          >
         </v-col>
         <v-divider vertical></v-divider>
         <v-col cols="12" md="3" lg="3">
@@ -33,6 +51,8 @@
             :hasInstantSelectorFunction="instantSelectorFunction != null"
             :i18n="i18n"
             :availableSpeeds="availableSpeeds"
+            :disablePlayButton="disablePlayButton"
+            :disableStopButton="disableStopButton"
             @changeSpeed="updateSpeedSelected"
             @play="playTimeline"
             @stop="stopTimeline"
@@ -41,9 +61,6 @@
         </v-col>
       </v-row>
     </v-container>
-    <div class="text-center" v-else>
-      <v-progress-circular indeterminate color="primary"></v-progress-circular>
-    </div>
   </v-card>
 </template>
 
@@ -66,6 +83,7 @@ export default {
       speedSelected: 1,
       isLoading: false,
       fullfillPromise: null,
+      index: null,
     };
   },
   props: {
@@ -97,6 +115,16 @@ export default {
       required: false,
       default: null,
     },
+    disablePlayButton: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
+    disableStopButton: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
   },
   computed: {
     storeElement() {
@@ -105,18 +133,14 @@ export default {
     tickLabels() {
       return this.storeElement.items.map((el) => el.label);
     },
-    index: {
-      get() {
-        return this.storeElement.sharedProps.index;
-      },
-      set(newVal) {
-        this.storeElement.sharedProps.index = newVal;
-      },
+  },
+  watch: {
+    "storeElement.value": function (newVal) {
+      this.checkIndexMatchesValue(newVal);
     },
   },
   mounted() {
     this.selector = this.store.getSelector(this.id);
-    this.selector.sharedProps.index = 0;
     //This event will trigger after the store has called the callback function specified on its instantiation
     document.addEventListener(
       "redrawFullfilled",
@@ -144,10 +168,12 @@ export default {
      * Start and stop buttons
      */
     playTimeline() {
+      this.$emit("reproductionStarted");
       this.isPaused = false;
       this.startInterval();
     },
     stopTimeline() {
+      this.$emit("reproductionStopped");
       this.isPaused = true;
     },
     /**
@@ -157,20 +183,26 @@ export default {
       // TODO, esta funcion tendrá que elegir un nuevo rango para mostrar
       // If value reaches end, we probably have to recover new data (API Fetch)
       while (!this.isPaused) {
+        if (this.storeElement.items.length == 0) {
+          return;
+        }
         if (this.index == this.storeElement.items.length - 1) {
-          await delay(BASE_SPEED / this.speedSelected);
+          await this.delay();
           this.$emit("lastItemReached", true);
-          this.stopTimeline();
+          return;
         } else {
           //Wait for the current time interval (based on the selected speed) and the reception of the "redrawFullfilled" event
           await Promise.all([
-            delay(BASE_SPEED / this.speedSelected),
+            this.delay(),
             this.changeStoreElementValuePromise(),
           ]);
-          ++this.index;
           this.fullfillPromise = null;
+          if (!this.isPaused) ++this.index;
         }
       }
+      //set the element value to the one pointed by the index
+      await this.callStoreChange();
+      this.isLoading = false;
     },
     async changeSliderValue(val) {
       if (val === "next") {
@@ -231,9 +263,28 @@ export default {
         this.isLoading = false;
       }
     },
+    checkIndexMatchesValue(newVal) {
+      if (newVal == null) {
+        this.index = null;
+        return;
+      }
+      if (this.isPaused) {
+        const idx = Array.isArray(newVal)
+          ? this.storeElement.items.findIndex((item) => {
+              for (var i = 0; i < item.value.length; ++i) {
+                if (item.value[i] !== newVal[i]) return false;
+              }
+              return true;
+            })
+          : this.storeElement.items.findIndex((it) => it.value == newVal);
+        this.index = idx == -1 ? null : idx;
+      }
+    },
+    delay() {
+      return new Promise((resolve) =>
+        setTimeout(resolve, BASE_SPEED / this.speedSelected)
+      );
+    },
   },
 };
-function delay(ms) {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-}
 </script>

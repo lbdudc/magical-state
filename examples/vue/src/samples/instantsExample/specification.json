@@ -22,7 +22,7 @@
     "id": "INSTANT_FILTER",
     "setItemsOnMounted": false,
     "type": "date",
-    "setDefaultFirstItem": true,
+    "setDefaultItem": "last",
     "actions": [],
     "redraw": true
   }

@@ -272,7 +272,7 @@ export default class Store {
           const dataObj = {};
           this._observable.filter(el => el.value != null).forEach(el => (dataObj[el.id] = el.value));
           fn(dataObj).then(() => {
-            utils.dispatchCustomEvent("redrawFullfilled");
+            utils.dispatchCustomEvent("redrawFullfilled", { id: null });
             resolve()
           });
         } else {
@@ -363,18 +363,15 @@ export default class Store {
     if (observable.type != "date" && (items == null || items.length <= 0)) {
       return Promise.resolve(false);
     }
-    observable.sharedProps.index = 0;
     if (observable.setDefaultItem != null) {
       const defVal = observable.setDefaultItem;
       if (typeof (defVal) === 'number') {
-        observable.sharedProps.index = defVal;
         return this.change(observable.id, items[defVal] != null ? items[defVal].value : null, needsRedraw);
       } else {
         switch (defVal) {
           case "first":
             return this.change(observable.id, items[0] != null ? items[0].value : null, needsRedraw);
           case "last":
-            observable.sharedProps.index = items.length - 1;
             return this.change(observable.id, items[items.length - 1] != null ? items[items.length - 1].value : null, needsRedraw);
           case "all":
             return this.change(observable.id, items.map(el => el.value), needsRedraw);

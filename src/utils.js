@@ -49,9 +49,6 @@ const createStore = (jsonSpec) => {
       default: el.default,
       type: el.type || "select",
       value: el.type === "multiple" ? [] : null,
-      sharedProps: {
-        index: null
-      },
       loading: false,
       showed: true,
       group: el.group,
