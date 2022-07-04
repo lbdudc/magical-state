@@ -263,5 +263,8 @@ const availableSpeeds = [
 |       next       |   Object  |     Emitted when the slider advances on the interval when the user clicks the 'advance' button. The object passed will contain the id of the selector and its value {id, val}     |
 |       prev       |   Object  | Emitted when the slider goes backwards on the interval when the user clicks the 'backwards' button. The object passed will contain the id of the selector and its value {id, val} |
 |       change       |   Object  | Emitted when the user changes the slider value directly whitout using the 'advance' nor the 'backwards' buttons. The object passed will contain the id of the selector and its value {id, val} |
+|       reproductionStarted       |   null  | Emitted when the timeline reproduction starts |
+|       reproductionStopped       |   null  | Emitted when the timeline reproduction stops |
+|       timelineAdvanced       |   null  | Emitted when the timeline position advances when reproducing it |
 
 </details>

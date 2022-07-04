@@ -22,6 +22,7 @@
               @reproductionStopped="isPlaying = false"
               @lastItemReached="lastElementReached"
               @firstItemReached="firstElementReached"
+              @timelineAdvanced="timelineAdvanced"
               :instantSelectorButtonLabel="
                 $t('timeline.instantSelectorButtonLabel')
               "
@@ -31,11 +32,14 @@
         <br />
         <v-btn @click="setStoreState">Set store state</v-btn>
         <v-divider class="ma-10"></v-divider>
-        <span v-if="changeEventDetected"
-          >Last change event detected: {{ changeEventDetected }}</span
-        >
         <br />
-        <span>{{ storeContent }}</span>
+        <span>INFORMACION TIMELINE EN REPRODUCCION</span>
+        <br />
+        <span>Hora definida como store value: {{ elementoAPintar }}</span>
+        <br />
+        <span
+          >Hora con la que se pintaria en pantalla: {{ elementoPintado }}</span
+        >
         <br />
       </v-col>
     </v-row>
@@ -59,11 +63,12 @@ export default {
     return {
       store: null,
       implementacion: null,
-      storeContent: null,
       showMSInfo: false,
       changeEventDetected: null,
       isPlaying: false,
       loadingInterval: false,
+      elementoPintado: null,
+      elementoAPintar: null,
     };
   },
   computed: {
@@ -85,7 +90,6 @@ export default {
     },
   },
   async mounted() {
-    document.addEventListener("change", this.handleChangeEvent);
     this.store = await createStore(
       jsonSpec,
       getValues,
@@ -93,8 +97,9 @@ export default {
       (storeContent) => {
         return new Promise(async (resolve) => {
           //should wait this delay before advancing to the next instant
-          await delay(1000);
-          this.storeContent = storeContent;
+          //await delay(1000);
+          //console.log(storeContent);
+          this.elementoAPintar = storeContent["INSTANT_FILTER"];
           resolve();
         });
       }
@@ -109,38 +114,36 @@ export default {
       };
       this.store.setState(state, true);
     },
-    handleChangeEvent(event) {
-      this.changeEventDetected = {
-        changedElement: event.detail.id,
-        newValue: event.detail.value,
-      };
-    },
     mockSelectorF() {
       console.log("mocking behaviour");
     },
     async lastElementReached(wasPlaying) {
       this.loadingInterval = true;
 
-      // depending on how pagination is implemented it may be better to set
-      // the new interval via triggerGetValues - setItems - setSelector
-      // to avoid the specification default value setting
-      await this.store.setSelector(
-        this.paginationElement.id,
-        this.paginationElement.value + 1
-      );
-      // stablish first item as selector's value
-      if (this.instantsElement.items.length > 0) {
+      //example returns [] from page 3
+      if (this.paginationElement.value >= 2) {
+        this.$refs.timeline.stopTimeline();
+      } else {
+        // depending on how pagination is implemented it may be better to set
+        // the new interval via triggerGetValues - setItems - setSelector
+        // to avoid the specification default value setting
         await this.store.setSelector(
-          this.instantsElement.id,
-          this.instantsElement.items[0].value
+          this.paginationElement.id,
+          this.paginationElement.value + 1
         );
-      }
+        // stablishing first item as selector's value
+        if (this.instantsElement.items.length > 0) {
+          await this.store.setSelector(
+            this.instantsElement.id,
+            this.instantsElement.items[0].value
+          );
+        }
 
-      if (wasPlaying && !this.disableStopButton) {
-        //call delay to ensure that the first element is displayed
-        await this.$refs.timeline.delay();
-        this.$refs.timeline.playTimeline();
-        this.loadingInterval = false;
+        if (wasPlaying && !this.disableStopButton) {
+          //call delay to ensure that the first element is displayed
+          await this.$refs.timeline.delay();
+          this.$refs.timeline.playTimeline();
+        }
       }
       this.loadingInterval = false;
     },
@@ -162,6 +165,9 @@ export default {
     checkDisablePlayButton() {
       this.disablePlayButton =
         this.instantsElement.items.length <= 0 ? true : false;
+    },
+    timelineAdvanced() {
+      this.elementoPintado = this.elementoAPintar;
     },
   },
   beforeDestroy() {

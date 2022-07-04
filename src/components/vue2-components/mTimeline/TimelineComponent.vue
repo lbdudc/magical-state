@@ -197,7 +197,10 @@ export default {
             this.changeStoreElementValuePromise(),
           ]);
           this.fullfillPromise = null;
-          if (!this.isPaused) ++this.index;
+          if (!this.isPaused) {
+            ++this.index;
+            this.$emit("timelineAdvanced");
+          }
         }
       }
       //set the element value to the one pointed by the index
