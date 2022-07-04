@@ -145,6 +145,7 @@ The list selector component is used to display information in a list from which 
 
 <details>
 <summary>List Selector props</summary>
+
 |     **name**     | **type** | **required** | **default** |                                               **description**                                              |
 |:----------------:|:--------:|:------------:|:-----------:|:----------------------------------------------------------------------------------------------------------:|
 | overrideOnChange |  Boolean |     false    |    false    | When true the component will not trigger the store reactivity, only the value of the selector will change. |
