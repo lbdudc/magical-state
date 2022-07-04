@@ -15,7 +15,8 @@
     "setDefaultItem": "last",
     "group": "Aggregation",
     "actions": [
-      "TEMPORAL_FILTER"
+      "TEMPORAL_FILTER",
+      "DATE_FILTER"
     ]
   },
   {

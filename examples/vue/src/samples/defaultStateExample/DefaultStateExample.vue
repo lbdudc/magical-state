@@ -5,7 +5,13 @@
         <v-row>
           <m-selector :store="store" id="SPATIAL_AGGREGATION" :i18n="$t">
           </m-selector>
-          <m-selector :store="store" id="TEMPORAL_AGGREGATION" :i18n="$t">
+          <m-selector
+            :store="store"
+            id="TEMPORAL_AGGREGATION"
+            :i18n="$t"
+            :overrideOnChange="true"
+            @change="temporalAggChange"
+          >
           </m-selector>
           <m-selector :store="store" id="SPATIAL_FILTER"> </m-selector>
           <m-selector :store="store" id="TEMPORAL_FILTER"> </m-selector>
@@ -97,6 +103,23 @@ export default {
       };
       console.log("holis", event.detail);
       this.redirect();
+    },
+    async temporalAggChange(el) {
+      if (el.val == 1) {
+        const date = new Date();
+        await this.store.setSelector(
+          "TEMPORAL_FILTER",
+          date.getFullYear(),
+          true
+        );
+        await this.store.setSelector(
+          "DATE_FILTER",
+          date.toISOString().split("T")[0],
+          false
+        );
+      } else {
+        this.store.change("TEMPORAL_AGGREGATION", el.val);
+      }
     },
   },
   beforeDestroy() {

@@ -5,6 +5,8 @@
       id="DATE_FILTER"
       :store="store"
       :rules="[(v) => !!v || 'Date field cannot be empty']"
+      :overrideOnChange="true"
+      @change="change"
     />
     <MHourPicker id="HOUR_PICKER" :store="store" :disabled="!disableSelector" />
     <v-divider></v-divider>
@@ -43,6 +45,11 @@ export default {
   computed: {
     disableSelector() {
       return this.store.getSelector("DATE_FILTER").value != null;
+    },
+  },
+  methods: {
+    change(el) {
+      this.store.setSelector("HOUR_PICKER", "12:20");
     },
   },
 };
