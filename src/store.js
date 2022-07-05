@@ -321,10 +321,16 @@ export default class Store {
               utils.getStoreKeyValues(this._observable)
             );
 
+            const prevVal = obsItem.value;
             // Set the items into the selector and end the loading state
             obsItem.value = obsItem.default || null;
             obsItem.items = res;
             hasRedrawProp = await this._setDefaultItem(obsItem, res, false) ? true : hasRedrawProp;
+
+            if (prevVal != null && obsItem.value == null && obsItem.actions.length > 0) {
+              this.change(obsItem.id, null, false);
+            }
+
             obsItem.loading = false;
             utils.dispatchCustomEvent("itemsLoaded", utils.createUIObject(obsItem));
             resolve(res);
