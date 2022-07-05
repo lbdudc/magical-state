@@ -61,7 +61,7 @@ export default {
       default: "text",
       required: false,
     },
-    overrideOnChange: {
+    overrideStoreChange: {
       type: Boolean,
       default: false,
       required: false,
@@ -74,7 +74,7 @@ export default {
   },
   methods: {
     async valueChanged(newVal) {
-      if (!this.overrideOnChange) {
+      if (!this.overrideStoreChange) {
         await this.store.change(this.id, newVal);
       }
       const { id, value } = this.storeElement;

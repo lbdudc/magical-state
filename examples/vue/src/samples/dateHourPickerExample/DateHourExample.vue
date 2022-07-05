@@ -5,7 +5,7 @@
       id="DATE_FILTER"
       :store="store"
       :rules="[(v) => !!v || 'Date field cannot be empty']"
-      :overrideOnChange="true"
+      :overrideStoreChange="true"
       @change="change"
     />
     <MHourPicker id="HOUR_PICKER" :store="store" :disabled="!disableSelector" />

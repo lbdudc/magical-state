@@ -97,7 +97,7 @@ export default {
       required: false,
       default: null,
     },
-    overrideOnChange: {
+    overrideStoreChange: {
       type: Boolean,
       default: false,
       required: false,
@@ -116,7 +116,7 @@ export default {
   },
   methods: {
     async daySelected(pickedDate) {
-      if (!this.overrideOnChange) {
+      if (!this.overrideStoreChange) {
         await this.store.change(this.id, pickedDate);
       }
       const { id, value } = this.storeElement;

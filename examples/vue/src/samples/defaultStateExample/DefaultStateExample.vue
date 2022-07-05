@@ -9,7 +9,7 @@
             :store="store"
             id="TEMPORAL_AGGREGATION"
             :i18n="$t"
-            :overrideOnChange="true"
+            :overrideStoreChange="true"
             @change="temporalAggChange"
           >
           </m-selector>

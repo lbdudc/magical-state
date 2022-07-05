@@ -10,7 +10,7 @@
     :disabled="disabled"
     :readonly="readonly"
     :rules="rules"
-    :overrideOnChange="overrideOnChange"
+    :overrideStoreChange="overrideStoreChange"
     @change="change"
   />
 </template>
@@ -61,7 +61,7 @@ export default {
       type: Array,
       required: false,
     },
-    overrideOnChange: {
+    overrideStoreChange: {
       type: Boolean,
       default: false,
       required: false,

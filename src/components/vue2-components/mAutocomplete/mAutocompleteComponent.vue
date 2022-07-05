@@ -165,7 +165,7 @@ export default {
       required: false,
       default: false,
     },
-    overrideOnChange: {
+    overrideStoreChange: {
       type: Boolean,
       default: false,
       required: false,
@@ -186,7 +186,7 @@ export default {
       return "";
     },
     async change(id, val) {
-      if (!this.overrideOnChange) {
+      if (!this.overrideStoreChange) {
         await this.store.change(id, val);
       }
       this.$emit("change", { id, val });

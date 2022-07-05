@@ -39,7 +39,7 @@ export default {
       required: false,
       default: null,
     },
-    overrideOnChange: {
+    overrideStoreChange: {
       type: Boolean,
       default: false,
       required: false,
@@ -78,7 +78,7 @@ export default {
       return "";
     },
     async selectedValChanged() {
-      if (!this.overrideOnChange) {
+      if (!this.overrideStoreChange) {
         await this.store.change(
           this.id,
           this.storeElement.items[this.index].value
