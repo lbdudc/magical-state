@@ -230,7 +230,7 @@ export default {
         this.index = val ? val : 0;
         await this.callStoreChange();
         const { id, value } = this.storeElement;
-        this.$emit("change", { id, value });
+        this.$emit("change", { id, val: value });
       }
       this.isLoading = false;
     },

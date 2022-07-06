@@ -97,6 +97,11 @@ export default {
       required: false,
       default: null,
     },
+    overrideStoreChange: {
+      type: Boolean,
+      default: false,
+      required: false,
+    },
   },
   computed: {
     storeElement() {
@@ -111,8 +116,11 @@ export default {
   },
   methods: {
     async daySelected(pickedDate) {
-      await this.store.change(this.id, pickedDate);
-      this.$emit("change", { id: this.id, val: pickedDate });
+      if (!this.overrideStoreChange) {
+        await this.store.change(this.id, pickedDate);
+      }
+      const { id, value } = this.storeElement;
+      this.$emit("change", { id, val: value });
     },
     i18Label(label) {
       if (label) return this.i18n ? this.i18n(label) : label;

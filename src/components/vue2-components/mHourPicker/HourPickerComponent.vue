@@ -10,6 +10,8 @@
     :disabled="disabled"
     :readonly="readonly"
     :rules="rules"
+    :overrideStoreChange="overrideStoreChange"
+    @change="change"
   />
 </template>
 <script>
@@ -58,6 +60,16 @@ export default {
     rules: {
       type: Array,
       required: false,
+    },
+    overrideStoreChange: {
+      type: Boolean,
+      default: false,
+      required: false,
+    },
+  },
+  methods: {
+    change(changedEl) {
+      this.$emit("change", changedEl);
     },
   },
 };

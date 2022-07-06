@@ -165,6 +165,11 @@ export default {
       required: false,
       default: false,
     },
+    overrideStoreChange: {
+      type: Boolean,
+      default: false,
+      required: false,
+    },
   },
   computed: {
     item() {
@@ -181,7 +186,9 @@ export default {
       return "";
     },
     async change(id, val) {
-      await this.store.change(id, val);
+      if (!this.overrideStoreChange) {
+        await this.store.change(id, val);
+      }
       this.$emit("change", { id, val });
     },
   },

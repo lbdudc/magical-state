@@ -6,6 +6,7 @@
 - [Common props](#common-props)
 - [Autocomplete Component](#autocomplete-component)
 - [Date Filter Component](#date-filter-component)
+- [Hour Picker Component](#hour-picker-component)
 - [List Selector Component](#list-selector-component)
 - [Selector Component](#selector-component)
 - [Text Field Component](#text-field-component)
@@ -71,6 +72,16 @@ The autocomplete component extends the magical selector and adds the ability to 
 | reverse          | Boolean | false    | false       | Reverses the input orientation                                                         |
 | hint             | String  | false    | null        | Hint text                                                                              |
 | persistentHint   | Boolean | false    | false       | Forces hint to always be visible                                                       |
+|  overrideStoreChange | Boolean |   false  |   false  |     When true the component will not trigger the store reactivity, only the value of the selector will change, but the @change emit will still be dispatched. This way the parent component using the vue2-component will be able to define its own store reactivity after a selector value change.       |
+
+</details>
+
+<details>
+<summary>Autocomplete emits</summary>
+
+|       name       |   param   |                                                                                    description                                                                                    |
+|:----------------:|:---------:|:---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|
+|       change       |   Object  | Emitted when the selector suffers a change of value. The object passed will contain the id of the selector and its value {id, val} |
 
 </details>
 
@@ -88,6 +99,7 @@ The date filter component lets users select a date.
 | outlined | Boolean | false    | false   | Applies the outlined style to the input  |
 | filled   | Boolean | false    | false   | Applies the alternate filled input style |
 | color    | String  | false    | null    | Applies specified color to the control   |
+|  overrideStoreChange | Boolean |   false  |   false  |     When true the component will not trigger the store reactivity, only the value of the selector will change, but the @change emit will still be dispatched. This way the parent component using the vue2-component will be able to define its own store reactivity after a selector value change.       |
 
 </details>
 
@@ -115,6 +127,7 @@ The hour pciker component lets users select a day time.
 | disabled         | Boolean |   false  |   null  | Disable the input                                                                                                                                                                                                                                                                                                |
 | readonly         | Boolean |   false  |   null  | Puts input in readonly state                                                                                                                                                                                                                                                                                     |
 | rules            | Array   |   false  |   null  | Accepts a mixed array of types function, boolean and string. Functions pass an input value as an argument and must return either true / false or a string containing an error message. The input field will enter an error state if a function returns (or any value in the array contains) false or is a string |
+|  overrideStoreChange | Boolean |   false  |   false  |     When true the component will not trigger the store reactivity, only the value of the selector will change, but the @change emit will still be dispatched. This way the parent component using the vue2-component will be able to define its own store reactivity after a selector value change.   |
 
 </details>
 
@@ -130,6 +143,15 @@ The hour pciker component lets users select a day time.
 ## List Selector Component
 
 The list selector component is used to display information in a list from which the user can select an item.
+
+<details>
+<summary>List Selector props</summary>
+
+|     **name**     | **type** | **required** | **default** |                                               **description**                                              |
+|:----------------:|:--------:|:------------:|:-----------:|:----------------------------------------------------------------------------------------------------------:|
+| overrideStoreChange |  Boolean |     false    |    false    | When true the component will not trigger the store reactivity, only the value of the selector will change, but the @change emit will still be dispatched. This way the parent component using the vue2-component will be able to define its own store reactivity after a selector value change. |
+
+</details>
 
 <details>
 <summary>List Selector emits</summary>
@@ -168,6 +190,7 @@ Select fields components are used for collecting user provided information from 
 | reverse          | Boolean | false    | false       | Reverses the input orientation                                                   |
 | hint             | String  | false    | null        | Hint text                                                                        |
 | persistentHint   | Boolean | false    | false       | Forces hint to always be visible                                                 |
+| overrideStoreChange |  Boolean |     false    |    false    | When true the component will not trigger the store reactivity, only the value of the selector will change, but the @change emit will still be dispatched. This way the parent component using the vue2-component will be able to define its own store reactivity after a selector value change. |
 
 </details>
 
@@ -196,6 +219,7 @@ Text fields components are used for collecting user provided information.
 |     readonly     | Boolean |   false  |  false  |                                                                                                                                           Puts input in readonly state                                                                                                                                           |
 |       rules      |  Array  |   false  |    []   | Accepts a mixed array of types function, boolean and string. Functions pass an input value as an argument and must return either true / false or a string containing an error message. The input field will enter an error state if a function returns (or any value in the array contains) false or is a string |
 |       type       |  String |   false  |  'text' |                                                                                                                                                  Sets input type                                                                                                                                                 |
+| overrideStoreChange |  Boolean |     false    |    false    | When true the component will not trigger the store reactivity, only the value of the selector will change, but the @change emit will still be dispatched. This way the parent component using the vue2-component will be able to define its own store reactivity after a selector value change. |
 
 </details>
 

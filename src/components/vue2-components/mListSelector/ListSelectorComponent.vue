@@ -39,6 +39,11 @@ export default {
       required: false,
       default: null,
     },
+    overrideStoreChange: {
+      type: Boolean,
+      default: false,
+      required: false,
+    },
   },
   data() {
     return {
@@ -73,12 +78,16 @@ export default {
       return "";
     },
     async selectedValChanged() {
-      await this.store.change(
-        this.id,
-        this.storeElement.items[this.index].value
-      );
+      if (!this.overrideStoreChange) {
+        await this.store.change(
+          this.id,
+          this.storeElement.items[this.index].value
+        );
+      } else {
+        this.storeElement.value = this.storeElement.items[this.index].value;
+      }
       const { id, value } = this.storeElement;
-      this.$emit("change", { id, value });
+      this.$emit("change", { id, val: value });
     },
   },
 };

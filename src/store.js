@@ -125,6 +125,7 @@ export default class Store {
   setSelector(id, value, deep = false) {
     return new Promise(async (resolve, reject) => {
       const obs = utils.findElementInObservable(id, this._observable);
+      obs.loading = true;
       let newItems = [];
 
       if (obs.type != "date" && Array.isArray(value) && obs.type != "multiple") {
@@ -151,6 +152,7 @@ export default class Store {
           : false;
       if (isItem || (obs.type === "date") || (value == null)) {
         try {
+          obs.loading = false;
           await this.change(obs.id, value);
         } catch (err) {
           reject(err);
