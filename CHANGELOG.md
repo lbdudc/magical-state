@@ -2,6 +2,18 @@
 
 <!--- next entry here -->
 
+## 0.16.0
+2022-07-11
+
+### Features
+
+- removing sharedProps index from the store and managing it from timeline and list components (da4336eec081e97687b9ab8b150ab07ddd9be8b2)
+- added prop to vue2 components to not trigger the store reactivity when changing values (37abe5a74c241a215bccceda2831d0814ebd8d38)
+
+### Fixes
+
+- added execution of change method when the child element is setting its newValue to null and has actions (08b4bd137dbd6be2f85c7d86d0862d66b16c9ee9)
+
 ## 0.15.0
 2022-06-29
 
