@@ -185,7 +185,7 @@ this.store = createStore(
 ### Change the state of the store
 
 - ```change(propId: String, newVal: Any, needsRedraw: Boolean): Promise<>```: Changes the value of the selector with the given id. *needsRedraw* prop defaults to true and specifies if the change on the selector's value should trigger the callback, in case the selector has *redraw* to true in the specification.
-- ```setSelector(selectorId: String, newVal: Any, deep: Boolean): Promise<>```: Changes the value of the selector with the given id. If *deep* is true or the selector isn't of type *date* and doesn't have items, *setSelector* will call *getValues* to porpulate the selector's items.  
+- ```setSelector(selectorId: String, newVal: Any, deep: Boolean): Promise<>```: Changes the value of the selector with the given id. If *deep* is true or the selector isn't of type *date* and doesn't have items, *setSelector* will call *getValues* to populate the selector's items.  
 - ```setItems(id: String, values: Array, useSpecConfig: Boolean): void```: Sets the items of the specified store element to the parameter *values*. If *useSpecConfig* is true, it will check the spec to set the selector's default value.
 
 ##### Important when setting a new value on a selector

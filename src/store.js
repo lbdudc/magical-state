@@ -125,6 +125,7 @@ export default class Store {
   setSelector(id, value, deep = false) {
     return new Promise(async (resolve, reject) => {
       const obs = utils.findElementInObservable(id, this._observable);
+      obs.loading = true;
       let newItems = [];
 
       if (obs.type != "date" && Array.isArray(value) && obs.type != "multiple") {
@@ -151,6 +152,7 @@ export default class Store {
           : false;
       if (isItem || (obs.type === "date") || (value == null)) {
         try {
+          obs.loading = false;
           await this.change(obs.id, value);
         } catch (err) {
           reject(err);
@@ -272,7 +274,7 @@ export default class Store {
           const dataObj = {};
           this._observable.filter(el => el.value != null).forEach(el => (dataObj[el.id] = el.value));
           fn(dataObj).then(() => {
-            utils.dispatchCustomEvent("redrawFullfilled");
+            utils.dispatchCustomEvent("redrawFullfilled", { id: null });
             resolve()
           });
         } else {
@@ -321,10 +323,16 @@ export default class Store {
               utils.getStoreKeyValues(this._observable)
             );
 
+            const prevVal = obsItem.value;
             // Set the items into the selector and end the loading state
             obsItem.value = obsItem.default || null;
             obsItem.items = res;
             hasRedrawProp = await this._setDefaultItem(obsItem, res, false) ? true : hasRedrawProp;
+
+            if (prevVal != null && obsItem.value == null && obsItem.actions.length > 0) {
+              this.change(obsItem.id, null, false);
+            }
+
             obsItem.loading = false;
             utils.dispatchCustomEvent("itemsLoaded", utils.createUIObject(obsItem));
             resolve(res);
@@ -363,18 +371,15 @@ export default class Store {
     if (observable.type != "date" && (items == null || items.length <= 0)) {
       return Promise.resolve(false);
     }
-    observable.sharedProps.index = 0;
     if (observable.setDefaultItem != null) {
       const defVal = observable.setDefaultItem;
       if (typeof (defVal) === 'number') {
-        observable.sharedProps.index = defVal;
         return this.change(observable.id, items[defVal] != null ? items[defVal].value : null, needsRedraw);
       } else {
         switch (defVal) {
           case "first":
             return this.change(observable.id, items[0] != null ? items[0].value : null, needsRedraw);
           case "last":
-            observable.sharedProps.index = items.length - 1;
             return this.change(observable.id, items[items.length - 1] != null ? items[items.length - 1].value : null, needsRedraw);
           case "all":
             return this.change(observable.id, items.map(el => el.value), needsRedraw);

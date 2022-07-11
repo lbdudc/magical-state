@@ -9,7 +9,7 @@
     :rules="rules"
     :type="type"
     :loading="storeElement.loading || store.state.loading"
-    @input="valueChanged(storeElement.value)"
+    @change="valueChanged(storeElement.value)"
     :readonly="readonly"
     clearable
   ></v-text-field>
@@ -61,6 +61,11 @@ export default {
       default: "text",
       required: false,
     },
+    overrideStoreChange: {
+      type: Boolean,
+      default: false,
+      required: false,
+    },
   },
   computed: {
     storeElement() {
@@ -69,8 +74,11 @@ export default {
   },
   methods: {
     async valueChanged(newVal) {
-      await this.store.change(this.id, newVal);
-      this.$emit("change", { id: this.id, val: newVal });
+      if (!this.overrideStoreChange) {
+        await this.store.change(this.id, newVal);
+      }
+      const { id, value } = this.storeElement;
+      this.$emit("change", { id, val: value });
     },
   },
 };

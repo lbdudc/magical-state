@@ -16,22 +16,31 @@
               :store="store"
               :i18n="$t"
               :instantSelectorFunction="mockSelectorF"
+              :disablePlayButton="disablePlayButton"
+              :disableStopButton="disableStopButton"
+              @reproductionStarted="isPlaying = true"
+              @reproductionStopped="isPlaying = false"
               @lastItemReached="lastElementReached"
               @firstItemReached="firstElementReached"
+              @timelineAdvanced="timelineAdvanced"
               :instantSelectorButtonLabel="
                 $t('timeline.instantSelectorButtonLabel')
               "
             />
           </v-col>
         </v-row>
+        <br />
+        <v-btn @click="setStoreState">Set store state</v-btn>
         <v-divider class="ma-10"></v-divider>
-        <span v-if="changeEventDetected"
-          >Last change event detected: {{ changeEventDetected }}</span
+        <br />
+        <span>INFORMACION TIMELINE EN REPRODUCCION</span>
+        <br />
+        <span>Hora definida como store value: {{ elementoAPintar }}</span>
+        <br />
+        <span
+          >Hora con la que se pintaria en pantalla: {{ elementoPintado }}</span
         >
         <br />
-        <span>{{ storeContent }}</span>
-        <br />
-        <span>{{ counter }}</span>
       </v-col>
     </v-row>
   </v-container>
@@ -54,10 +63,12 @@ export default {
     return {
       store: null,
       implementacion: null,
-      storeContent: null,
       showMSInfo: false,
       changeEventDetected: null,
-      counter: 0,
+      isPlaying: false,
+      loadingInterval: false,
+      elementoPintado: null,
+      elementoAPintar: null,
     };
   },
   computed: {
@@ -67,9 +78,18 @@ export default {
     instantsElement() {
       return this.store.getSelector("INSTANT_FILTER");
     },
+    disablePlayButton() {
+      return (
+        this.isPlaying ||
+        this.instantsElement.items.length <= 0 ||
+        this.loadingInterval
+      );
+    },
+    disableStopButton() {
+      return !this.isPlaying || this.instantsElement.items.length <= 0;
+    },
   },
   async mounted() {
-    document.addEventListener("change", this.handleChangeEvent);
     this.store = await createStore(
       jsonSpec,
       getValues,
@@ -77,33 +97,55 @@ export default {
       (storeContent) => {
         return new Promise(async (resolve) => {
           //should wait this delay before advancing to the next instant
-          await delay(2000);
-          this.storeContent = storeContent;
-          ++this.counter;
+          //await delay(1000);
+          //console.log(storeContent);
+          this.elementoAPintar = storeContent["INSTANT_FILTER"];
           resolve();
         });
       }
     );
   },
   methods: {
-    handleChangeEvent(event) {
-      this.changeEventDetected = {
-        changedElement: event.detail.id,
-        newValue: event.detail.value,
+    setStoreState() {
+      const state = {
+        DATE_FILTER: "2022-06-29",
+        CURRENT_PAGE: 0,
+        INSTANT_FILTER: [2022, 3, 31, 16, 35],
       };
+      this.store.setState(state, true);
     },
     mockSelectorF() {
       console.log("mocking behaviour");
     },
     async lastElementReached(wasPlaying) {
-      await this.store.setSelector(
-        this.paginationElement.id,
-        this.paginationElement.value + 1
-      );
-      this.instantsElement.sharedProps.index = 0;
-      if (wasPlaying) {
-        this.$refs.timeline.playTimeline();
+      this.loadingInterval = true;
+
+      //example returns [] from page 3
+      if (this.paginationElement.value >= 2) {
+        this.$refs.timeline.stopTimeline();
+      } else {
+        // depending on how pagination is implemented it may be better to set
+        // the new interval via triggerGetValues - setItems - setSelector
+        // to avoid the specification default value setting
+        await this.store.setSelector(
+          this.paginationElement.id,
+          this.paginationElement.value + 1
+        );
+        // stablishing first item as selector's value
+        if (this.instantsElement.items.length > 0) {
+          await this.store.setSelector(
+            this.instantsElement.id,
+            this.instantsElement.items[0].value
+          );
+        }
+
+        if (wasPlaying && !this.disableStopButton) {
+          //call delay to ensure that the first element is displayed
+          await this.$refs.timeline.delay();
+          this.$refs.timeline.playTimeline();
+        }
       }
+      this.loadingInterval = false;
     },
     async firstElementReached() {
       if (this.paginationElement.value != 0) {
@@ -111,9 +153,21 @@ export default {
           this.paginationElement.id,
           this.paginationElement.value - 1
         );
-        this.instantsElement.sharedProps.index =
-          this.instantsElement.items.length - 1;
+        if (this.instantsElement.items.length > 0) {
+          await this.store.setSelector(
+            this.instantsElement.id,
+            this.instantsElement.items[this.instantsElement.items.length - 1]
+              .value
+          );
+        }
       }
+    },
+    checkDisablePlayButton() {
+      this.disablePlayButton =
+        this.instantsElement.items.length <= 0 ? true : false;
+    },
+    timelineAdvanced() {
+      this.elementoPintado = this.elementoAPintar;
     },
   },
   beforeDestroy() {

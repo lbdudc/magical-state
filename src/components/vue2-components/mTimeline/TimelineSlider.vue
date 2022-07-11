@@ -73,7 +73,7 @@ export default {
   },
   computed: {
     isDisabled() {
-      return !this.isPaused && this.isLoading;
+      return !this.isPaused || this.isLoading;
     },
   },
   methods: {
