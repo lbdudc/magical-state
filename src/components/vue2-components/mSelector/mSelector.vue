@@ -170,6 +170,11 @@ export default {
       default: false,
       required: false,
     },
+    pushSelectedValuesUp: {
+      type: Boolean,
+      default: false,
+      required: false,
+    },
   },
   computed: {
     item() {
@@ -194,6 +199,18 @@ export default {
       return "";
     },
     async change(id, val) {
+      if (this.pushSelectedValuesUp && this.item.type === "multiple") {
+        val.forEach((v) => {
+          //pushing every selected value up to the first positions of the array
+          const selected = this.item.items.splice(
+            this.item.items.findIndex((el) => {
+              return el.value == v;
+            }),
+            1
+          );
+          this.item.items.unshift(selected[0]);
+        });
+      }
       if (!this.overrideStoreChange) {
         await this.store.change(id, val);
       }
