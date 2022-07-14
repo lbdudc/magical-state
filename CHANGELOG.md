@@ -2,6 +2,13 @@
 
 <!--- next entry here -->
 
+## 0.17.0
+2022-07-14
+
+### Features
+
+- showing first the selected elements on selectors that accept multiple values (0fe8a514de8bd9ce9ec773a24242da083832f67a)
+
 ## 0.16.0
 2022-07-11
 
