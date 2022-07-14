@@ -122,7 +122,7 @@ export default class Store {
    * @param value - The value to be set
    * @param deep - If true, it will force to getValues for the selector
    */
-  setSelector(id, value, deep = false) {
+  setSelector(id, value, deep = false, triggerCallbak = true) {
     return new Promise(async (resolve, reject) => {
       const obs = utils.findElementInObservable(id, this._observable);
       obs.loading = true;
@@ -153,7 +153,7 @@ export default class Store {
       if (isItem || (obs.type === "date") || (value == null)) {
         try {
           obs.loading = false;
-          await this.change(obs.id, value);
+          await this.change(obs.id, value, triggerCallbak);
         } catch (err) {
           reject(err);
         }

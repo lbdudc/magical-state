@@ -5,6 +5,7 @@
         <v-row>
           <m-autocomplete
             :store="store"
+            :pushSelectedValuesUp="true"
             id="SPATIAL_AGGREGATION"
           ></m-autocomplete>
           <m-autocomplete :store="store" id="SPATIAL_FILTER"> </m-autocomplete>
