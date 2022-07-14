@@ -73,6 +73,7 @@ The autocomplete component extends the magical selector and adds the ability to 
 | hint             | String  | false    | null        | Hint text                                                                              |
 | persistentHint   | Boolean | false    | false       | Forces hint to always be visible                                                       |
 |  overrideStoreChange | Boolean |   false  |   false  |     When true the component will not trigger the store reactivity, only the value of the selector will change, but the @change emit will still be dispatched. This way the parent component using the vue2-component will be able to define its own store reactivity after a selector value change.       |
+|  pushSelectedValuesUp | Boolean |   false  |   false  |     When the selector is multiple and this prop is true the selected elements will be pushed up the item's array so they are displayed in the first positions    |
 
 </details>
 
@@ -191,6 +192,7 @@ Select fields components are used for collecting user provided information from 
 | hint             | String  | false    | null        | Hint text                                                                        |
 | persistentHint   | Boolean | false    | false       | Forces hint to always be visible                                                 |
 | overrideStoreChange |  Boolean |     false    |    false    | When true the component will not trigger the store reactivity, only the value of the selector will change, but the @change emit will still be dispatched. This way the parent component using the vue2-component will be able to define its own store reactivity after a selector value change. |
+|  pushSelectedValuesUp | Boolean |   false  |   false  |     When the selector is multiple and this prop is true the selected elements will be pushed up the item's array so they are displayed in the first positions    |
 
 </details>
 

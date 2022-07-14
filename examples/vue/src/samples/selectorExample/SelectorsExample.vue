@@ -3,7 +3,12 @@
     <v-row>
       <v-col cols="12">
         <v-row>
-          <m-selector :store="store" id="SPATIAL_AGGREGATION"> </m-selector>
+          <m-selector
+            :store="store"
+            id="SPATIAL_AGGREGATION"
+            :pushSelectedValuesUp="false"
+          >
+          </m-selector>
           <m-selector :store="store" id="TEMPORAL_AGGREGATION"> </m-selector>
           <m-selector :store="store" id="SPATIAL_FILTER"> </m-selector>
           <m-selector :store="store" id="TEMPORAL_FILTER"> </m-selector>
