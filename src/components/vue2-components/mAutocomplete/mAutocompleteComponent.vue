@@ -38,6 +38,8 @@
 </template>
 
 <script>
+let selectedPrevPos = {};
+
 export default {
   name: "MagicalSelector",
   props: {
@@ -181,6 +183,16 @@ export default {
       return this.store.getSelector(this.id);
     },
   },
+  mounted() {
+    if (
+      this.pushSelectedValuesUp &&
+      this.item.type === "multiple" &&
+      this.item.value &&
+      this.item.value.length > 0
+    ) {
+      this.item.value.forEach((el, idx) => (selectedPrevPos[el] = idx));
+    }
+  },
   methods: {
     i18Label(label) {
       if (label) return this.i18nLabel ? this.i18nLabel(label) : label;
@@ -192,16 +204,57 @@ export default {
     },
     async change(id, val) {
       if (this.pushSelectedValuesUp && this.item.type === "multiple") {
-        val.forEach((v) => {
-          //pushing every selected value up to the first positions of the array
+        if (val.length > Object.keys(selectedPrevPos).length) {
+          //get the new element and its current position on the items
+          const newEl = val.filter((x) => selectedPrevPos[x] == null);
+          let pos = this.item.items.findIndex((el) => {
+            return el.value == newEl;
+          });
+
+          let notOnInitPos = true;
+          let aux = null;
+          while (notOnInitPos) {
+            const deeper = Object.keys(selectedPrevPos).filter(
+              (el) =>
+                selectedPrevPos[el] >= pos &&
+                (!aux || aux > selectedPrevPos[el])
+            );
+            if (deeper.length == 0) {
+              notOnInitPos = false;
+            } else {
+              aux = pos;
+              pos = pos - deeper.length;
+            }
+          }
+          selectedPrevPos[newEl] = pos;
+          //push the new element to the first position of the items
           const selected = this.item.items.splice(
             this.item.items.findIndex((el) => {
-              return el.value == v;
+              return el.value == newEl;
             }),
             1
           );
           this.item.items.unshift(selected[0]);
-        });
+        } else {
+          const key = Object.keys(selectedPrevPos).find(
+            (el) => val.find((v) => v == el) == null
+          );
+          const el = this.item.items.find((el) => el.value == key);
+          this.item.items.splice(
+            this.item.items.findIndex((el) => el.value == key),
+            1
+          );
+          //count the elements that should be positioned after the deselected element
+          let toAdd = 0;
+          val.forEach(
+            (el) =>
+              (toAdd =
+                selectedPrevPos[el] > selectedPrevPos[key] ? toAdd + 1 : toAdd)
+          );
+
+          this.item.items.splice(selectedPrevPos[key] + toAdd, 0, el);
+          delete selectedPrevPos[key];
+        }
       }
       if (!this.overrideStoreChange) {
         await this.store.change(id, val);
