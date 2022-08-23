@@ -191,7 +191,6 @@ export default {
     },
   },
   mounted() {
-    console.log(this.item.items);
     if (
       this.pushSelectedValuesUp &&
       this.item.type === "multiple" &&
