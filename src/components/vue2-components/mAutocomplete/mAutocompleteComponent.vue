@@ -38,6 +38,10 @@
 </template>
 
 <script>
+import selectorItemPositionHelper from "../common/selectorItemPositionHelper";
+
+let selectedPrevPos = {};
+
 export default {
   name: "MagicalSelector",
   props: {
@@ -181,6 +185,24 @@ export default {
       return this.store.getSelector(this.id);
     },
   },
+  mounted() {
+    if (
+      this.pushSelectedValuesUp &&
+      this.item.type === "multiple" &&
+      this.item.value &&
+      this.item.value.length > 0
+    ) {
+      this.item.value.forEach((v) => {
+        const { items, positions } = selectorItemPositionHelper.itemSelection(
+          v,
+          this.item.items,
+          selectedPrevPos
+        );
+        this.item.items = items;
+        selectedPrevPos = positions;
+      });
+    }
+  },
   methods: {
     i18Label(label) {
       if (label) return this.i18nLabel ? this.i18nLabel(label) : label;
@@ -192,16 +214,26 @@ export default {
     },
     async change(id, val) {
       if (this.pushSelectedValuesUp && this.item.type === "multiple") {
-        val.forEach((v) => {
-          //pushing every selected value up to the first positions of the array
-          const selected = this.item.items.splice(
-            this.item.items.findIndex((el) => {
-              return el.value == v;
-            }),
-            1
+        if (val.length > Object.keys(selectedPrevPos).length) {
+          //get the new element and its current position on the items
+          const newEl = val.filter((x) => selectedPrevPos[x] == null);
+          const { items, positions } = selectorItemPositionHelper.itemSelection(
+            newEl,
+            this.item.items,
+            selectedPrevPos
           );
-          this.item.items.unshift(selected[0]);
-        });
+          this.item.items = items;
+          selectedPrevPos = positions;
+        } else {
+          const { items, positions } =
+            selectorItemPositionHelper.itemDeselection(
+              val,
+              this.item.items,
+              selectedPrevPos
+            );
+          this.item.items = items;
+          selectedPrevPos = positions;
+        }
       }
       if (!this.overrideStoreChange) {
         await this.store.change(id, val);

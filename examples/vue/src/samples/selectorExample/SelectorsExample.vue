@@ -4,9 +4,10 @@
       <v-col cols="12">
         <v-row>
           <m-selector
+            v-if="store"
             :store="store"
             id="SPATIAL_AGGREGATION"
-            :pushSelectedValuesUp="false"
+            :pushSelectedValuesUp="true"
           >
           </m-selector>
           <m-selector :store="store" id="TEMPORAL_AGGREGATION"> </m-selector>

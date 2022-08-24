@@ -4,6 +4,7 @@
       <v-col v-if="store" cols="12">
         <v-row>
           <m-autocomplete
+            v-if="store"
             :store="store"
             :pushSelectedValuesUp="true"
             id="SPATIAL_AGGREGATION"
