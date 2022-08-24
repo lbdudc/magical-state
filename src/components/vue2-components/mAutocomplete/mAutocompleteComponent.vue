@@ -38,6 +38,8 @@
 </template>
 
 <script>
+import selectorItemPositionHelper from "../common/selectorItemPositionHelper";
+
 let selectedPrevPos = {};
 
 export default {
@@ -190,7 +192,15 @@ export default {
       this.item.value &&
       this.item.value.length > 0
     ) {
-      this.change(this.item.id, this.item.value);
+      this.item.value.forEach((v) => {
+        const { items, positions } = selectorItemPositionHelper.itemSelection(
+          v,
+          this.item.items,
+          selectedPrevPos
+        );
+        this.item.items = items;
+        selectedPrevPos = positions;
+      });
     }
   },
   methods: {
@@ -207,53 +217,22 @@ export default {
         if (val.length > Object.keys(selectedPrevPos).length) {
           //get the new element and its current position on the items
           const newEl = val.filter((x) => selectedPrevPos[x] == null);
-          let pos = this.item.items.findIndex((el) => {
-            return el.value == newEl;
-          });
-
-          let notOnInitPos = true;
-          let aux = null;
-          while (notOnInitPos) {
-            const deeper = Object.keys(selectedPrevPos).filter(
-              (el) =>
-                selectedPrevPos[el] >= pos &&
-                (!aux || aux > selectedPrevPos[el])
-            );
-            if (deeper.length == 0) {
-              notOnInitPos = false;
-            } else {
-              aux = pos;
-              pos = pos - deeper.length;
-            }
-          }
-          selectedPrevPos[newEl] = pos;
-          //push the new element to the first position of the items
-          const selected = this.item.items.splice(
-            this.item.items.findIndex((el) => {
-              return el.value == newEl;
-            }),
-            1
+          const { items, positions } = selectorItemPositionHelper.itemSelection(
+            newEl,
+            this.item.items,
+            selectedPrevPos
           );
-          this.item.items.unshift(selected[0]);
+          this.item.items = items;
+          selectedPrevPos = positions;
         } else {
-          const key = Object.keys(selectedPrevPos).find(
-            (el) => val.find((v) => v == el) == null
-          );
-          const el = this.item.items.find((el) => el.value == key);
-          this.item.items.splice(
-            this.item.items.findIndex((el) => el.value == key),
-            1
-          );
-          //count the elements that should be positioned after the deselected element
-          let toAdd = 0;
-          val.forEach(
-            (el) =>
-              (toAdd =
-                selectedPrevPos[el] > selectedPrevPos[key] ? toAdd + 1 : toAdd)
-          );
-
-          this.item.items.splice(selectedPrevPos[key] + toAdd, 0, el);
-          delete selectedPrevPos[key];
+          const { items, positions } =
+            selectorItemPositionHelper.itemDeselection(
+              val,
+              this.item.items,
+              selectedPrevPos
+            );
+          this.item.items = items;
+          selectedPrevPos = positions;
         }
       }
       if (!this.overrideStoreChange) {
