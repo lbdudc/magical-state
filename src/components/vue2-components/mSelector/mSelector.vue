@@ -197,7 +197,7 @@ export default {
       this.item.value &&
       this.item.value.length > 0
     ) {
-      this.item.value.forEach((el, idx) => (selectedPrevPos[el] = idx));
+      this.change(this.item.id, this.item.value);
     }
   },
   methods: {
