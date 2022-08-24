@@ -2,6 +2,13 @@
 
 <!--- next entry here -->
 
+## 0.18.0
+2022-08-24
+
+### Features
+
+- Retrieving the deselected elements to their original positions when the selectors are multiple and expected to push selected items up (80318530ce68b99d2790e07ef70224c40200625e)
+
 ## 0.17.0
 2022-07-14
 
