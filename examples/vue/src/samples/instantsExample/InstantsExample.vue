@@ -3,7 +3,7 @@
     <v-row>
       <v-col v-if="store" cols="12">
         <v-row>
-          <MDateFilter id="DATE_FILTER" :store="store" :i18n="$t" />
+          <MDateFilter id="DATE_FILTER" :store="store" :i18n="$t" :maxValue="new Date().toISOString().slice(0, 10)"/>
         </v-row>
         <v-row>
           <MListSelector id="INSTANT_FILTER" :store="store" />

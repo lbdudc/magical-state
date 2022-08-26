@@ -25,7 +25,7 @@
     </template>
     <v-date-picker
       :locale="$i18n.locale"
-      :max="new Date().toISOString().slice(0, 10)"
+      :max="maxValue"
       :next-month-aria-label="i18Label('datePicker.nextMonthAriaLabel')"
       :next-year-aria-label="i18Label('datePicker.nextYearAriaLabel')"
       :prev-month-aria-label="i18Label('datePicker.prevMonthAriaLabel')"
@@ -102,6 +102,11 @@ export default {
       default: false,
       required: false,
     },
+    maxValue:{
+      type: String, 
+      default: null,
+      required: false
+    }
   },
   computed: {
     storeElement() {

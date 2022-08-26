@@ -101,6 +101,7 @@ The date filter component lets users select a date.
 | filled   | Boolean | false    | false   | Applies the alternate filled input style |
 | color    | String  | false    | null    | Applies specified color to the control   |
 |  overrideStoreChange | Boolean |   false  |   false  |     When true the component will not trigger the store reactivity, only the value of the selector will change, but the @change emit will still be dispatched. This way the parent component using the vue2-component will be able to define its own store reactivity after a selector value change.       |
+|  maxValue | String |   false  |   null  |     Maximum allowed date/month (ISO 8601 format).       |
 
 </details>
 
