@@ -16,10 +16,12 @@
         :label="i18Label(storeElement.label)"
         :loading="storeElement.loading || store.state.loading"
         :outlined="outlined"
+        :error-messages="errorMessage"
+        :error="errorMessage != null"
         append-icon="mdi-calendar"
         readonly
         v-bind="attrs"
-        v-model="storeElement.value"
+        v-model="dateString"
         v-on="on"
       ></v-text-field>
     </template>
@@ -34,13 +36,7 @@
       :prev-year-aria-label="i18Label('datePicker.prevYearAriaLabel')"
       no-title
       persistent-hint
-      v-model="storeElement.value"
-      @input="
-        () => {
-          daySelected(storeElement.value, 0);
-          menu = false;
-        }
-      "
+      v-model="itemValue"
     >
     </v-date-picker>
   </v-menu>
@@ -52,6 +48,8 @@ export default {
   data() {
     return {
       menu: false,
+      dateString: null,
+      errorMessage: null,
     };
   },
   props: {
@@ -119,6 +117,11 @@ export default {
       default: null,
       required: false,
     },
+    rules: {
+      type: Array,
+      default: () => [],
+      required: false,
+    },
   },
   computed: {
     storeElement() {
@@ -129,6 +132,22 @@ export default {
           value: null,
         };
       return this.store.getSelector(this.id);
+    },
+    itemValue: {
+      get() {
+        return this.storeElement.value;
+      },
+      set(val) {
+        const error = this.rules.find((f) => f(val) != true);
+        this.dateString = val;
+        if (error != null) {
+          this.errorMessage = error(val);
+          this.$emit("input-error", this.id);
+        } else {
+          this.errorMessage = null;
+          this.daySelected(val);
+        }
+      },
     },
   },
   methods: {
