@@ -4,8 +4,9 @@
       <v-list-item-group
         v-if="!storeElement.loading"
         v-model="index"
+        :max="max"
         @change="selectedValChanged"
-        mandatory
+        :mandatory="mandatory"
       >
         <v-list-item v-for="(item, index) in storeElement.items" :key="index">
           <v-list-item-title>{{ item.label }}</v-list-item-title>
@@ -40,6 +41,15 @@ export default {
       default: null,
     },
     overrideStoreChange: {
+      type: Boolean,
+      default: false,
+      required: false,
+    },
+    max: {
+      default: null,
+      required: false,
+    },
+    mandatory: {
       type: Boolean,
       default: false,
       required: false,

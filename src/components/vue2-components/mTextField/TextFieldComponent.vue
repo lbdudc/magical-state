@@ -1,18 +1,20 @@
 <template>
-  <v-text-field
-    v-model="storeElement.value"
-    :label="i18n ? i18n(storeElement.label) : ''"
-    :prependInnerIcon="prependInnerIcon"
-    :appendIcon="appendIcon"
-    :dense="dense"
-    :disabled="disabled"
-    :rules="rules"
-    :type="type"
-    :loading="storeElement.loading || store.state.loading"
-    @change="valueChanged(storeElement.value)"
-    :readonly="readonly"
-    clearable
-  ></v-text-field>
+  <v-form :ref="'form-' + storeElement.id">
+    <v-text-field
+      v-model="storeElement.value"
+      :label="i18n ? i18n(storeElement.label) : ''"
+      :prependInnerIcon="prependInnerIcon"
+      :appendIcon="appendIcon"
+      :dense="dense"
+      :disabled="disabled"
+      :rules="rules"
+      :type="type"
+      :loading="storeElement.loading || store.state.loading"
+      @change="valueChanged(storeElement.value)"
+      :readonly="readonly"
+      clearable
+    ></v-text-field>
+  </v-form>
 </template>
 <script>
 export default {
@@ -74,11 +76,15 @@ export default {
   },
   methods: {
     async valueChanged(newVal) {
-      if (!this.overrideStoreChange) {
-        await this.store.change(this.id, newVal);
+      if (this.$refs["form-" + this.storeElement.id].validate()) {
+        if (!this.overrideStoreChange) {
+          await this.store.change(this.id, newVal);
+        }
+        const { id, value } = this.storeElement;
+        this.$emit("change", { id, val: value });
+      } else {
+        this.$emit("input-error", this.id);
       }
-      const { id, value } = this.storeElement;
-      this.$emit("change", { id, val: value });
     },
   },
 };
