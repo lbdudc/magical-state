@@ -246,6 +246,9 @@ export default class Store {
         const newStateObjValue = newState[el.id];
         const newVal = newStateObjValue != null ? newStateObjValue : el.default;
 
+        if (newVal === 'true') newVal = true;
+        if (newVal === 'false') newVal = false;
+
         if (selector.type === "date") {
           selector.value = newVal
         } else if (selector.items != null && selector.items.length > 0) {
