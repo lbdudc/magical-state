@@ -46,7 +46,7 @@ const createStore = (jsonSpec) => {
     return {
       id: el.id,
       label: el.label,
-      default: el.default,
+      default: el.default === 'true' ? true : el.default === 'false' ? false : el.default,
       type: el.type || "select",
       value: el.type === "multiple" ? [] : null,
       loading: false,
