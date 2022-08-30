@@ -1,7 +1,7 @@
 <template>
   <v-form :ref="'form-' + storeElement.id">
     <v-text-field
-      v-model="storeElement.value"
+      v-model="itemValue"
       :label="i18n ? i18n(storeElement.label) : ''"
       :prependInnerIcon="prependInnerIcon"
       :appendIcon="appendIcon"
@@ -10,7 +10,7 @@
       :rules="rules"
       :type="type"
       :loading="storeElement.loading || store.state.loading"
-      @change="valueChanged(storeElement.value)"
+      @change="valueChanged(itemValue)"
       :readonly="readonly"
       clearable
     ></v-text-field>
@@ -69,19 +69,33 @@ export default {
       required: false,
     },
   },
+  data() {
+    return {
+      itemValue: null,
+    };
+  },
   computed: {
     storeElement() {
       return this.store.getSelector(this.id);
     },
   },
+  watch: {
+    "storeElement.value": function (newVal) {
+      this.itemValue = newVal;
+    },
+  },
+  mounted() {
+    this.itemValue = this.storeElement.value;
+  },
   methods: {
     async valueChanged(newVal) {
       if (this.$refs["form-" + this.storeElement.id].validate()) {
+        this.storeElement.value = newVal;
         if (!this.overrideStoreChange) {
           await this.store.change(this.id, newVal);
         }
-        const { id, value } = this.storeElement;
-        this.$emit("change", { id, val: value });
+        const { id } = this.storeElement;
+        this.$emit("change", { id, val: newVal });
       } else {
         this.$emit("input-error", this.id);
       }

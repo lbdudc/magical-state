@@ -21,7 +21,7 @@
         append-icon="mdi-calendar"
         readonly
         v-bind="attrs"
-        v-model="dateString"
+        v-model="itemValue"
         v-on="on"
       ></v-text-field>
     </template>
@@ -34,6 +34,7 @@
       :next-year-aria-label="i18Label('datePicker.nextYearAriaLabel')"
       :prev-month-aria-label="i18Label('datePicker.prevMonthAriaLabel')"
       :prev-year-aria-label="i18Label('datePicker.prevYearAriaLabel')"
+      @change="daySelected"
       no-title
       persistent-hint
       v-model="itemValue"
@@ -50,6 +51,7 @@ export default {
       menu: false,
       dateString: null,
       errorMessage: null,
+      itemValue: null,
     };
   },
   props: {
@@ -123,6 +125,14 @@ export default {
       required: false,
     },
   },
+  mounted() {
+    this.itemValue = this.storeElement.value;
+  },
+  watch: {
+    "storeElement.value": function (newVal) {
+      this.itemValue = newVal;
+    },
+  },
   computed: {
     storeElement() {
       if (this.store == null)
@@ -133,25 +143,17 @@ export default {
         };
       return this.store.getSelector(this.id);
     },
-    itemValue: {
-      get() {
-        return this.storeElement.value;
-      },
-      set(val) {
-        const error = this.rules.find((f) => f(val) != true);
-        this.dateString = val;
-        if (error != null) {
-          this.errorMessage = error(val);
-          this.$emit("input-error", this.id);
-        } else {
-          this.errorMessage = null;
-          this.daySelected(val);
-        }
-      },
-    },
   },
   methods: {
     async daySelected(pickedDate) {
+      const error = this.rules.find((f) => f(pickedDate) != true);
+      if (error != null) {
+        this.errorMessage = error(pickedDate);
+        this.$emit("input-error", this.id);
+      } else {
+        this.errorMessage = null;
+        this.storeElement.value = pickedDate;
+      }
       if (!this.overrideStoreChange) {
         await this.store.change(this.id, pickedDate);
       }

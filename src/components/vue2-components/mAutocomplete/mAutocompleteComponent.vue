@@ -231,6 +231,7 @@ export default {
       return "";
     },
     async change(id, val) {
+      this.item.value = val;
       if (this.pushSelectedValuesUp && this.item.type === "multiple") {
         if (val.length > Object.keys(selectedPrevPos).length) {
           //get the new element and its current position on the items
