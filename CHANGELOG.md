@@ -2,6 +2,13 @@
 
 <!--- next entry here -->
 
+## 0.19.0
+2022-08-30
+
+### Features
+
+- Added check to prevent setting default boolean values to strings (815d18c0712cb864312fe5bcb4c3918a20787f83)
+
 ## 0.18.0
 2022-08-24
 
