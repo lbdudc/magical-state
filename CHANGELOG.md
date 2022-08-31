@@ -2,6 +2,13 @@
 
 <!--- next entry here -->
 
+## 0.21.0
+2022-08-31
+
+### Features
+
+- implemented internacionalization (7582570c946dc845fd11cca8e203fb61f14b504f)
+
 ## 0.20.0
 2022-08-31
 
