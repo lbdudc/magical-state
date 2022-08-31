@@ -12,6 +12,7 @@
     :rules="rules"
     :overrideStoreChange="overrideStoreChange"
     @change="change"
+    @input-error="inputError"
   />
 </template>
 <script>
@@ -70,6 +71,9 @@ export default {
   methods: {
     change(changedEl) {
       this.$emit("change", changedEl);
+    },
+    inputError() {
+      this.$emit("input-error", this.id);
     },
   },
 };

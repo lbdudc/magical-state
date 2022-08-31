@@ -250,7 +250,7 @@ export default class Store {
         if (newVal === 'false') newVal = false;
 
         if (selector.type === "date") {
-          selector.value = newVal
+          selector.value = newVal;
         } else if (selector.items != null && selector.items.length > 0) {
 
           const isItem =
@@ -304,7 +304,6 @@ export default class Store {
         reject(`Cannot set value of type array on a selector that is not multiple`);
       }
       obs.value = obs.type === 'multiple' && !Array.isArray(newVal) ? [newVal] : newVal;
-
       // Reset values of the depending selectors (if has any)
       hasRedrawProp = hasRedrawProp || utils.resetDependedSelectors(propId, this._jsonSpec, this._observable);
       // For each children, create a new Promise calling the update function

@@ -16,29 +16,28 @@
         :label="i18Label(storeElement.label)"
         :loading="storeElement.loading || store.state.loading"
         :outlined="outlined"
+        :error-messages="errorMessage"
+        :error="errorMessage != null"
         append-icon="mdi-calendar"
         readonly
         v-bind="attrs"
-        v-model="storeElement.value"
+        v-model="itemValue"
         v-on="on"
       ></v-text-field>
     </template>
     <v-date-picker
       :locale="$i18n.locale"
-      :max="new Date().toISOString().slice(0, 10)"
+      :max="maxValue"
+      :min="minValue"
+      :allowed-dates="allowedDates"
       :next-month-aria-label="i18Label('datePicker.nextMonthAriaLabel')"
       :next-year-aria-label="i18Label('datePicker.nextYearAriaLabel')"
       :prev-month-aria-label="i18Label('datePicker.prevMonthAriaLabel')"
       :prev-year-aria-label="i18Label('datePicker.prevYearAriaLabel')"
+      @change="daySelected"
       no-title
       persistent-hint
-      v-model="storeElement.value"
-      @input="
-        () => {
-          daySelected(storeElement.value, 0);
-          menu = false;
-        }
-      "
+      v-model="itemValue"
     >
     </v-date-picker>
   </v-menu>
@@ -50,6 +49,9 @@ export default {
   data() {
     return {
       menu: false,
+      dateString: null,
+      errorMessage: null,
+      itemValue: null,
     };
   },
   props: {
@@ -102,6 +104,34 @@ export default {
       default: false,
       required: false,
     },
+    maxValue: {
+      type: String,
+      default: null,
+      required: false,
+    },
+    minValue: {
+      type: String,
+      default: null,
+      required: false,
+    },
+    allowedDates: {
+      type: Function,
+      default: null,
+      required: false,
+    },
+    rules: {
+      type: Array,
+      default: () => [],
+      required: false,
+    },
+  },
+  mounted() {
+    this.itemValue = this.storeElement.value;
+  },
+  watch: {
+    "storeElement.value": function (newVal) {
+      this.itemValue = newVal;
+    },
   },
   computed: {
     storeElement() {
@@ -116,6 +146,14 @@ export default {
   },
   methods: {
     async daySelected(pickedDate) {
+      const error = this.rules.find((f) => f(pickedDate) != true);
+      if (error != null) {
+        this.errorMessage = error(pickedDate);
+        this.$emit("input-error", this.id);
+      } else {
+        this.errorMessage = null;
+        this.storeElement.value = pickedDate;
+      }
       if (!this.overrideStoreChange) {
         await this.store.change(this.id, pickedDate);
       }

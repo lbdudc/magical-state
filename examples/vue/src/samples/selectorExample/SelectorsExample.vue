@@ -10,7 +10,12 @@
             :pushSelectedValuesUp="true"
           >
           </m-selector>
-          <m-selector :store="store" id="TEMPORAL_AGGREGATION"> </m-selector>
+          <m-selector
+            :store="store"
+            id="TEMPORAL_AGGREGATION"
+            :rules="[(v) => !!v || 'cant be empty']"
+          >
+          </m-selector>
           <m-selector :store="store" id="SPATIAL_FILTER"> </m-selector>
           <m-selector :store="store" id="TEMPORAL_FILTER"> </m-selector>
           <m-date-filter :store="store" id="DATE_FILTER"> </m-date-filter>

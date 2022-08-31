@@ -74,6 +74,7 @@ The autocomplete component extends the magical selector and adds the ability to 
 | persistentHint   | Boolean | false    | false       | Forces hint to always be visible                                                       |
 |  overrideStoreChange | Boolean |   false  |   false  |     When true the component will not trigger the store reactivity, only the value of the selector will change, but the @change emit will still be dispatched. This way the parent component using the vue2-component will be able to define its own store reactivity after a selector value change.       |
 |  pushSelectedValuesUp | Boolean |   false  |   false  |     When the selector is multiple and this prop is true the selected elements will be pushed up the item's array so they are displayed in the first positions    |
+|  rules | Array |   false  |   []  |     Accepts a mixed array of types function, boolean and string. Functions pass an input value as an argument and must return either true / false or a string containing an error message. The input field will enter an error state if a function returns (or any value in the array contains) false or is a string    |
 
 </details>
 
@@ -83,6 +84,7 @@ The autocomplete component extends the magical selector and adds the ability to 
 |       name       |   param   |                                                                                    description                                                                                    |
 |:----------------:|:---------:|:---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|
 |       change       |   Object  | Emitted when the selector suffers a change of value. The object passed will contain the id of the selector and its value {id, val} |
+|       input-error       |   String  | Emitted when the selector receives an input that doesn't follow the specified rules. The String passed will represent the id of the selector. |
 
 </details>
 
@@ -101,6 +103,10 @@ The date filter component lets users select a date.
 | filled   | Boolean | false    | false   | Applies the alternate filled input style |
 | color    | String  | false    | null    | Applies specified color to the control   |
 |  overrideStoreChange | Boolean |   false  |   false  |     When true the component will not trigger the store reactivity, only the value of the selector will change, but the @change emit will still be dispatched. This way the parent component using the vue2-component will be able to define its own store reactivity after a selector value change.       |
+|  maxValue | String |   false  |   null  |     Maximum allowed date/month (ISO 8601 format).       |
+|  minValue | String |   false  |   null  |    Minimum allowed date/month (ISO 8601 format).       |
+|  allowedDates | Function |   false  |   null  |     Restricts which dates can be selected      |
+|  rules | Array |   false  |   []  |     Accepts a mixed array of types function, boolean and string. Functions pass an input value as an argument and must return either true / false or a string containing an error message. The input field will enter an error state if a function returns (or any value in the array contains) false or is a string    |
 
 </details>
 
@@ -138,6 +144,7 @@ The hour pciker component lets users select a day time.
 |       name       |   param   |                                                                                    description                                                                                    |
 |:----------------:|:---------:|:---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|
 |       change       |   Object  | Emitted when the selector suffers a change of value. The object passed will contain the id of the selector and its value {id, val} |
+|       input-error       |   String  | Emitted when the selector receives an input that doesn't follow the specified rules. The String passed will represent the id of the selector. |
 
 </details>
 
@@ -151,6 +158,8 @@ The list selector component is used to display information in a list from which 
 |     **name**     | **type** | **required** | **default** |                                               **description**                                              |
 |:----------------:|:--------:|:------------:|:-----------:|:----------------------------------------------------------------------------------------------------------:|
 | overrideStoreChange |  Boolean |     false    |    false    | When true the component will not trigger the store reactivity, only the value of the selector will change, but the @change emit will still be dispatched. This way the parent component using the vue2-component will be able to define its own store reactivity after a selector value change. |
+| max |  number or string |     false    |    false    | Sets a maximum number of selections that can be made. |
+| mandatory |  boolean |     false    |    false    |  Forces a value to always be selected (if available). |
 
 </details>
 
@@ -193,6 +202,7 @@ Select fields components are used for collecting user provided information from 
 | persistentHint   | Boolean | false    | false       | Forces hint to always be visible                                                 |
 | overrideStoreChange |  Boolean |     false    |    false    | When true the component will not trigger the store reactivity, only the value of the selector will change, but the @change emit will still be dispatched. This way the parent component using the vue2-component will be able to define its own store reactivity after a selector value change. |
 |  pushSelectedValuesUp | Boolean |   false  |   false  |     When the selector is multiple and this prop is true the selected elements will be pushed up the item's array so they are displayed in the first positions    |
+|  rules | Array |   false  |   []  |     Accepts a mixed array of types function, boolean and string. Functions pass an input value as an argument and must return either true / false or a string containing an error message. The input field will enter an error state if a function returns (or any value in the array contains) false or is a string.    |
 
 </details>
 
@@ -202,6 +212,7 @@ Select fields components are used for collecting user provided information from 
 |       name       |   param   |                                                                                    description                                                                                    |
 |:----------------:|:---------:|:---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|
 |       change       |   Object  | Emitted when the selector suffers a change of value. The object passed will contain the id of the selector and its value {id, val} |
+|       input-error       |   String  | Emitted when the selector receives an input that doesn't follow the specified rules. The String passed will represent the id of the selector. |
 
 </details>
 
@@ -231,6 +242,7 @@ Text fields components are used for collecting user provided information.
 |       name       |   param   |                                                                                    description                                                                                    |
 |:----------------:|:---------:|:---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|
 |       change       |   Object  | Emitted when the selector suffers a change of value. The object passed will contain the id of the selector and its value {id, val} |
+|       input-error       |   String  | Emitted when the selector receives an input that doesn't follow the specified rules. The String passed will represent the id of the selector. |
 
 </details>
 

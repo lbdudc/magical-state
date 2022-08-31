@@ -3,7 +3,12 @@
     <v-row>
       <v-col v-if="store" cols="12">
         <v-row>
-          <MDateFilter id="DATE_FILTER" :store="store" :i18n="$t" />
+          <MDateFilter
+            id="DATE_FILTER"
+            :store="store"
+            :i18n="$t"
+            :rules="[(v) => v != '2022-08-29' || 'date cant be today']"
+          />
         </v-row>
         <v-row>
           <MListSelector id="INSTANT_FILTER" :store="store" />
