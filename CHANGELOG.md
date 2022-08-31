@@ -2,6 +2,18 @@
 
 <!--- next entry here -->
 
+## 0.20.0
+2022-08-31
+
+### Features
+
+- Added rules and restrictions to all components (2f89d2e2dadc7264f74ae9b9aec480e525847a97)
+
+### Fixes
+
+- updated documentation to cover the new coponents' props (e2ef82eb1b4cebb713f3b5663685fcc835e7acf3)
+- error on const assigntment (df56de6138a5f909ce20d7b4312277370bed11c6)
+
 ## 0.19.0
 2022-08-30
 
