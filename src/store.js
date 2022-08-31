@@ -244,7 +244,7 @@ export default class Store {
 
         // Value is in the new State, or is default
         const newStateObjValue = newState[el.id];
-        const newVal = newStateObjValue != null ? newStateObjValue : el.default;
+        let newVal = newStateObjValue != null ? newStateObjValue : el.default;
 
         if (newVal === 'true') newVal = true;
         if (newVal === 'false') newVal = false;
