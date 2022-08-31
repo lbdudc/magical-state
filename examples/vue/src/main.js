@@ -9,11 +9,22 @@ Vue.use(VueI18n);
 
 const messages = {
   ES: {},
+  EN: {}
 };
+
+const localeEn = require.context("./locale/en", true, /\.json$/);
+
 const localeEs = require.context("./locale/es", true, /\.json$/);
+
 localeEs.keys().forEach((filename) => {
   Object.keys(localeEs(filename)).forEach((key) => {
     messages.ES[key] = localeEs(filename)[key];
+  });
+});
+
+localeEn.keys().forEach((filename) => {
+  Object.keys(localeEn(filename)).forEach((key) => {
+    messages.EN[key] = localeEn(filename)[key];
   });
 });
 

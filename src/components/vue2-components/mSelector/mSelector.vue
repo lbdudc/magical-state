@@ -1,40 +1,38 @@
 <template>
   <v-container class="ma-0 pa-0">
-    <v-form :ref="'form-' + item.id">
-      <v-row no-gutters>
-        <v-col cols="12">
-          <v-select
-            :append-icon="appendIcon"
-            :append-outer-icon="appendOuterIcon"
-            :background-color="backgroundColor"
-            :chips="chips"
-            :clearable="clearable"
-            :color="color"
-            :deletable-chips="deletableChips"
-            :dense="dense"
-            :disabled="item.loading || store.state.loading || disabled"
-            :filled="filled"
-            :flat="flat"
-            :hint="hint"
-            :item-color="itemColor"
-            :item-text="(el) => i18Items(el.label)"
-            :items="item.items"
-            :label="i18Label(item.label)"
-            :loading="item.loading || store.state.loading"
-            :multiple="item.type === 'multiple'"
-            :outlined="outlined"
-            :persistent-hint="persistentHint"
-            :prepend-icon="prependIcon"
-            :prepend-inner-icon="prependInnerIcon"
-            :reverse="reverse"
-            :small-chips="smallChips"
-            :solo="solo"
-            :rules="rules"
-            v-model="itemValue"
-          ></v-select>
-        </v-col>
-      </v-row>
-    </v-form>
+    <v-row no-gutters>
+      <v-col cols="12">
+        <v-select
+          :append-icon="appendIcon"
+          :append-outer-icon="appendOuterIcon"
+          :background-color="backgroundColor"
+          :chips="chips"
+          :clearable="clearable"
+          :color="color"
+          :deletable-chips="deletableChips"
+          :dense="dense"
+          :disabled="item.loading || store.state.loading || disabled"
+          :filled="filled"
+          :flat="flat"
+          :hint="hint"
+          :item-color="itemColor"
+          :item-text="(el) => i18Items(el.label)"
+          :items="item.items"
+          :label="i18Label(item.label)"
+          :loading="item.loading || store.state.loading"
+          :multiple="item.type === 'multiple'"
+          :outlined="outlined"
+          :persistent-hint="persistentHint"
+          :prepend-icon="prependIcon"
+          :prepend-inner-icon="prependInnerIcon"
+          :reverse="reverse"
+          :small-chips="smallChips"
+          :solo="solo"
+          :error-messages="i18Label(errorMessage)"
+          v-model="itemValue"
+        ></v-select>
+      </v-col>
+    </v-row>
   </v-container>
 </template>
 
@@ -185,6 +183,11 @@ export default {
       required: false,
     },
   },
+  data() {
+    return {
+      errorMessage: null,
+    };
+  },
   computed: {
     item() {
       if (this.store == null)
@@ -202,9 +205,12 @@ export default {
         return this.item.value;
       },
       set(newVal) {
-        if (this.$refs[`form-${this.item.id}`].validate()) {
+        const error = this.rules.find((f) => f(newVal) != true);
+        if (error == null) {
+          this.errorMessage = null;
           this.change(this.item.id, newVal);
         } else {
+          this.errorMessage = error(newVal);
           this.$emit("input-error", this.id);
         }
       },
