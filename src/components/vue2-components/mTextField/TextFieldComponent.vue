@@ -1,20 +1,18 @@
 <template>
-  <v-form :ref="'form-' + storeElement.id">
-    <v-text-field
-      v-model="itemValue"
-      :label="i18n ? i18n(storeElement.label) : ''"
-      :prependInnerIcon="prependInnerIcon"
-      :appendIcon="appendIcon"
-      :dense="dense"
-      :disabled="disabled"
-      :rules="rules"
-      :type="type"
-      :loading="storeElement.loading || store.state.loading"
-      @change="valueChanged(itemValue)"
-      :readonly="readonly"
-      clearable
-    ></v-text-field>
-  </v-form>
+  <v-text-field
+    v-model="itemValue"
+    :label="i18n ? i18n(storeElement.label) : ''"
+    :prependInnerIcon="prependInnerIcon"
+    :appendIcon="appendIcon"
+    :dense="dense"
+    :disabled="disabled"
+    :error-messages="i18Label(errorMessage)"
+    :type="type"
+    :loading="storeElement.loading || store.state.loading"
+    @change="valueChanged(itemValue)"
+    :readonly="readonly"
+    clearable
+  ></v-text-field>
 </template>
 <script>
 export default {
@@ -57,6 +55,7 @@ export default {
     rules: {
       type: Array,
       required: false,
+      default: () => [],
     },
     type: {
       type: String,
@@ -72,6 +71,7 @@ export default {
   data() {
     return {
       itemValue: null,
+      errorMessage: null,
     };
   },
   computed: {
@@ -89,16 +89,23 @@ export default {
   },
   methods: {
     async valueChanged(newVal) {
-      if (this.$refs["form-" + this.storeElement.id].validate()) {
+      const error = this.rules.find((f) => f(newVal) != true);
+      if (error == null) {
         this.storeElement.value = newVal;
+        this.errorMessage = null;
         if (!this.overrideStoreChange) {
           await this.store.change(this.id, newVal);
         }
         const { id } = this.storeElement;
         this.$emit("change", { id, val: newVal });
       } else {
+        this.errorMessage = error(newVal);
         this.$emit("input-error", this.id);
       }
+    },
+    i18Label(label) {
+      if (label) return this.i18n ? this.i18n(label) : label;
+      return "";
     },
   },
 };

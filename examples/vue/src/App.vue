@@ -10,6 +10,8 @@
       <v-btn @click="picked = 'Example5'">Autocompletes</v-btn>
       <v-btn @click="picked = 'Example6'">Hour Picker</v-btn>
     </v-row>
+    <v-divider></v-divider>
+    <v-btn @click="cambiarLocale">locale switch</v-btn>
   </v-app>
 </template>
 
@@ -52,6 +54,11 @@ export default {
         default:
           return SelectorsExample;
       }
+    },
+  },
+  methods: {
+    cambiarLocale() {
+      this.$i18n.locale = this.$i18n.locale == "ES" ? "EN" : "ES";
     },
   },
 };
