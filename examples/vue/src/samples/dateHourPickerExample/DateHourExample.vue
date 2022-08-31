@@ -4,11 +4,17 @@
       type="date"
       id="DATE_FILTER"
       :store="store"
-      :rules="[(v) => !!v || 'Date field cannot be empty']"
       :overrideStoreChange="true"
       @change="change"
+      :i18n="this.$t"
     />
-    <MHourPicker id="HOUR_PICKER" :store="store" :disabled="!disableSelector" />
+    <MHourPicker
+      id="HOUR_PICKER"
+      :store="store"
+      :disabled="!disableSelector"
+      :rules="[(v) => !!v || 'error.empty']"
+      :i18n="this.$t"
+    />
     <v-divider></v-divider>
     {{ storeStatus }}
   </v-container>

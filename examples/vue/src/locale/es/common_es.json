@@ -57,5 +57,8 @@
   },
   "timeline": {
     "instantSelectorButtonLabel": "print-console"
+  },
+  "error": {
+    "empty": "no puede ser vacio"
   }
 }

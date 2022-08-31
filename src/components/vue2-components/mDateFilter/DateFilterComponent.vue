@@ -16,7 +16,7 @@
         :label="i18Label(storeElement.label)"
         :loading="storeElement.loading || store.state.loading"
         :outlined="outlined"
-        :error-messages="errorMessage"
+        :error-messages="i18Label(errorMessage)"
         :error="errorMessage != null"
         append-icon="mdi-calendar"
         readonly
@@ -153,9 +153,9 @@ export default {
       } else {
         this.errorMessage = null;
         this.storeElement.value = pickedDate;
-      }
-      if (!this.overrideStoreChange) {
-        await this.store.change(this.id, pickedDate);
+        if (!this.overrideStoreChange) {
+          await this.store.change(this.id, pickedDate);
+        }
       }
       const { id, value } = this.storeElement;
       this.$emit("change", { id, val: value });
