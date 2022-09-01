@@ -116,6 +116,7 @@ The date filter component lets users select a date.
 |       name       |   param   |                                                                                    description                                                                                    |
 |:----------------:|:---------:|:---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|
 |       change       |   Object  | Emitted when the selector suffers a change of value. The object passed will contain the id of the selector and its value {id, val} |
+|       input-error       |   String  | Emitted when the selector receives an input that doesn't follow the specified rules. The String passed will represent the id of the selector. |
 
 </details>
 

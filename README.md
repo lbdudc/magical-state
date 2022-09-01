@@ -187,10 +187,12 @@ this.store = createStore(
 - ```change(propId: String, newVal: Any, needsRedraw: Boolean): Promise<>```: Changes the value of the selector with the given id. *needsRedraw* prop defaults to true and specifies if the change on the selector's value should trigger the callback, in case the selector has *redraw* to true in the specification.
 - ```setSelector(selectorId: String, newVal: Any, deep: Boolean, triggerCallbak: Boolean): Promise<>```: Changes the value of the selector with the given id. If *deep* is true or the selector isn't of type *date* and doesn't have items, *setSelector* will call *getValues* to populate the selector's items.  
 - ```setItems(id: String, values: Array, useSpecConfig: Boolean): void```: Sets the items of the specified store element to the parameter *values*. If *useSpecConfig* is true, it will check the spec to set the selector's default value.
+- ```setHasErrors(selectorId: String, value: Boolean, useSpecConfig: Boolean): Boolean```: Sets the property 'hasErrors' of the specified selector to the value provided. If it's set to true this will prevent the store from firing the callback when an element changes value.
 
 ##### Important when setting a new value on a selector
 
-Both *change* and *setSelector* functions may reject their returned promises when the value to be set is not found on the selector's items. This is not relevant if the selector has type "date".
+- Both *change* and *setSelector* functions may reject their returned promises when the value to be set is not found on the selector's items. This is not relevant if the selector has type *date*.
+- If a selector has an error, *hasError* property equaling true, and its value changes to a correct one, it's important to first set this property back to false so that the callback is triggered when calling *change* function.
 
 ### Get the state of the store
 
