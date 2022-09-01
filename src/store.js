@@ -8,6 +8,7 @@ export default class Store {
     this._state = {
       loading: true,
     }
+    this._isWaitingForRedraw = false;
 
     if (typeof callback !== "function")
       throw new Error("callback is not a function");
@@ -305,7 +306,16 @@ export default class Store {
       }
       obs.value = obs.type === 'multiple' && !Array.isArray(newVal) ? [newVal] : newVal;
       // Reset values of the depending selectors (if has any)
-      hasRedrawProp = hasRedrawProp || utils.resetDependedSelectors(propId, this._jsonSpec, this._observable);
+      hasRedrawProp =
+        hasRedrawProp ||
+        utils.resetDependedSelectors(propId, this._jsonSpec, this._observable) ||
+        this._isWaitingForRedraw;
+
+      // setting it to false on parent element before the childs are processed
+      if (this._isWaitingForRedraw && !utils.storeHasErrors(this._observable)) {
+        this._isWaitingForRedraw = false;
+      }
+
       // For each children, create a new Promise calling the update function
       const act = [];
       obs.actions.forEach((el) => {
@@ -349,10 +359,15 @@ export default class Store {
           utils.dispatchCustomEvent("change", { id: el.id, value: newVal, store: this._store });
 
           // If the element has a redraw property, call the callback funct
-          if (hasRedrawProp && needsRedraw) {
-            const dataObj = {};
-            this._observable.filter(el => el.value != null).forEach(el => (dataObj[el.id] = el.value));
-            this._callback(dataObj).then(() => utils.dispatchCustomEvent("redrawFullfilled", { id: el.id }));
+          if ((hasRedrawProp && needsRedraw)) {
+            if (utils.storeHasErrors(this._observable)) {
+              this._isWaitingForRedraw = true;
+            }
+            else {
+              const dataObj = {};
+              this._observable.filter(el => el.value != null).forEach(el => (dataObj[el.id] = el.value));
+              this._callback(dataObj).then(() => utils.dispatchCustomEvent("redrawFullfilled", { id: el.id }));
+            }
           }
           resolve(hasRedrawProp);
         })
@@ -424,5 +439,14 @@ export default class Store {
     } else {
       await this.change(id, null, false);
     }
+  }
+
+  /**
+   * 
+   * @param {String} selectorId id of the selector that has errors
+   * @param {Boolean} value 
+   */
+  setHasErrors(selectorId, value) {
+    this.getSelector(selectorId).hasErrors = value;
   }
 }
