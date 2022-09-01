@@ -201,9 +201,11 @@ export default {
         const error = this.rules.find((f) => f(newVal) != true);
         if (error == null) {
           this.errorMessage = null;
+          this.storeElement.hasErrors = false;
           this.change(this.item.id, newVal);
         } else {
           this.errorMessage = error(newVal);
+          this.storeElement.hasErrors = true;
           this.$emit("input-error", this.id);
         }
       },

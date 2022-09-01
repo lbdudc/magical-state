@@ -93,6 +93,7 @@ export default {
       if (error == null) {
         this.storeElement.value = newVal;
         this.errorMessage = null;
+        this.storeElement.hasErrors = false;
         if (!this.overrideStoreChange) {
           await this.store.change(this.id, newVal);
         }
@@ -100,6 +101,7 @@ export default {
         this.$emit("change", { id, val: newVal });
       } else {
         this.errorMessage = error(newVal);
+        this.storeElement.hasErrors = true;
         this.$emit("input-error", this.id);
       }
     },

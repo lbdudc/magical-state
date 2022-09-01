@@ -149,16 +149,18 @@ export default {
       const error = this.rules.find((f) => f(pickedDate) != true);
       if (error != null) {
         this.errorMessage = error(pickedDate);
+        this.storeElement.hasErrors = true;
         this.$emit("input-error", this.id);
       } else {
         this.errorMessage = null;
         this.storeElement.value = pickedDate;
+        this.storeElement.hasErrors = false;
         if (!this.overrideStoreChange) {
           await this.store.change(this.id, pickedDate);
         }
+        const { id, value } = this.storeElement;
+        this.$emit("change", { id, val: value });
       }
-      const { id, value } = this.storeElement;
-      this.$emit("change", { id, val: value });
     },
     i18Label(label) {
       if (label) return this.i18n ? this.i18n(label) : label;
