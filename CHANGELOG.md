@@ -2,6 +2,13 @@
 
 <!--- next entry here -->
 
+## 0.22.0
+2022-09-02
+
+### Features
+
+- preventing callback from triggering where there are erros on the selectors (0fe3620cc6b1867e33bc409214dce72aca339914)
+
 ## 0.21.0
 2022-08-31
 
