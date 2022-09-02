@@ -11,7 +11,7 @@
               (v) => v.length > 0 || 'no puede estar vacío',
               (v) => v != 1 || 'no puede tomar valor 1',
             ]"
-            @input-error="errorOnInput"
+            @onInputError="onInputError"
             id="SPATIAL_AGGREGATION"
           ></m-autocomplete>
           <m-autocomplete :store="store" id="SPATIAL_FILTER"> </m-autocomplete>
@@ -56,7 +56,7 @@ export default {
     );
   },
   methods: {
-    errorOnInput(id) {
+    onInputError(id) {
       console.log("input error on selector: " + id);
       console.log(this.store);
     },

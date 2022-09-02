@@ -208,10 +208,12 @@ export default {
         const error = this.rules.find((f) => f(newVal) != true);
         if (error == null) {
           this.errorMessage = null;
+          this.item.hasErrors = false;
           this.change(this.item.id, newVal);
         } else {
           this.errorMessage = error(newVal);
-          this.$emit("input-error", this.id);
+          this.item.hasErrors = true;
+          this.$emit("onInputError", this.id);
         }
       },
     },

@@ -1,4 +1,5 @@
 import { createStore, parseUrl } from "../index";
+import utils from "../src/utils";
 
 let store;
 
@@ -67,4 +68,16 @@ describe("Utils", () => {
     //({ DATE_FILTER: '1990-01-01', INSTANT_FILTER: 34 });
     expect(store.objFromObservable).toEqual({ DATE_FILTER: '1990-01-01', INSTANT_FILTER: 34 });
   });
+
+  it("storeHasErrors should return true when a selector has errors", async () => {
+    const store = await createStore(jsonSpec, getValues, null, () => { });
+    const filter = store.getSelector("DATE_FILTER");
+    filter.hasErrors = true;
+    expect(utils.storeHasErrors(store._observable)).toBe(true);
+  })
+
+  it("storeHasErrors should return false when a selector has no errors", async () => {
+    const store = await createStore(jsonSpec, getValues, null, () => { });
+    expect(utils.storeHasErrors(store._observable)).toBe(false);
+  })
 })
