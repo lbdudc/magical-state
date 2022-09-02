@@ -58,6 +58,7 @@ const createStore = (jsonSpec) => {
       items: [],
       actions: el.actions || [],
       setDefaultItem: el.setDefaultItem || null,
+      hasErrors: false,
     };
   });
 };
@@ -274,6 +275,15 @@ const dispatchCustomEvent = (nameEvent, detail) => {
   document.dispatchEvent(customEvent);
 };
 
+/**
+ * Checks if any of the selectors have errors, returning true if any do and false if none do
+ * @param {*} observable 
+ * @returns wheter any of the store's selectors have errors or not
+ */
+const storeHasErrors = (observable) => {
+  return observable.find(el => el.hasErrors == true) != null;
+}
+
 export default {
   checkJsonSpec,
   isValidState,
@@ -290,5 +300,6 @@ export default {
   parseUrl,
   exportStoreEncodedURL,
   dispatchCustomEvent,
-  createUIObject
+  createUIObject,
+  storeHasErrors
 };
