@@ -150,7 +150,7 @@ export default {
       if (error != null) {
         this.errorMessage = error(pickedDate);
         this.storeElement.hasErrors = true;
-        this.$emit("input-error", this.id);
+        this.$emit("onInputError", this.id);
       } else {
         this.errorMessage = null;
         this.storeElement.value = pickedDate;

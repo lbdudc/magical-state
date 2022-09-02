@@ -206,7 +206,7 @@ export default {
         } else {
           this.errorMessage = error(newVal);
           this.item.hasErrors = true;
-          this.$emit("input-error", this.id);
+          this.$emit("onInputError", this.id);
         }
       },
     },

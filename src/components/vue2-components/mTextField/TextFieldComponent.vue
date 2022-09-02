@@ -102,7 +102,7 @@ export default {
       } else {
         this.errorMessage = error(newVal);
         this.storeElement.hasErrors = true;
-        this.$emit("input-error", this.id);
+        this.$emit("onInputError", this.id);
       }
     },
     i18Label(label) {

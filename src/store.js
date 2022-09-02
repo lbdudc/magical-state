@@ -68,6 +68,15 @@ export default class Store {
   }
 
   /**
+   * 
+   * @param {String} selectorId id of the selector that has errors
+   * @param {Boolean} value 
+   */
+  setHasErrors(selectorId, value) {
+    this.getSelector(selectorId).hasErrors = value;
+  }
+
+  /**
    * It returns the encoded URL of the store.
    * @returns A string of the store's values, encoded in base64.
    */
@@ -439,14 +448,5 @@ export default class Store {
     } else {
       await this.change(id, null, false);
     }
-  }
-
-  /**
-   * 
-   * @param {String} selectorId id of the selector that has errors
-   * @param {Boolean} value 
-   */
-  setHasErrors(selectorId, value) {
-    this.getSelector(selectorId).hasErrors = value;
   }
 }
