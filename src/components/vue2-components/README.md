@@ -107,6 +107,7 @@ The date filter component lets users select a date.
 |  minValue | String |   false  |   null  |    Minimum allowed date/month (ISO 8601 format).       |
 |  allowedDates | Function |   false  |   null  |     Restricts which dates can be selected      |
 |  rules | Array |   false  |   []  |     Accepts a mixed array of types function, boolean and string. Functions pass an input value as an argument and must return either true / false or a string containing an error message. The input field will enter an error state if a function returns (or any value in the array contains) false or is a string    |
+|  closeOnContentClick | Boolean |   false  |   true  |   Designates if the date picker should be closed when a value is selected  |
 
 </details>
 

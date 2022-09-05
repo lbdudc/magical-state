@@ -124,6 +124,11 @@ export default {
       default: () => [],
       required: false,
     },
+    closeOnContentClick: {
+      type: Boolean,
+      default: true,
+      required: false,
+    },
   },
   mounted() {
     this.itemValue = this.storeElement.value;
@@ -146,6 +151,9 @@ export default {
   },
   methods: {
     async daySelected(pickedDate) {
+      if (this.closeOnContentClick) {
+        this.menu = false;
+      }
       const error = this.rules.find((f) => f(pickedDate) != true);
       if (error != null) {
         this.errorMessage = error(pickedDate);
