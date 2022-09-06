@@ -6,6 +6,7 @@
           <MDateFilter
             id="DATE_FILTER"
             :store="store"
+            :closeOnContentClick="true"
             :i18n="$t"
             :rules="[(v) => v != '2022-08-29' || 'date cant be today']"
           />
