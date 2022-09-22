@@ -26,6 +26,7 @@
       ></v-text-field>
     </template>
     <v-date-picker
+      :type="type"
       :locale="$i18n.locale"
       :max="maxValue"
       :min="minValue"
@@ -128,6 +129,11 @@ export default {
       type: Boolean,
       default: true,
       required: false,
+    },
+    type: {
+      type: String,
+      required: false,
+      default: "date",
     },
   },
   mounted() {
