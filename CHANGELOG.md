@@ -2,6 +2,13 @@
 
 <!--- next entry here -->
 
+## 0.23.0
+2022-09-08
+
+### Features
+
+- added prop to close date picker component after a selection is made (df3ca24711e9c2474bab04a050950d045d6a5332)
+
 ## 0.22.0
 2022-09-02
 
