@@ -16,8 +16,8 @@
         :label="i18Label(storeElement.label)"
         :loading="storeElement.loading || store.state.loading"
         :outlined="outlined"
-        :error-messages="i18Label(errorMessage)"
-        :error="errorMessage != null"
+        :error-messages="i18nErrorMessages"
+        :error="error"
         append-icon="mdi-calendar"
         readonly
         v-bind="attrs"
@@ -51,7 +51,6 @@ export default {
     return {
       menu: false,
       dateString: null,
-      errorMessage: null,
       itemValue: null,
     };
   },
@@ -120,14 +119,19 @@ export default {
       default: null,
       required: false,
     },
-    rules: {
-      type: Array,
-      default: () => [],
-      required: false,
-    },
     closeOnContentClick: {
       type: Boolean,
       default: true,
+      required: false,
+    },
+    error: {
+      type: Boolean,
+      default: false,
+      required: false,
+    },
+    errorMessages: {
+      type: String | Array,
+      default: () => [],
       required: false,
     },
     type: {
@@ -154,27 +158,25 @@ export default {
         };
       return this.store.getSelector(this.id);
     },
+    i18nErrorMessages() {
+      if (typeof this.errorMessages === "string") {
+        return this.i18Label(this.errorMessages);
+      } else {
+        return this.errorMessages.map(el => this.i18Label(el));
+      }
+    }
   },
   methods: {
     async daySelected(pickedDate) {
       if (this.closeOnContentClick) {
         this.menu = false;
       }
-      const error = this.rules.find((f) => f(pickedDate) != true);
-      if (error != null) {
-        this.errorMessage = error(pickedDate);
-        this.storeElement.hasErrors = true;
-        this.$emit("onInputError", this.id);
-      } else {
-        this.errorMessage = null;
-        this.storeElement.value = pickedDate;
-        this.storeElement.hasErrors = false;
-        if (!this.overrideStoreChange) {
-          await this.store.change(this.id, pickedDate);
-        }
-        const { id, value } = this.storeElement;
-        this.$emit("change", { id, val: value });
+      this.storeElement.value = pickedDate;
+      if (!this.overrideStoreChange) {
+        await this.store.change(this.id, pickedDate);
       }
+      const { id, value } = this.storeElement;
+      this.$emit("change", { id, val: value });
     },
     i18Label(label) {
       if (label) return this.i18n ? this.i18n(label) : label;
