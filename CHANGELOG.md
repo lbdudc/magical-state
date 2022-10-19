@@ -2,6 +2,13 @@
 
 <!--- next entry here -->
 
+## 0.24.0
+2022-09-22
+
+### Features
+
+- Added type prop (77e776f39813a4f94f9e67cde01147da50be0439)
+
 ## 0.23.0
 2022-09-08
 
