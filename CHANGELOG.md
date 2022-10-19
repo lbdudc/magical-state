@@ -2,6 +2,13 @@
 
 <!--- next entry here -->
 
+## 0.24.1
+2022-10-19
+
+### Fixes
+
+- Fixed dates validation (2d99f6bf9c1b423065c97898229f6537274d15cd)
+
 ## 0.24.0
 2022-09-22
 
