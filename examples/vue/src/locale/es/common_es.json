@@ -59,6 +59,8 @@
     "instantSelectorButtonLabel": "print-console"
   },
   "error": {
-    "empty": "no puede ser vacio"
+    "empty": "no puede ser vacio",
+    "initDate": "Fecha ini > fecha fin",
+    "endDate": "Fecha fin < fecha ini"
   }
 }

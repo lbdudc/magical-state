@@ -1,0 +1,32 @@
+[
+  {
+    "id": "START_DATE",
+    "label": "Date filter",
+    "setItemsOnMounted": false,
+    "setDefaultFirstItem": false,
+    "type": "date"
+  },
+  {
+    "id": "END_DATE",
+    "label": "Date filter",
+    "setItemsOnMounted": false,
+    "setDefaultFirstItem": false,
+    "type": "date"
+  },
+  {
+    "id": "SELECTOR",
+    "setItemsOnMounted": true,
+    "actions": [],
+    "redraw": true
+  },
+  {
+    "id": "AUTOCOMPLETE",
+    "actions": [],
+    "redraw": true,
+    "setItemsOnMounted": true
+  },
+  {
+    "id": "TEXT",
+    "type": "date"
+  }
+]
