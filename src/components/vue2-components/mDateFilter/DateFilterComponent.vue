@@ -5,6 +5,7 @@
     :nudge-right="40"
     transition="scale-transition"
     offset-y
+    :disabled="disabled"
     min-width="auto"
   >
     <template v-slot:activator="{ on, attrs }">
@@ -13,6 +14,7 @@
         :dense="dense"
         :filled="filled"
         :flat="flat"
+        :disabled="disabled"
         :label="i18Label(storeElement.label)"
         :loading="storeElement.loading || store.state.loading"
         :outlined="outlined"
@@ -29,6 +31,7 @@
       :type="type"
       :locale="$i18n.locale"
       :max="maxValue"
+      :disabled="disabled"
       :min="minValue"
       :allowed-dates="allowedDates"
       :next-month-aria-label="i18Label('datePicker.nextMonthAriaLabel')"
@@ -57,6 +60,10 @@ export default {
   props: {
     store: {
       type: Object,
+      required: false,
+    },
+    disabled: {
+      type: Boolean,
       required: false,
     },
     id: {
