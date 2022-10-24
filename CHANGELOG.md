@@ -2,6 +2,13 @@
 
 <!--- next entry here -->
 
+## 0.25.0
+2022-10-24
+
+### Features
+
+- Changes on rules so that they are completely managed from the store (5655adaec2f4b8f46be9486dccdbeb44dde3bf59)
+
 ## 0.24.1
 2022-10-19
 
