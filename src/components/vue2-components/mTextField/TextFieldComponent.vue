@@ -86,6 +86,12 @@ export default {
   },
   mounted() {
     this.itemValue = this.storeElement.value;
+    if (this.rules.length > 0) {
+      document.addEventListener("checkErrors", this.checkForErrors);
+    }
+  },
+  beforeDestroy() {
+    document.removeEventListener("checkErrors", this.checkForErrors);
   },
   methods: {
     async valueChanged(newVal) {
@@ -104,6 +110,9 @@ export default {
         this.storeElement.hasErrors = true;
         this.$emit("onInputError", this.id);
       }
+    },
+    checkForErrors() {
+      this.valueChanged(this.itemValue);
     },
     i18Label(label) {
       if (label) return this.i18n ? this.i18n(label) : label;

@@ -1,5 +1,8 @@
 <template>
-  <v-container class="ma-0 pa-0" v-if="store">
+  <v-container
+    class="ma-0 pa-0"
+    v-if="store"
+  >
     <v-row no-gutters>
       <v-col cols="12">
         <v-autocomplete
@@ -200,8 +203,6 @@ export default {
       set(newVal) {
         const error = this.rules.find((f) => f(newVal) != true);
         if (error == null) {
-          this.errorMessage = null;
-          this.item.hasErrors = false;
           this.change(this.item.id, newVal);
         } else {
           this.errorMessage = error(newVal);
@@ -228,6 +229,12 @@ export default {
         selectedPrevPos = positions;
       });
     }
+    if (this.rules.length > 0) {
+      document.addEventListener("checkErrors", this.checkForErrors);
+    }
+  },
+  beforeDestroy() {
+    document.removeEventListener("checkErrors", this.checkForErrors);
   },
   methods: {
     i18Label(label) {
@@ -239,6 +246,8 @@ export default {
       return "";
     },
     async change(id, val) {
+      this.errorMessage = null;
+      this.item.hasErrors = false;
       this.item.value = val;
       if (this.pushSelectedValuesUp && this.item.type === "multiple") {
         if (val.length > Object.keys(selectedPrevPos).length) {
@@ -266,6 +275,12 @@ export default {
         await this.store.change(id, val);
       }
       this.$emit("change", { id, val });
+    },
+    checkForErrors() {
+      const error = this.rules.find((f) => f(this.itemValue) != true);
+      if (error == null) {
+        this.change(this.id, this.itemValue);
+      }
     },
   },
 };

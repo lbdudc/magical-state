@@ -9,6 +9,7 @@
       <v-btn @click="picked = 'Example4'">Update State</v-btn>
       <v-btn @click="picked = 'Example5'">Autocompletes</v-btn>
       <v-btn @click="picked = 'Example6'">Hour Picker</v-btn>
+      <v-btn @click="picked = 'Example7'">Errors Management</v-btn>
     </v-row>
     <v-divider></v-divider>
     <v-btn @click="cambiarLocale">locale switch</v-btn>
@@ -22,6 +23,7 @@ import DefaultStateExample from "./samples/defaultStateExample/DefaultStateExamp
 import UpdateStateExample from "./samples/updateStateExample/UpdateStateExample";
 import AutocompleteExample from "./samples/autocompleteExample/AutocompleteExample.vue";
 import DateHourExample from "./samples/dateHourPickerExample/DateHourExample.vue";
+import ErrorManagementExample from "./samples/errorsManagementExample/ErrorManagementExample.vue";
 
 export default {
   name: "App",
@@ -31,6 +33,7 @@ export default {
     DefaultStateExample,
     UpdateStateExample,
     AutocompleteExample,
+    ErrorManagementExample,
   },
   data() {
     return { picked: localStorage.getItem("picked") };
@@ -51,6 +54,8 @@ export default {
           return AutocompleteExample;
         case "Example6":
           return DateHourExample;
+        case "Example7":
+          return ErrorManagementExample;
         default:
           return SelectorsExample;
       }
