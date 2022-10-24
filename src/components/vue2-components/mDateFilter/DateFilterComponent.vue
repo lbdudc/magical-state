@@ -16,8 +16,8 @@
         :label="i18Label(storeElement.label)"
         :loading="storeElement.loading || store.state.loading"
         :outlined="outlined"
-        :error-messages="i18nErrorMessages"
-        :error="error"
+        :error-messages="i18Label(errorMessage)"
+        :error="errorMessage != null"
         append-icon="mdi-calendar"
         readonly
         v-bind="attrs"
@@ -50,8 +50,8 @@ export default {
   data() {
     return {
       menu: false,
-      dateString: null,
       itemValue: null,
+      errorMessage: null,
     };
   },
   props: {
@@ -124,13 +124,8 @@ export default {
       default: true,
       required: false,
     },
-    error: {
-      type: Boolean,
-      default: false,
-      required: false,
-    },
-    errorMessages: {
-      type: String | Array,
+    rules: {
+      type: Array,
       default: () => [],
       required: false,
     },
@@ -142,6 +137,12 @@ export default {
   },
   mounted() {
     this.itemValue = this.storeElement.value;
+    if (this.rules.length > 0) {
+      document.addEventListener("checkErrors", this.checkForErrors);
+    }
+  },
+  beforeDestroy() {
+    document.removeEventListener("checkErrors", this.checkForErrors);
   },
   watch: {
     "storeElement.value": function (newVal) {
@@ -158,29 +159,40 @@ export default {
         };
       return this.store.getSelector(this.id);
     },
-    i18nErrorMessages() {
-      if (typeof this.errorMessages === "string") {
-        return this.i18Label(this.errorMessages);
-      } else {
-        return this.errorMessages.map(el => this.i18Label(el));
-      }
-    }
   },
   methods: {
     async daySelected(pickedDate) {
       if (this.closeOnContentClick) {
         this.menu = false;
       }
-      this.storeElement.value = pickedDate;
-      if (!this.overrideStoreChange) {
-        await this.store.change(this.id, pickedDate);
+      const error = this.rules.find((f) => f(pickedDate) != true);
+      if (error != null) {
+        this.errorMessage = error(pickedDate);
+        this.storeElement.hasErrors = true;
+        this.$emit("onInputError", this.id);
+      } else {
+        this.changeStoreValue(pickedDate);
       }
-      const { id, value } = this.storeElement;
-      this.$emit("change", { id, val: value });
     },
     i18Label(label) {
       if (label) return this.i18n ? this.i18n(label) : label;
       return "";
+    },
+    checkForErrors() {
+      const error = this.rules.find((f) => f(this.itemValue) != true);
+      if (error == null) {
+        this.changeStoreValue(this.itemValue);
+      }
+    },
+    async changeStoreValue(newVal) {
+      this.errorMessage = null;
+      this.storeElement.value = newVal;
+      this.storeElement.hasErrors = false;
+      if (!this.overrideStoreChange) {
+        await this.store.change(this.id, newVal);
+      }
+      const { id, value } = this.storeElement;
+      this.$emit("change", { id, val: value });
     },
   },
 };

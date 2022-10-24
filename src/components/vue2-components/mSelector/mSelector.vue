@@ -207,8 +207,6 @@ export default {
       set(newVal) {
         const error = this.rules.find((f) => f(newVal) != true);
         if (error == null) {
-          this.errorMessage = null;
-          this.item.hasErrors = false;
           this.change(this.item.id, newVal);
         } else {
           this.errorMessage = error(newVal);
@@ -235,6 +233,12 @@ export default {
         selectedPrevPos = positions;
       });
     }
+    if (this.rules.length > 0) {
+      document.addEventListener("checkErrors", this.checkForErrors);
+    }
+  },
+  beforeDestroy() {
+    document.removeEventListener("checkErrors", this.checkForErrors);
   },
   methods: {
     i18Label(label) {
@@ -246,6 +250,8 @@ export default {
       return "";
     },
     async change(id, val) {
+      this.errorMessage = null;
+      this.item.hasErrors = false;
       if (this.pushSelectedValuesUp && this.item.type === "multiple") {
         if (val.length > Object.keys(selectedPrevPos).length) {
           //get the new element and its current position on the items
@@ -272,6 +278,12 @@ export default {
         await this.store.change(id, val);
       }
       this.$emit("change", { id, val });
+    },
+    checkForErrors() {
+      const error = this.rules.find((f) => f(this.itemValue) != true);
+      if (error == null) {
+        this.change(this.id, this.itemValue);
+      }
     },
   },
 };

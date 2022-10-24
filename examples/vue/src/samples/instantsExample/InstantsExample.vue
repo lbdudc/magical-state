@@ -1,7 +1,10 @@
 <template>
   <v-container v-if="store">
     <v-row>
-      <v-col v-if="store" cols="12">
+      <v-col
+        v-if="store"
+        cols="12"
+      >
         <v-row>
           <MDateFilter
             id="DATE_FILTER"
@@ -12,7 +15,10 @@
           />
         </v-row>
         <v-row>
-          <MListSelector id="INSTANT_FILTER" :store="store" />
+          <MListSelector
+            id="INSTANT_FILTER"
+            :store="store"
+          />
         </v-row>
         <v-row>
           <v-col cols="12">
@@ -43,9 +49,7 @@
         <br />
         <span>Hora definida como store value: {{ elementoAPintar }}</span>
         <br />
-        <span
-          >Hora con la que se pintaria en pantalla: {{ elementoPintado }}</span
-        >
+        <span>Hora con la que se pintaria en pantalla: {{ elementoPintado }}</span>
         <br />
       </v-col>
     </v-row>
