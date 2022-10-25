@@ -131,7 +131,9 @@ export default {
       return this.store.getSelector(this.id);
     },
     tickLabels() {
-      return this.storeElement.items.map((el) => el.label);
+      return this.storeElement.items.map((el) =>
+        this.i18n ? this.i18n(el.label) : el.label
+      );
     },
   },
   watch: {
