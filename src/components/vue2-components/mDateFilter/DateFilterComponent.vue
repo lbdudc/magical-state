@@ -34,6 +34,7 @@
       :disabled="disabled"
       :min="minValue"
       :allowed-dates="allowedDates"
+      :first-day-of-week="firstDayOfWeek"
       :next-month-aria-label="i18Label('datePicker.nextMonthAriaLabel')"
       :next-year-aria-label="i18Label('datePicker.nextYearAriaLabel')"
       :prev-month-aria-label="i18Label('datePicker.prevMonthAriaLabel')"
@@ -95,6 +96,11 @@ export default {
       type: Boolean,
       required: false,
       default: false,
+    },
+    firstDayOfWeek: {
+      type: String | Number,
+      required: false,
+      default: 0
     },
     flat: {
       type: Boolean,
