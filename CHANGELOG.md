@@ -2,6 +2,14 @@
 
 <!--- next entry here -->
 
+## 0.25.1
+2022-10-26
+
+### Fixes
+
+- **datefiltercomponent:** Added 'firstDayOfWeek' prop (3b52d996df3c626d6117e43b73a4b558902d0e1b)
+- Fixed bug with labels (220cc892309f6cf0e4ba67d613e55fd045693374)
+
 ## 0.25.0
 2022-10-24
 
