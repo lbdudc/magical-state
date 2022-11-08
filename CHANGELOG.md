@@ -2,6 +2,13 @@
 
 <!--- next entry here -->
 
+## 0.26.0
+2022-11-08
+
+### Features
+
+- Added support for modifying the selection slot in mAutoComplete (8ad726557ebe73b1a1906c6f61e6ef93be27cb82)
+
 ## 0.25.1
 2022-10-26
 
