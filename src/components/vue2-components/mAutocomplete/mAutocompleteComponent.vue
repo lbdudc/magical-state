@@ -33,7 +33,12 @@
           :solo="solo"
           :error-messages="i18Label(errorMessage)"
           v-model="itemValue"
-        ></v-autocomplete>
+        >
+          <template v-if="$slots.selection" v-slot:selection="{item, index}">
+            <slot :item="item" :index="index" name="selection">
+            </slot>
+          </template>
+        </v-autocomplete>
       </v-col>
     </v-row>
   </v-container>
