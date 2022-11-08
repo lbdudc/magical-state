@@ -34,7 +34,7 @@
           :error-messages="i18Label(errorMessage)"
           v-model="itemValue"
         >
-          <template v-slot:selection="{item, index}">
+          <template v-if="$slots.selection" v-slot:selection="{item, index}">
             <slot :item="item" :index="index" name="selection">
             </slot>
           </template>
