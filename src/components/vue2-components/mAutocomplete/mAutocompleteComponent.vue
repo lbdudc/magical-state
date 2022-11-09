@@ -34,8 +34,8 @@
           :error-messages="i18Label(errorMessage)"
           v-model="itemValue"
         >
-          <template v-if="$slots.selection" v-slot:selection="{item, index}">
-            <slot :item="item" :index="index" name="selection">
+          <template v-for="(_, key) in $scopedSlots" v-slot:[`${key}`]="{item, index}">
+            <slot :item="item" :index="index" :name="key">
             </slot>
           </template>
         </v-autocomplete>
