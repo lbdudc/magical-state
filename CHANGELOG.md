@@ -2,6 +2,13 @@
 
 <!--- next entry here -->
 
+## 0.26.1
+2022-11-09
+
+### Fixes
+
+- Fixed bug with mAucomplete templates (46aee821b200ebca6d674076d1a1d5c3d8996c72)
+
 ## 0.26.0
 2022-11-08
 
