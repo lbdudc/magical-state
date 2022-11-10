@@ -2,6 +2,13 @@
 
 <!--- next entry here -->
 
+## 0.26.2
+2022-11-10
+
+### Fixes
+
+- Fixed not setting previous selected value when rule applies again on another depending selector (e6608daff6ed939977d8358ae2d15ce262369fd0)
+
 ## 0.26.1
 2022-11-09
 
