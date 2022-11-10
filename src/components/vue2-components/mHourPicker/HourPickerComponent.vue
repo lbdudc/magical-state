@@ -11,6 +11,7 @@
     :readonly="readonly"
     :rules="rules"
     :overrideStoreChange="overrideStoreChange"
+    :hideDetails="hideDetails"
     @change="change"
     @onInputError="onInputError"
   />
@@ -49,6 +50,11 @@ export default {
     dense: {
       type: Boolean,
       required: false,
+    },
+    hideDetails: {
+      type: Boolean | String,
+      required: false,
+      default: false,
     },
     disabled: {
       type: Boolean,
