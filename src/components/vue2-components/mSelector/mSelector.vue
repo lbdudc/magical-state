@@ -29,6 +29,7 @@
           :small-chips="smallChips"
           :solo="solo"
           :error-messages="i18Label(errorMessage)"
+          :hideDetails="hideDetails"
           v-model="itemValue"
         ></v-select>
       </v-col>
@@ -116,6 +117,11 @@ export default {
       type: String,
       required: false,
       default: null,
+    },
+    hideDetails: {
+      type: Boolean | String,
+      required: false,
+      default: false,
     },
     itemColor: {
       type: String,

@@ -20,6 +20,7 @@
         :outlined="outlined"
         :error-messages="i18Label(errorMessage)"
         :error="errorMessage != null"
+        :hideDetails="hideDetails"
         append-icon="mdi-calendar"
         readonly
         v-bind="attrs"
@@ -100,7 +101,7 @@ export default {
     firstDayOfWeek: {
       type: String | Number,
       required: false,
-      default: 0
+      default: 0,
     },
     flat: {
       type: Boolean,
@@ -111,6 +112,11 @@ export default {
       type: String,
       required: false,
       default: null,
+    },
+    hideDetails: {
+      type: Boolean | String,
+      required: false,
+      default: false,
     },
     overrideStoreChange: {
       type: Boolean,
