@@ -1,8 +1,5 @@
 <template>
-  <v-container
-    class="ma-0 pa-0"
-    v-if="store"
-  >
+  <v-container class="ma-0 pa-0" v-if="store">
     <v-row no-gutters>
       <v-col cols="12">
         <v-autocomplete
@@ -34,9 +31,11 @@
           :error-messages="i18Label(errorMessage)"
           v-model="itemValue"
         >
-          <template v-for="(_, key) in $scopedSlots" v-slot:[`${key}`]="{item, index}">
-            <slot :item="item" :index="index" :name="key">
-            </slot>
+          <template
+            v-for="(_, key) in $scopedSlots"
+            v-slot:[`${key}`]="{ item, index }"
+          >
+            <slot :item="item" :index="index" :name="key"> </slot>
           </template>
         </v-autocomplete>
       </v-col>
@@ -203,13 +202,16 @@ export default {
     },
     itemValue: {
       get() {
-        return this.item.value;
+        return this.item.hasErrors ? this.item.prevVal : this.item.value;
       },
       set(newVal) {
         const error = this.rules.find((f) => f(newVal) != true);
         if (error == null) {
           this.change(this.item.id, newVal);
+          this.item.prevVal = null;
+          this.item.hasErrors = false;
         } else {
+          this.item.prevVal = newVal;
           this.errorMessage = error(newVal);
           this.item.hasErrors = true;
           this.$emit("onInputError", this.id);

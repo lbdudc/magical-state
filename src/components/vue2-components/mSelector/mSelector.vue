@@ -202,13 +202,16 @@ export default {
     },
     itemValue: {
       get() {
-        return this.item.value;
+        return this.item.hasErrors ? this.item.prevVal : this.item.value;
       },
       set(newVal) {
         const error = this.rules.find((f) => f(newVal) != true);
         if (error == null) {
           this.change(this.item.id, newVal);
+          this.item.prevVal = null;
+          this.item.hasErrors = false;
         } else {
+          this.item.prevVal = newVal;
           this.errorMessage = error(newVal);
           this.item.hasErrors = true;
           this.$emit("onInputError", this.id);
