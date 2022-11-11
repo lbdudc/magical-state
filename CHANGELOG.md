@@ -2,6 +2,13 @@
 
 <!--- next entry here -->
 
+## 0.27.0
+2022-11-10
+
+### Features
+
+- Added hideDetails prop on vue2-components (23d50b3120b836d478d8b2b8d0f14bf5fc9a1870)
+
 ## 0.26.2
 2022-11-10
 
