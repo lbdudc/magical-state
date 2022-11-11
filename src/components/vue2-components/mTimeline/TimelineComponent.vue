@@ -15,6 +15,7 @@
             v-else
             :isPaused="isPaused"
             :isLoading="isLoading"
+            :limit-buttons="limitButtons"
             :sliderSteps="tickLabels.length"
             :sliderTickLabels="tickLabels"
             :sliderActualTime="index"
@@ -124,7 +125,7 @@ props: {
     type: Boolean,
     required: false,
     default: false,
-  }
+  },
 },
 computed: {
   storeElement() {
