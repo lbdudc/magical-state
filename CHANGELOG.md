@@ -2,6 +2,14 @@
 
 <!--- next entry here -->
 
+## 0.27.1
+2022-11-11
+
+### Fixes
+
+- Changed style of timeline component (7f27cd59380adae90b08df089b8a4082d40debc3)
+- Added limit buttons prop (02f4aab382ecdd352e141c8d3e57e964dd2d2d97)
+
 ## 0.27.0
 2022-11-10
 
