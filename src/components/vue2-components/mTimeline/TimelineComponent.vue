@@ -4,7 +4,7 @@
       <v-col cols="12" md="9">
         <div
           class="text-center"
-          v-if="storeElement.loading || store.state.loading"
+          v-if="storeElement.loading || store.state.loading || loading"
         >
           <v-progress-circular
             indeterminate
@@ -126,6 +126,11 @@ props: {
     required: false,
     default: false,
   },
+  loading: {
+    type: Boolean,
+    required: false,
+    default: false,
+  }
 },
 computed: {
   storeElement() {

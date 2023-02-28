@@ -276,6 +276,7 @@ This component is composed of a slider with dots that represent each item of a s
 |      availableSpeeds       |  Array   |  false   |  null   |  Array of objects representing the available speeds of the timeline player.   |
 |     disablePlayButton      | Boolean  |  false   |  false  |              When set to true the play button will be disabled.               |
 |     disableStopButton      | Boolean  |  false   |  false  |              When set to true the stop button will be disabled.               |
+|        limitButons         | Boolean  |  false   |  false  |                When set to true two limit buttons will appear.                |
 
 <details>
   <summary>Example of availableSpeeds array</summary>
@@ -312,5 +313,6 @@ const availableSpeeds = [
 | reproductionStarted |   null    |                                                                         Emitted when the timeline reproduction starts                                                                          |
 | reproductionStopped |   null    |                                                                          Emitted when the timeline reproduction stops                                                                          |
 |  timelineAdvanced   |   null    |                                                                Emitted when the timeline position advances when reproducing it                                                                 |
-
+| goToFirstItem |   null    |                                                                         Emitted when the left limit button is clicked.                                                                          |
+| goToLastItem |   null    |                                                                         Emitted when the right limit button is clicked.                                                                          |
 </details>
