@@ -33,7 +33,6 @@
       :ticks="ticks"
       :dense="dense"
       :discrete="discrete"
-      :disabled="isDisabled"
       @change="changeValue"
     ></v-slider>
     <v-btn
@@ -132,7 +131,7 @@ export default {
   },
   computed: {
     isDisabled() {
-      return !this.isPaused || this.isLoading || this.sliderTickLabels?.length == 0;
+      return !this.isPaused || this.isLoading;
     },
   },
   methods: {
