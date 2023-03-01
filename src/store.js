@@ -1,7 +1,7 @@
 import utils from "./utils";
 
 export default class Store {
-  constructor(jsonSpec, getValues, initialState, callback) {
+  constructor(jsonSpec, getValues, defaultValuesGetter, callback) {
     this._jsonSpec = jsonSpec;
     this._store = {};
     this._observable = null;
@@ -15,6 +15,7 @@ export default class Store {
 
     this._callback = callback;
     this._getValues = getValues;
+    this._defaultValuesGetter = defaultValuesGetter;
 
     // TODO check if the jsonSpec is valid
     utils.checkJsonSpec(this._jsonSpec);
@@ -141,22 +142,8 @@ export default class Store {
       obs.loading = true;
       let newItems = [];
 
-      if (
-        obs.type != "date" &&
-        Array.isArray(value) &&
-        obs.type != "multiple"
-      ) {
-        reject(
-          `Cannot set value of type array on a selector that is not multiple`
-        );
-      }
-
       // If there are no items in the selector or is deep, we force getValues
-      if (
-        deep ||
-        ((obs.items == null || obs.items.length == 0) &&
-          (obs.type === "select" || obs.type === "multiple"))
-      ) {
+      if (deep || obs.items == null || obs.items.length == 0) {
         newItems = await this._getValues(
           id,
           utils.getKeyValueRootElements(id, this._jsonSpec, this._observable)
@@ -165,27 +152,13 @@ export default class Store {
         if (newItems != null && newItems.length != 0) obs.items = newItems;
       }
 
-      const isItem =
-        obs.items != null
-          ? Array.isArray(value)
-            ? value.every(
-                (val) => obs.items.find((it) => it.value == val) != null
-              )
-            : obs.items.find((it) => it.value == value) != null
-          : false;
-      if (isItem || obs.type === "date" || value == null) {
-        try {
-          obs.loading = false;
-          await this.change(obs.id, value, triggerCallbak);
-        } catch (err) {
-          reject(err);
-        }
-        resolve();
-      } else {
-        reject(
-          `The value ${value} is not in the selector items, selector with ${id} not set`
-        );
+      try {
+        obs.loading = false;
+        await this.change(obs.id, value, triggerCallbak);
+      } catch (err) {
+        reject(err);
       }
+      resolve();
     });
   }
 
@@ -237,7 +210,13 @@ export default class Store {
 
     // Check if the element needs to set a default value
     try {
-      await this._setDefaultItem(el, res);
+      const newVal = await this._defaultValuesGetter(
+        propId,
+        res,
+        this.objFromObservable,
+        null
+      );
+      await this.change(propId, newVal, false);
     } catch (err) {
       throw err;
     }
@@ -270,24 +249,12 @@ export default class Store {
 
           // Value is in the new State, or is default
           const newStateObjValue = newState[el.id];
-          let newVal = newStateObjValue != null ? newStateObjValue : el.default;
+          let newVal = newStateObjValue != null ? newStateObjValue : null;
 
           if (newVal === "true") newVal = true;
           if (newVal === "false") newVal = false;
 
-          if (selector.type === "date") {
-            selector.value = newVal;
-          } else if (selector.items != null && selector.items.length > 0) {
-            const isItem = Array.isArray(newVal)
-              ? newVal.every(
-                  (val) => selector.items.find((it) => it.value == val) != null
-                )
-              : selector.items.find((it) => it.value == newVal) != null;
-
-            selector.value = isItem ? newVal : null;
-          } else {
-            selector.value = null;
-          }
+          selector.value = newVal;
 
           utils.dispatchCustomEvent(
             "itemsLoaded",
@@ -319,7 +286,9 @@ export default class Store {
   }
 
   /**
-   * Calls the callbacks of the elements that depend on the element that has changed
+   * Changes the value of the indicated selector and its dependent ones.
+   * It also triggers the callback in case any of these selectors has the prop
+   * callback to true
    * @param {String} propId
    * @param {Any} newVal
    * @param {Boolean} needsRedraw
@@ -331,17 +300,7 @@ export default class Store {
       let hasRedrawProp = el.redraw;
       const obs = utils.findElementInObservable(propId, this._observable);
 
-      if (
-        obs.type != "date" &&
-        Array.isArray(newVal) &&
-        obs.type != "multiple"
-      ) {
-        reject(
-          `Cannot set value of type array on a selector that is not multiple`
-        );
-      }
-      obs.value =
-        obs.type === "multiple" && !Array.isArray(newVal) ? [newVal] : newVal;
+      obs.value = newVal;
       // Reset values of the depending selectors (if has any)
       hasRedrawProp =
         hasRedrawProp ||
@@ -362,8 +321,6 @@ export default class Store {
       obs.actions.forEach((el) => {
         // Get the element of the observable child
         const obsItem = utils.findElementInObservable(el, this._observable);
-        // If a child need to be redrawn, we set the hasRedrawProp property to true for later
-        if (obsItem.redraw && obsItem.setDefaultFirstItem) hasRedrawProp = true;
 
         act.push(
           new Promise(async (resolve, reject) => {
@@ -379,22 +336,24 @@ export default class Store {
               ),
               utils.getStoreKeyValues(this._observable)
             );
-
             const prevVal = obsItem.value;
-            // Set the items into the selector and end the loading state
-            obsItem.value = obsItem.default || null;
             obsItem.items = res;
-            hasRedrawProp = (await this._setDefaultItem(obsItem, res, false))
+            const newVal = await this._defaultValuesGetter(
+              obsItem.id,
+              obsItem.items,
+              this.objFromObservable,
+              prevVal
+            );
+
+            // If a child need to be redrawn and is setting a new value, we set the hasRedrawProp property to true for later
+            if (obsItem.redraw && !!newVal) {
+              hasRedrawProp = true;
+            }
+
+            // set hasRedrawProp according to the promise returned when executing change() on its children
+            hasRedrawProp = (await this.change(obsItem.id, newVal, false))
               ? true
               : hasRedrawProp;
-
-            if (
-              prevVal != null &&
-              obsItem.value == null &&
-              obsItem.actions.length > 0
-            ) {
-              this.change(obsItem.id, null, false);
-            }
 
             obsItem.loading = false;
             utils.dispatchCustomEvent(
@@ -443,63 +402,6 @@ export default class Store {
   }
 
   /**
-   * Checks if the selector should be set with the first element of the list
-   * then sets it
-   * @param {Object} observable
-   * @param {Array} items
-   */
-  _setDefaultItem(observable, items, needsRedraw) {
-    if (observable.type != "date" && (items == null || items.length <= 0)) {
-      return Promise.resolve(false);
-    }
-    if (observable.setDefaultItem != null) {
-      const defVal = observable.setDefaultItem;
-      if (typeof defVal === "number") {
-        return this.change(
-          observable.id,
-          items[defVal] != null ? items[defVal].value : null,
-          needsRedraw
-        );
-      } else {
-        switch (defVal) {
-          case "first":
-            return this.change(
-              observable.id,
-              items[0] != null ? items[0].value : null,
-              needsRedraw
-            );
-          case "last":
-            return this.change(
-              observable.id,
-              items[items.length - 1] != null
-                ? items[items.length - 1].value
-                : null,
-              needsRedraw
-            );
-          case "all":
-            return this.change(
-              observable.id,
-              items.map((el) => el.value),
-              needsRedraw
-            );
-          default:
-            return Promise.reject(`${defVal} is not a valid option`);
-        }
-      }
-    } else if (observable.setDefaultFirstItem) {
-      // If we update the value of the selector, we need to call its updated event
-      return this.change(
-        observable.id,
-        items[0] != null ? items[0].value : null,
-        needsRedraw
-      );
-    } else if (observable.default != null) {
-      return this.change(observable.id, observable.default, observable.redraw);
-    }
-    return Promise.resolve(false);
-  }
-
-  /**
    * Returns a list of objects that contains the basic information about every observable element
    * so they can be displayed on the UI
    * @returns A list of objects
@@ -519,10 +421,12 @@ export default class Store {
   async setItems(id, values, useSpecConfig) {
     const el = utils.findElementInObservable(id, this._observable);
     el.items = values;
-    if (useSpecConfig) {
-      await this._setDefaultItem(el, values, el.redraw);
-    } else {
-      await this.change(id, null, false);
-    }
+    const newVal = await this._defaultValuesGetter(
+      obsItem.id,
+      obsItem.items,
+      this.objFromObservable,
+      prevVal
+    );
+    await this.change(propId, newVal, false);
   }
 }

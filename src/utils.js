@@ -14,9 +14,13 @@ const isValidState = (state) => {
   if (state == null) return false;
   if (typeof state === "string" && state === "") return false;
   if (Array.isArray(state)) return false;
-  if (typeof state === "object" && Object.getPrototypeOf(state) !== Object.prototype) return false;
+  if (
+    typeof state === "object" &&
+    Object.getPrototypeOf(state) !== Object.prototype
+  )
+    return false;
   return true;
-}
+};
 
 /**
  * Finds an elemenet in the jsonSpec
@@ -46,18 +50,13 @@ const createStore = (jsonSpec) => {
     return {
       id: el.id,
       label: el.label,
-      default: el.default === 'true' ? true : el.default === 'false' ? false : el.default,
-      type: el.type || "select",
-      value: el.type === "multiple" ? [] : null,
+      value: null,
       loading: false,
       showed: true,
-      group: el.group,
       redraw: el.redraw === true,
-      setDefaultFirstItem: el.setDefaultFirstItem === true,
       setItemsOnMounted: el.setItemsOnMounted && el.setItemsOnMounted === true,
       items: [],
       actions: el.actions || [],
-      setDefaultItem: el.setDefaultItem || null,
       hasErrors: false,
     };
   });
@@ -231,14 +230,12 @@ const parseUrl = (url) => {
  * @returns An object with key/values decoded from the URL.
  */
 const decodeURL = (url, spec) => {
-  if (url == null || url === "")
-    return {}
+  if (url == null || url === "") return {};
   try {
     const decodedObj = parseUrl(url);
     const dataObj = {};
     decodedObj.forEach((obj) => {
-      //TODO: encode and decode multiple selectors
-      if (spec[obj.id] != null && spec[obj.id].type != "multiple") {
+      if (spec[obj.id] != null) {
         dataObj[spec[obj.id].id] = obj.value;
       }
     });
@@ -260,10 +257,9 @@ const createUIObject = (element) => {
     id: element.id,
     label: element.label,
     value: element.value,
-    type: element.type,
-    items: element.items
-  }
-}
+    items: element.items,
+  };
+};
 
 /**
  * Creates and dispatches a custom event
@@ -277,12 +273,12 @@ const dispatchCustomEvent = (nameEvent, detail) => {
 
 /**
  * Checks if any of the selectors have errors, returning true if any do and false if none do
- * @param {*} observable 
+ * @param {*} observable
  * @returns wheter any of the store's selectors have errors or not
  */
 const storeHasErrors = (observable) => {
-  return observable.find(el => el.hasErrors == true) != null;
-}
+  return observable.find((el) => el.hasErrors == true) != null;
+};
 
 export default {
   checkJsonSpec,
@@ -301,5 +297,5 @@ export default {
   exportStoreEncodedURL,
   dispatchCustomEvent,
   createUIObject,
-  storeHasErrors
+  storeHasErrors,
 };
