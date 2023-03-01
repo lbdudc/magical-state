@@ -20,7 +20,7 @@
           :items="item.items"
           :label="i18Label(item.label)"
           :loading="item.loading || store.state.loading"
-          :multiple="item.type === 'multiple'"
+          :multiple="multiple"
           :outlined="outlined"
           :persistent-hint="persistentHint"
           :prepend-icon="prependIcon"
@@ -201,6 +201,11 @@ export default {
       default: () => [],
       required: false,
     },
+    multiple: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
   },
   computed: {
     item() {
@@ -228,7 +233,7 @@ export default {
   mounted() {
     if (
       this.pushSelectedValuesUp &&
-      this.item.type === "multiple" &&
+      this.multiple &&
       this.item.value &&
       this.item.value.length > 0
     ) {
@@ -262,7 +267,7 @@ export default {
       this.errorMessage = null;
       this.item.hasErrors = false;
       this.item.value = val;
-      if (this.pushSelectedValuesUp && this.item.type === "multiple") {
+      if (this.pushSelectedValuesUp && this.multiple) {
         if (val.length > Object.keys(selectedPrevPos).length) {
           //get the new element and its current position on the items
           const newEl = val.filter((x) => selectedPrevPos[x] == null);

@@ -8,4 +8,4 @@ export default async (propId, params, store) => {
     case "SPATIAL_FILTER":
       return multipleFilterService.getSpatialFilterItems(params);
   }
-}
+};
