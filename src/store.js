@@ -238,7 +238,6 @@ export default class Store {
   async setState(newState, executeCallback, customCallback) {
     this._state.loading = true;
     let set = [];
-
     this._observable.forEach(async (el) => {
       // first check if we can change de value (appears in the items)
       const selector = utils.findElementInObservable(el.id, this._observable);

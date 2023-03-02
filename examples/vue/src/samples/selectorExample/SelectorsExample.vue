@@ -3,18 +3,9 @@
     <v-row>
       <v-col cols="12">
         <v-row>
-          <m-selector
-            v-if="store"
-            :store="store"
-            id="SPATIAL_AGGREGATION"
-            :pushSelectedValuesUp="true"
-          >
+          <m-selector v-if="store" :store="store" id="SPATIAL_AGGREGATION" :multiple="true" :pushSelectedValuesUp="true">
           </m-selector>
-          <m-selector
-            :store="store"
-            id="TEMPORAL_AGGREGATION"
-            :rules="[(v) => !!v || 'cant be empty']"
-          >
+          <m-selector :store="store" id="TEMPORAL_AGGREGATION" :rules="[(v) => !!v || 'cant be empty']">
           </m-selector>
           <m-selector :store="store" id="SPATIAL_FILTER"> </m-selector>
           <m-selector :store="store" id="TEMPORAL_FILTER"> </m-selector>
@@ -48,9 +39,10 @@
 
 <script>
 import jsonSpec from "./specification.json";
-import { createStore } from "../../../../../index";
+import { createStore, parseUrl } from "../../../../../index";
 import { MSelector, MDateFilter } from "../../../../../vue2-components";
 import getValues from "./getters";
+import defaultValuesGetter from "./defaultValuesGetter";
 
 export default {
   name: "SelectorsExample",
@@ -64,14 +56,16 @@ export default {
       implementacion: null,
       storeContent: null,
       showStore: false,
-      importExportValue: "MD0xLDI=",
+      importExportValue: "MD0xLDImMT0xJjM9MjAyMSY0PTIwMjMtMDMtMDc=",
     };
   },
   async mounted() {
+    const decodedUrl = parseUrl(this.importExportValue, jsonSpec);
+    decodedUrl["SPATIAL_AGGREGATION"] = decodedUrl["SPATIAL_AGGREGATION"] != null ? decodedUrl["SPATIAL_AGGREGATION"].split(",").map(el => parseInt(el)) : [];
     this.store = await createStore(
       jsonSpec,
-      getValues,
-      this.importExportValue,
+      { getValues: getValues, defaultValuesGetter: defaultValuesGetter },
+      decodedUrl,
       (storeContent) => {
         return new Promise(async (resolve) => {
           this.storeContent = storeContent;
@@ -88,7 +82,9 @@ export default {
       this.importExportValue = this.store.exportStoreEncodedURL();
     },
     imported() {
-      this.store.importStoreEncodedURL(this.importExportValue);
+      const decodedUrl = parseUrl(this.importExportValue, jsonSpec);
+      decodedUrl["SPATIAL_AGGREGATION"] = decodedUrl["SPATIAL_AGGREGATION"] != null ? decodedUrl["SPATIAL_AGGREGATION"].split(",").map(el => parseInt(el)) : [];
+      this.store.setState(decodedUrl);
     },
   },
 };
