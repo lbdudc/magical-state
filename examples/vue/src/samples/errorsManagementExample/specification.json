@@ -1,17 +1,11 @@
 [
   {
     "id": "START_DATE",
-    "label": "Date filter",
-    "setItemsOnMounted": false,
-    "setDefaultFirstItem": false,
-    "type": "date"
+    "label": "Date filter"
   },
   {
     "id": "END_DATE",
-    "label": "Date filter",
-    "setItemsOnMounted": false,
-    "setDefaultFirstItem": false,
-    "type": "date"
+    "label": "Date filter"
   },
   {
     "id": "SELECTOR",
@@ -26,7 +20,6 @@
     "setItemsOnMounted": true
   },
   {
-    "id": "TEXT",
-    "type": "date"
+    "id": "TEXT"
   }
 ]

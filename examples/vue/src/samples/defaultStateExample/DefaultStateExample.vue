@@ -5,13 +5,8 @@
         <v-row>
           <m-selector :store="store" id="SPATIAL_AGGREGATION" :i18n="$t">
           </m-selector>
-          <m-selector
-            :store="store"
-            id="TEMPORAL_AGGREGATION"
-            :i18n="$t"
-            :overrideStoreChange="true"
-            @change="temporalAggChange"
-          >
+          <m-selector :store="store" id="TEMPORAL_AGGREGATION" :i18n="$t" :overrideStoreChange="true"
+            @change="temporalAggChange">
           </m-selector>
           <m-selector :store="store" id="SPATIAL_FILTER"> </m-selector>
           <m-selector :store="store" id="TEMPORAL_FILTER"> </m-selector>
@@ -25,9 +20,7 @@
     <v-btn @click="updateState()">Update</v-btn>
     <v-btn @click="updateCustomState()">Update custom callback</v-btn>
     <br />
-    <span v-if="changeEventDetected"
-      >Last change event detected: {{ changeEventDetected }}</span
-    >
+    <span v-if="changeEventDetected">Last change event detected: {{ changeEventDetected }}</span>
   </v-container>
 </template>
 <script>
@@ -35,6 +28,7 @@ import jsonSpec from "./specification.json";
 import { createStore } from "../../../../../index";
 import { MSelector, MDateFilter } from "../../../../../vue2-components";
 import getValues from "./getters";
+import defaultValuesGetter from "./defaultValuesGetter";
 
 const initialState = {
   SPATIAL_FILTER: 2,
@@ -60,7 +54,7 @@ export default {
   async mounted() {
     this.store = await createStore(
       jsonSpec,
-      getValues,
+      { getValues: getValues, defaultValuesGetter: defaultValuesGetter },
       initialState,
       (storeContent) => {
         return new Promise(async (resolve) => {

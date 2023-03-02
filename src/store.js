@@ -214,7 +214,7 @@ export default class Store {
         propId,
         res,
         this.objFromObservable,
-        null
+        el.value
       );
       await this.change(propId, newVal, false);
     } catch (err) {
@@ -421,11 +421,11 @@ export default class Store {
     const el = utils.findElementInObservable(id, this._observable);
     el.items = values;
     const newVal = await this._defaultValuesGetter(
-      obsItem.id,
-      obsItem.items,
+      id,
+      el.items,
       this.objFromObservable,
-      prevVal
+      el.value
     );
-    await this.change(propId, newVal, false);
+    await this.change(id, newVal, false);
   }
 }

@@ -20,14 +20,13 @@
     <v-btn @click="setUrl()">Set URL</v-btn>
     <v-btn @click="updateState()">Update State</v-btn>
     <v-btn @click="setTemporalItems()">set temp agg items w spec</v-btn>
-    <v-btn @click="setTemporalItemsNoSpec()">set temp agg items w/o spec</v-btn>
   </v-container>
 </template>
 <script>
 import jsonSpec from "./specification.json";
 import { createStore } from "../../../../../index";
 import { MSelector, MDateFilter } from "../../../../../vue2-components";
-
+import defaultValuesGetter from "./defaultValuesGetter";
 import getValues from "./getters";
 
 const newItems = [
@@ -52,7 +51,7 @@ export default {
   async mounted() {
     this.store = await createStore(
       jsonSpec,
-      getValues,
+      { getValues: getValues, defaultValuesGetter: defaultValuesGetter },
       null,
       (storeContent) => {
         return new Promise((resolve) => {
@@ -77,9 +76,6 @@ export default {
     },
     setTemporalItems() {
       this.store.setItems("TEMPORAL_AGGREGATION", newItems, true);
-    },
-    setTemporalItemsNoSpec() {
-      this.store.setItems("TEMPORAL_AGGREGATION", newItems, false);
     },
   },
 };

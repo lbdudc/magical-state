@@ -1,44 +1,23 @@
 <template>
   <v-container v-if="store">
     <v-row>
-      <v-col
-        v-if="store"
-        cols="12"
-      >
+      <v-col v-if="store" cols="12">
         <v-row>
-          <MDateFilter
-            id="DATE_FILTER"
-            :store="store"
-            :closeOnContentClick="true"
-            :i18n="$t"
-            :rules="[(v) => v != '2022-08-29' || 'date cant be today']"
-          />
+          <MDateFilter id="DATE_FILTER" :store="store" :closeOnContentClick="true" :i18n="$t"
+            :rules="[(v) => v != '2022-08-29' || 'date cant be today']" />
         </v-row>
         <v-row>
-          <MListSelector
-            id="INSTANT_FILTER"
-            :store="store"
-          />
+          <MListSelector id="INSTANT_FILTER" :store="store" />
         </v-row>
         <v-row>
           <v-col cols="12">
-            <MTimeline
-              ref="timeline"
-              id="INSTANT_FILTER"
-              :store="store"
-              :i18n="$t"
-              :instantSelectorFunction="mockSelectorF"
-              :disablePlayButton="disablePlayButton"
-              :disableStopButton="disableStopButton"
-              @reproductionStarted="isPlaying = true"
-              @reproductionStopped="isPlaying = false"
-              @lastItemReached="lastElementReached"
-              @firstItemReached="firstElementReached"
-              @timelineAdvanced="timelineAdvanced"
-              :instantSelectorButtonLabel="
+            <MTimeline ref="timeline" id="INSTANT_FILTER" :store="store" :i18n="$t"
+              :instantSelectorFunction="mockSelectorF" :disablePlayButton="disablePlayButton"
+              :disableStopButton="disableStopButton" @reproductionStarted="isPlaying = true"
+              @reproductionStopped="isPlaying = false" @lastItemReached="lastElementReached"
+              @firstItemReached="firstElementReached" @timelineAdvanced="timelineAdvanced" :instantSelectorButtonLabel="
                 $t('timeline.instantSelectorButtonLabel')
-              "
-            />
+              " />
           </v-col>
         </v-row>
         <br />
@@ -65,6 +44,7 @@ import {
   MTimeline,
 } from "../../../../../vue2-components";
 import getValues from "./getters";
+import defaultValuesGetter from "./defaultValuesGetter";
 
 export default {
   name: "InstantsExample",
@@ -102,7 +82,7 @@ export default {
   async mounted() {
     this.store = await createStore(
       jsonSpec,
-      getValues,
+      { getValues: getValues, defaultValuesGetter: defaultValuesGetter },
       null,
       (storeContent) => {
         return new Promise(async (resolve) => {

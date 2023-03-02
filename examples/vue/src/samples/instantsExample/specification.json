@@ -2,21 +2,14 @@
   {
     "id": "DATE_FILTER",
     "label": "Date filter",
-    "setItemsOnMounted": false,
-    "setDefaultFirstItem": false,
-    "type": "date",
-    "actions": [
-      "CURRENT_PAGE"
-    ]
+    "actions": ["CURRENT_PAGE"]
   },
   {
     "id": "CURRENT_PAGE",
     "label": "Current Page",
     "default": 0,
     "type": "date",
-    "actions": [
-      "INSTANT_FILTER"
-    ]
+    "actions": ["INSTANT_FILTER"]
   },
   {
     "id": "INSTANT_FILTER",

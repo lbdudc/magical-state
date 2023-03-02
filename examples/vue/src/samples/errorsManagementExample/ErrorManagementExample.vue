@@ -1,57 +1,33 @@
 <template>
   <v-container v-if="store">
     <v-row>
-      <v-col
-        v-if="store"
-        cols="12"
-      >
+      <v-col v-if="store" cols="12">
         <v-row>
-          <MDateFilter
-            id="START_DATE"
-            :store="store"
+          <MDateFilter id="START_DATE" :store="store"
             :rules="[(v) => store.getSelector('END_DATE').value == null || v < store.getSelector('END_DATE').value || 'error.initDate']"
-            :closeOnContentClick="true"
-            :i18n="$t"
-          />
+            :closeOnContentClick="true" :i18n="$t" />
         </v-row>
         <v-row>
-          <MDateFilter
-            id="END_DATE"
+          <MDateFilter id="END_DATE"
             :rules="[(v) => store.getSelector('START_DATE').value == null || v > store.getSelector('START_DATE').value || 'error.endDate']"
-            :store="store"
-            :closeOnContentClick="true"
-            :i18n="$t"
-          />
+            :store="store" :closeOnContentClick="true" :i18n="$t" />
         </v-row>
         <v-row>
           dos selectores de abajo han de ser distintos entre si
-          <m-selector
-            :store="store"
-            id="SELECTOR"
+          <m-selector :store="store" id="SELECTOR"
             :rules="[(v) => store.getSelector('AUTOCOMPLETE').value != v || 'tiene que ser distinto a selector multiple']"
-            :i18nLabel="$t"
-          ></m-selector>
+            :i18nLabel="$t"></m-selector>
         </v-row>
         <v-row>
-          <m-autocomplete
-            v-if="store"
-            :store="store"
-            :pushSelectedValuesUp="true"
-            :rules="[
-              (v) => store.getSelector('SELECTOR').value != v || 'tiene que ser distinto a selector',
-            ]"
-            id="AUTOCOMPLETE"
-          ></m-autocomplete>
+          <m-autocomplete v-if="store" :store="store" :pushSelectedValuesUp="true" :rules="[
+            (v) => store.getSelector('SELECTOR').value != v || 'tiene que ser distinto a selector',
+          ]" id="AUTOCOMPLETE"></m-autocomplete>
         </v-row>
         <v-row>
           text field depende de start date != null
-          <MTextField
-            id="TEXT"
-            :store="store"
-            :rules="[
-              () => store.getSelector('START_DATE').value != null || 'start date = null',
-            ]"
-          ></MTextField>
+          <MTextField id="TEXT" :store="store" :rules="[
+            () => store.getSelector('START_DATE').value != null || 'start date = null',
+          ]"></MTextField>
         </v-row>
       </v-col>
     </v-row>
@@ -68,6 +44,7 @@ import {
   MTextField,
 } from "../../../../../vue2-components";
 import getValues from "./getters";
+import defaultValuesGetter from "./defaultValuesGetter";
 
 export default {
   name: "InstantsExample",
@@ -78,7 +55,7 @@ export default {
     };
   },
   async mounted() {
-    this.store = await createStore(jsonSpec, getValues, null, () => {
+    this.store = await createStore(jsonSpec, { getValues: getValues, defaultValuesGetter: defaultValuesGetter }, null, () => {
       return new Promise(async (resolve) => {
         resolve();
       });
