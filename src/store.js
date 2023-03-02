@@ -8,7 +8,7 @@ export default class Store {
     this._state = {
       loading: true,
     };
-    this._isWaitingForRedraw = false;
+    this._isWaitingForCallback = false;
 
     if (typeof callback !== "function")
       throw new Error("callback is not a function");
@@ -274,7 +274,7 @@ export default class Store {
             .filter((el) => el.value != null)
             .forEach((el) => (dataObj[el.id] = el.value));
           fn(dataObj).then(() => {
-            utils.dispatchCustomEvent("redrawFullfilled", { id: null });
+            utils.dispatchCustomEvent("callbackFulfilled", { id: null });
             resolve();
           });
         } else {
@@ -290,29 +290,32 @@ export default class Store {
    * callback to true
    * @param {String} propId
    * @param {Any} newVal
-   * @param {Boolean} needsRedraw
+   * @param {Boolean} needsTriggerCallback
    */
-  async change(propId, newVal, needsRedraw = true) {
+  async change(propId, newVal, needsTriggerCallback = true) {
     return new Promise((resolve, reject) => {
       // Get the element of the jsonSpec
       const el = utils.findJsonSpecElement(propId, this._jsonSpec);
-      let hasRedrawProp = el.redraw;
+      let hasTriggerCallbackProp = el.triggerCallbak;
       const obs = utils.findElementInObservable(propId, this._observable);
 
       obs.value = newVal;
       // Reset values of the depending selectors (if has any)
-      hasRedrawProp =
-        hasRedrawProp ||
+      hasTriggerCallbackProp =
+        hasTriggerCallbackProp ||
         utils.resetDependedSelectors(
           propId,
           this._jsonSpec,
           this._observable
         ) ||
-        this._isWaitingForRedraw;
+        this._isWaitingForCallback;
 
       // setting it to false on parent element before the childs are processed
-      if (this._isWaitingForRedraw && !utils.storeHasErrors(this._observable)) {
-        this._isWaitingForRedraw = false;
+      if (
+        this._isWaitingForCallback &&
+        !utils.storeHasErrors(this._observable)
+      ) {
+        this._isWaitingForCallback = false;
       }
 
       // For each children, create a new Promise calling the update function
@@ -344,15 +347,19 @@ export default class Store {
               prevVal
             );
 
-            // If a child need to be redrawn and is setting a new value, we set the hasRedrawProp property to true for later
-            if (obsItem.redraw && !!newVal) {
-              hasRedrawProp = true;
+            // If a child needs to trigger the callback and is setting a new value, we set the hasTriggerCallbackProp property to true for later
+            if (obsItem.triggerCallbak && !!newVal) {
+              hasTriggerCallbackProp = true;
             }
 
-            // set hasRedrawProp according to the promise returned when executing change() on its children
-            hasRedrawProp = (await this.change(obsItem.id, newVal, false))
+            // set hasTriggerCallbackProp according to the promise returned when executing change() on its children
+            hasTriggerCallbackProp = (await this.change(
+              obsItem.id,
+              newVal,
+              false
+            ))
               ? true
-              : hasRedrawProp;
+              : hasTriggerCallbackProp;
 
             obsItem.loading = false;
             utils.dispatchCustomEvent(
@@ -377,21 +384,21 @@ export default class Store {
             //Emitting event so the components can check if they should change their error status
             utils.dispatchCustomEvent("checkErrors");
           }
-          // If the element has a redraw property, call the callback funct
-          if (hasRedrawProp && needsRedraw) {
+          // If the element has triggerCallbak property, call the callback funct
+          if (hasTriggerCallbackProp && needsTriggerCallback) {
             if (utils.storeHasErrors(this._observable)) {
-              this._isWaitingForRedraw = true;
+              this._isWaitingForCallback = true;
             } else {
               const dataObj = {};
               this._observable
                 .filter((el) => el.value != null)
                 .forEach((el) => (dataObj[el.id] = el.value));
               this._callback(dataObj).then(() =>
-                utils.dispatchCustomEvent("redrawFullfilled", { id: el.id })
+                utils.dispatchCustomEvent("callbackFulfilled", { id: el.id })
               );
             }
           }
-          resolve(hasRedrawProp);
+          resolve(hasTriggerCallbackProp);
         })
         .catch((err) => {
           console.error(err);

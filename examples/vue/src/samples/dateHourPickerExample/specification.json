@@ -8,6 +8,6 @@
   {
     "id": "HOUR_PICKER",
     "label": "Hour picker",
-    "redraw": true
+    "triggerCallbak": true
   }
 ]

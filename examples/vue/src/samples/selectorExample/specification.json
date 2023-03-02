@@ -19,13 +19,13 @@
   {
     "id": "TEMPORAL_FILTER",
     "label": "Temporal Filter",
-    "redraw": true,
+    "triggerCallbak": true,
     "actions": []
   },
   {
     "id": "DATE_FILTER",
     "label": "Date Filter",
-    "redraw": true,
+    "triggerCallbak": true,
     "actions": []
   }
 ]

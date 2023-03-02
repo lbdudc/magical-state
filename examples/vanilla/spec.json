@@ -2,32 +2,28 @@
   {
     "id": "SPATIAL_AGGREGATION",
     "label": "Spatial Aggregation",
-    "redraw": true,
+    "triggerCallbak": true,
     "setItemsOnMounted": true,
-    "actions": [
-      "SPATIAL_FILTER"
-    ]
+    "actions": ["SPATIAL_FILTER"]
   },
   {
     "id": "SPATIAL_FILTER",
     "label": "Spatial Filter",
     "setDefaultFirstItem": true,
     "actions": [],
-    "redraw": true
+    "triggerCallbak": true
   },
   {
     "id": "DATE_FILTER",
     "label": "Date Filter",
     "type": "date",
-    "actions": [
-      "INSTANT_FILTER"
-    ]
+    "actions": ["INSTANT_FILTER"]
   },
   {
     "id": "INSTANT_FILTER",
     "setItemsOnMounted": false,
     "setDefaultFirstItem": true,
     "actions": [],
-    "redraw": true
+    "triggerCallbak": true
   }
 ]

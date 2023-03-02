@@ -11,12 +11,12 @@
     "id": "SELECTOR",
     "setItemsOnMounted": true,
     "actions": [],
-    "redraw": true
+    "triggerCallbak": true
   },
   {
     "id": "AUTOCOMPLETE",
     "actions": [],
-    "redraw": true,
+    "triggerCallbak": true,
     "setItemsOnMounted": true
   },
   {

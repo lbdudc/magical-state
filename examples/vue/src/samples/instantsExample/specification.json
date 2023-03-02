@@ -17,6 +17,6 @@
     "type": "date",
     "setDefaultItem": "last",
     "actions": [],
-    "redraw": true
+    "triggerCallbak": true
   }
 ]
