@@ -8,6 +8,6 @@
   {
     "id": "SPATIAL_FILTER",
     "label": "Spatial Filter",
-    "triggerCallbak": true
+    "triggerCallback": true
   }
 ]

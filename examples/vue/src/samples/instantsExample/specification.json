@@ -17,6 +17,6 @@
     "type": "date",
     "setDefaultItem": "last",
     "actions": [],
-    "triggerCallbak": true
+    "triggerCallback": true
   }
 ]

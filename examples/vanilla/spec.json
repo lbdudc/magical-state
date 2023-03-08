@@ -2,7 +2,7 @@
   {
     "id": "SPATIAL_AGGREGATION",
     "label": "Spatial Aggregation",
-    "triggerCallbak": true,
+    "triggerCallback": true,
     "setItemsOnMounted": true,
     "actions": ["SPATIAL_FILTER"]
   },
@@ -11,7 +11,7 @@
     "label": "Spatial Filter",
     "setDefaultFirstItem": true,
     "actions": [],
-    "triggerCallbak": true
+    "triggerCallback": true
   },
   {
     "id": "DATE_FILTER",
@@ -24,6 +24,6 @@
     "setItemsOnMounted": false,
     "setDefaultFirstItem": true,
     "actions": [],
-    "triggerCallbak": true
+    "triggerCallback": true
   }
 ]

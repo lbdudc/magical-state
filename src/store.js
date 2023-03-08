@@ -136,7 +136,7 @@ export default class Store {
    * @param value - The value to be set
    * @param deep - If true, it will force to getValues for the selector
    */
-  setSelector(id, value, deep = false, triggerCallbak = true) {
+  setSelector(id, value, deep = false, triggerCallback = true) {
     return new Promise(async (resolve, reject) => {
       const obs = utils.findElementInObservable(id, this._observable);
       obs.loading = true;
@@ -154,7 +154,7 @@ export default class Store {
 
       try {
         obs.loading = false;
-        await this.change(obs.id, value, triggerCallbak);
+        await this.change(obs.id, value, triggerCallback);
       } catch (err) {
         reject(err);
       }
@@ -295,7 +295,7 @@ export default class Store {
     return new Promise((resolve, reject) => {
       // Get the element of the jsonSpec
       const el = utils.findJsonSpecElement(propId, this._jsonSpec);
-      let hasTriggerCallbackProp = el.triggerCallbak;
+      let hasTriggerCallbackProp = el.triggerCallback;
       const obs = utils.findElementInObservable(propId, this._observable);
 
       obs.value = newVal;
@@ -346,7 +346,7 @@ export default class Store {
             );
 
             // If a child needs to trigger the callback and is setting a new value, we set the hasTriggerCallbackProp property to true for later
-            if (obsItem.triggerCallbak && !!newVal) {
+            if (obsItem.triggerCallback && !!newVal) {
               hasTriggerCallbackProp = true;
             }
 
@@ -382,7 +382,7 @@ export default class Store {
             //Emitting event so the components can check if they should change their error status
             utils.dispatchCustomEvent("checkErrors");
           }
-          // If the element has triggerCallbak property, call the callback funct
+          // If the element has triggerCallback property, call the callback funct
           if (hasTriggerCallbackProp && needsTriggerCallback) {
             if (utils.storeHasErrors(this._observable)) {
               this._isWaitingForCallback = true;

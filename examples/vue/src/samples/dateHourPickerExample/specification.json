@@ -8,6 +8,6 @@
   {
     "id": "HOUR_PICKER",
     "label": "Hour picker",
-    "triggerCallbak": true
+    "triggerCallback": true
   }
 ]

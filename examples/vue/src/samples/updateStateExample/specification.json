@@ -19,7 +19,7 @@
   {
     "id": "TEMPORAL_FILTER",
     "label": "Temporal Filter",
-    "triggerCallbak": true,
+    "triggerCallback": true,
     "actions": []
   },
   {

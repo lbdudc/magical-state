@@ -53,7 +53,7 @@ const createStore = (jsonSpec) => {
       value: null,
       loading: false,
       showed: true,
-      triggerCallbak: el.triggerCallbak === true,
+      triggerCallback: el.triggerCallback === true,
       setItemsOnMounted: el.setItemsOnMounted && el.setItemsOnMounted === true,
       items: [],
       actions: el.actions || [],
@@ -123,16 +123,16 @@ const getKeyValueRootElements = (id, jsonSpec, obs) => {
  */
 const resetDependedSelectors = (element, jsonSpec, obs) => {
   const el = findJsonSpecElement(element, jsonSpec);
-  let triggerCallbak = false;
+  let triggerCallback = false;
   if (el.actions != null) {
     el.actions.forEach((child) => {
       const childElement = findElementInObservable(child, obs);
       childElement.value = undefined;
       childElement.items = [];
-      triggerCallbak = triggerCallbak || childElement.triggerCallbak;
+      triggerCallback = triggerCallback || childElement.triggerCallback;
     });
   }
-  return triggerCallbak;
+  return triggerCallback;
 };
 
 /**
