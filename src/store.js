@@ -213,8 +213,7 @@ export default class Store {
       const newVal = await this._defaultValuesGetter(
         propId,
         res,
-        this.objFromObservable,
-        el.value
+        this.objFromObservable
       );
       await this.change(propId, newVal, false);
     } catch (err) {
@@ -343,8 +342,7 @@ export default class Store {
             const newVal = await this._defaultValuesGetter(
               obsItem.id,
               obsItem.items,
-              this.objFromObservable,
-              prevVal
+              this.objFromObservable
             );
 
             // If a child needs to trigger the callback and is setting a new value, we set the hasTriggerCallbackProp property to true for later
@@ -430,8 +428,7 @@ export default class Store {
     const newVal = await this._defaultValuesGetter(
       id,
       el.items,
-      this.objFromObservable,
-      el.value
+      this.objFromObservable
     );
     await this.change(id, newVal, false);
   }
