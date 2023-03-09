@@ -242,7 +242,10 @@ export default class Store {
       const selector = utils.findElementInObservable(el.id, this._observable);
       set.push(
         new Promise(async (resolve) => {
-          const res = await this._getValues(el.id, newState);
+          const res = await this._getValues(
+            el.id,
+            JSON.parse(JSON.stringify(newState))
+          );
           selector.items = res;
 
           // Value is in the new State, or is default
