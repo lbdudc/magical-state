@@ -1,18 +1,9 @@
 <template>
   <v-text-field
-    v-model="itemValue"
-    :label="i18n ? i18n(storeElement.label) : ''"
-    :prependInnerIcon="prependInnerIcon"
-    :appendIcon="appendIcon"
-    :dense="dense"
-    :disabled="disabled"
-    :error-messages="i18Label(errorMessage)"
-    :type="type"
-    :loading="storeElement.loading || store.state.loading"
-    @change="valueChanged(itemValue)"
-    :readonly="readonly"
-    clearable
-  ></v-text-field>
+v-model="itemValue" :label="i18n ? i18n(storeElement.label) : ''" :prepend-inner-icon="prependInnerIcon"
+    :append-icon="appendIcon" :dense="dense" :disabled="disabled" :error-messages="i18Label(errorMessage)" :type="type"
+    :loading="storeElement.loading || store.state.loading" :readonly="readonly" clearable
+    @change="valueChanged(itemValue)"></v-text-field>
 </template>
 <script>
 export default {
@@ -35,10 +26,13 @@ export default {
     prependInnerIcon: {
       type: String,
       required: false,
+      default: null
     },
     appendIcon: {
       type: String,
       required: false,
+      default: null
+
     },
     dense: {
       type: Boolean,
@@ -90,7 +84,7 @@ export default {
       document.addEventListener("checkErrors", this.checkForErrors);
     }
   },
-  beforeDestroy() {
+  beforeUnmount() {
     document.removeEventListener("checkErrors", this.checkForErrors);
   },
   methods: {

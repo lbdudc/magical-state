@@ -1,9 +1,11 @@
 <template>
   <v-container v-if="store">
-    <MTextField type="date" id="DATE_FILTER" :store="store" :overrideStoreChange="true" @change="change"
-      :i18n="this.$t" />
-    <MHourPicker id="HOUR_PICKER" :store="store" :disabled="!disableSelector" :rules="[(v) => !!v || 'error.empty']"
-      :i18n="this.$t" />
+    <MTextField
+id="DATE_FILTER" type="date" :store="store" :override-store-change="true" :i18n="$t"
+      @change="change" />
+    <MHourPicker
+id="HOUR_PICKER" :store="store" :disabled="!disableSelector" :rules="[(v) => !!v || 'error.empty']"
+      :i18n="$t" />
     <v-divider></v-divider>
     {{ storeStatus }}
   </v-container>
@@ -27,6 +29,11 @@ export default {
       storeStatus: null,
     };
   },
+  computed: {
+    disableSelector() {
+      return this.store.getSelector("DATE_FILTER").value != null;
+    },
+  },
   async mounted() {
     this.store = await createStore(
       jsonSpec,
@@ -38,11 +45,6 @@ export default {
           resolve();
         })
     );
-  },
-  computed: {
-    disableSelector() {
-      return this.store.getSelector("DATE_FILTER").value != null;
-    },
   },
   methods: {
     change(el) {

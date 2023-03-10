@@ -2,14 +2,14 @@
   <v-container class="ma-0 pa-2" fluid>
     <v-row justify="start" align="center">
       <v-col cols="12" md="9">
-        <div class="text-center" v-if="storeElement.loading || store.state.loading || loading">
+        <div v-if="storeElement.loading || store.state.loading || loading" class="text-center">
           <v-progress-circular indeterminate color="primary"></v-progress-circular>
         </div>
-        <MTimelineSlider v-else :isPaused="isPaused" :isLoading="isLoading" :limit-buttons="limitButtons"
-          :sliderSteps="tickLabels.length" :sliderTickLabels="tickLabels" :sliderActualTime="index"
-          :sliderColor="'secondary'" @change="changeSliderValue" @nextValue="changeSliderValue('next')"
-          @prevValue="changeSliderValue('prev')" @goToFirstItem="$emit('goToFirstItem')"
-          @goToLastItem="$emit('goToLastItem')" />
+        <MTimelineSlider v-else :is-paused="isPaused" :is-loading="isLoading" :limit-buttons="limitButtons"
+          :slider-steps="tickLabels.length" :slider-tick-labels="tickLabels" :slider-actual-time="index"
+          :slider-color="'secondary'" @change="changeSliderValue" @next-value="changeSliderValue('next')"
+          @prev-value="changeSliderValue('prev')" @go-to-first-item="$emit('goToFirstItem')"
+          @go-to-last-item="$emit('goToLastItem')" />
         <span v-if="
           !storeElement.loading &&
           !store.state.loading &&
@@ -17,12 +17,13 @@
         " class="text-center">No data available</span>
       </v-col>
       <v-col cols="12" md="3">
-        <MTimelineControls :isPaused="isPaused" :isLoading="isLoading" :speedSelected="speedSelected"
-          :sliderActualTime="index" :sliderSteps="tickLabels.length"
-          :instantSelectorButtonLabel="instantSelectorButtonLabel" :label="'Speed'"
-          :hasInstantSelectorFunction="instantSelectorFunction != null" :i18n="i18n" :availableSpeeds="availableSpeeds"
-          :disablePlayButton="disablePlayButton" :disableStopButton="disableStopButton" @changeSpeed="updateSpeedSelected"
-          @play="playTimeline" @stop="stopTimeline" @now="setValueToNow" />
+        <MTimelineControls :is-paused="isPaused" :is-loading="isLoading" :speed-selected="speedSelected"
+          :slider-actual-time="index" :slider-steps="tickLabels.length"
+          :instant-selector-button-label="instantSelectorButtonLabel" :label="'Speed'"
+          :has-instant-selector-function="instantSelectorFunction != null" :i18n="i18n"
+          :available-speeds="availableSpeeds" :disable-play-button="disablePlayButton"
+          :disable-stop-button="disableStopButton" @change-speed="updateSpeedSelected" @play="playTimeline"
+          @stop="stopTimeline" @now="setValueToNow" />
       </v-col>
     </v-row>
   </v-container>
@@ -35,20 +36,10 @@ import MTimelineSlider from "./TimelineSlider";
 const BASE_SPEED = 1000;
 
 export default {
+  name: "MagicalTimeline",
   components: {
     MTimelineControls,
     MTimelineSlider,
-  },
-  name: "MagicalTimeline",
-  data() {
-    return {
-      // Controls
-      isPaused: true,
-      speedSelected: 1,
-      isLoading: false,
-      fullfillPromise: null,
-      index: null,
-    };
   },
   props: {
     store: {
@@ -73,6 +64,7 @@ export default {
     instantSelectorButtonLabel: {
       type: String,
       required: false,
+      default: null
     },
     availableSpeeds: {
       type: Array,
@@ -100,6 +92,16 @@ export default {
       default: false,
     }
   },
+  data() {
+    return {
+      // Controls
+      isPaused: true,
+      speedSelected: 1,
+      isLoading: false,
+      fullfillPromise: null,
+      index: null,
+    };
+  },
   computed: {
     storeElement() {
       return this.store.getSelector(this.id);
@@ -123,7 +125,7 @@ export default {
       this.callbackFullfilledReceived
     );
   },
-  beforeDestroy() {
+  beforeUnmount() {
     document.removeEventListener(
       "callbackFulfilled",
       this.callbackFullfilledReceived

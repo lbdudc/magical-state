@@ -1,19 +1,16 @@
 module.exports = {
-  extends: "plugin:prettier/recommended",
   env: {
-    browser: true,
     node: true,
-    es6: true
   },
+  extends: ["eslint:recommended", "plugin:vue/vue3-recommended", "prettier"],
   rules: {
-    "no-undef": "error",
-    "no-unused-vars": "warn"
+    "no-fallthrough": "off",
+    "no-case-declarations": "off",
+    "no-async-promise-executor": "off",
+    "no-unused-vars": "off",
+    "vue/require-prop-type-constructor": "off",
+    "no-useless-catch": "off",
+    "vue/require-explicit-emits": "off",
+    "vue/no-template-shadow": "off",
   },
-  globals: {
-    L: false,
-    MV: false
-  },
-  parserOptions: {
-    sourceType: "module"
-  }
 };

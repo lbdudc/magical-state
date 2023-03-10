@@ -3,7 +3,8 @@
     <v-row>
       <v-col v-if="store" cols="12">
         <v-row>
-          <MDateFilter id="DATE_FILTER" :store="store" :closeOnContentClick="true" :i18n="$t"
+          <MDateFilter
+id="DATE_FILTER" :store="store" :close-on-content-click="true" :i18n="$t"
             :rules="[(v) => v != '2022-08-29' || 'date cant be today']" />
         </v-row>
         <v-row>
@@ -11,13 +12,14 @@
         </v-row>
         <v-row>
           <v-col cols="12">
-            <MTimeline ref="timeline" id="INSTANT_FILTER" :store="store" :i18n="$t"
-              :instantSelectorFunction="mockSelectorF" :disablePlayButton="disablePlayButton"
-              :disableStopButton="disableStopButton" @reproductionStarted="isPlaying = true"
-              @reproductionStopped="isPlaying = false" @lastItemReached="lastElementReached"
-              @firstItemReached="firstElementReached" @timelineAdvanced="timelineAdvanced" :instantSelectorButtonLabel="
+            <MTimeline
+id="INSTANT_FILTER" ref="timeline" :store="store" :i18n="$t"
+              :instant-selector-function="mockSelectorF" :disable-play-button="disablePlayButton"
+              :disable-stop-button="disableStopButton" :instant-selector-button-label="
                 $t('timeline.instantSelectorButtonLabel')
-              " />
+              " @reproduction-started="isPlaying = true" @reproduction-stopped="isPlaying = false"
+              @last-item-reached="lastElementReached" @first-item-reached="firstElementReached"
+              @timeline-advanced="timelineAdvanced" />
           </v-col>
         </v-row>
         <br />
@@ -95,6 +97,9 @@ export default {
       }
     );
   },
+  beforeUnmount() {
+    document.removeEventListener("change", this.handleChangeEvent);
+  },
   methods: {
     setStoreState() {
       const state = {
@@ -159,9 +164,6 @@ export default {
     timelineAdvanced() {
       this.elementoPintado = this.elementoAPintar;
     },
-  },
-  beforeDestroy() {
-    document.removeEventListener("change", this.handleChangeEvent);
   },
 };
 function delay(ms) {

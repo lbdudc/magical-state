@@ -44,8 +44,6 @@ const evenPage = [
   },
 ];
 
-let a = false;
-
 async function getInstants(params) {
   const f = async () => {
     await sleep(500);

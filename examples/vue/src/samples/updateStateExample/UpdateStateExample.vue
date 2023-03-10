@@ -3,13 +3,13 @@
     <v-row>
       <v-col v-if="store" cols="12">
         <v-row>
-          <m-selector :store="store" id="SPATIAL_AGGREGATION" :i18n="$t">
+          <m-selector id="SPATIAL_AGGREGATION" :store="store" :i18n="$t">
           </m-selector>
-          <m-selector :store="store" id="TEMPORAL_AGGREGATION" :i18n="$t">
+          <m-selector id="TEMPORAL_AGGREGATION" :store="store" :i18n="$t">
           </m-selector>
-          <m-selector :store="store" id="SPATIAL_FILTER"> </m-selector>
-          <m-selector :store="store" id="TEMPORAL_FILTER"> </m-selector>
-          <m-date-filter :store="store" id="DATE_FILTER"></m-date-filter>
+          <m-selector id="SPATIAL_FILTER" :store="store"> </m-selector>
+          <m-selector id="TEMPORAL_FILTER" :store="store"> </m-selector>
+          <m-date-filter id="DATE_FILTER" :store="store"></m-date-filter>
         </v-row>
         <v-divider class="ma-10"></v-divider>
         <span>{{ storeContent }}</span>

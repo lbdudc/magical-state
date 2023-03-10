@@ -3,11 +3,13 @@
     <v-row>
       <v-col v-if="store" cols="12">
         <v-row>
-          <m-autocomplete v-if="store" :store="store" :multiple="true" :pushSelectedValuesUp="true" :rules="[
-            (v) => v.length > 0 || 'no puede estar vacío',
-            (v) => v != 1 || 'no puede tomar valor 1',
-          ]" @onInputError="onInputError" id="SPATIAL_AGGREGATION"></m-autocomplete>
-          <m-autocomplete :store="store" id="SPATIAL_FILTER"> </m-autocomplete>
+          <m-autocomplete
+v-if="store" id="SPATIAL_AGGREGATION" :store="store" :multiple="true"
+            :push-selected-values-up="true" :rules="[
+              (v) => v.length > 0 || 'no puede estar vacío',
+              (v) => v != 1 || 'no puede tomar valor 1',
+            ]" @on-input-error="onInputError"></m-autocomplete>
+          <m-autocomplete id="SPATIAL_FILTER" :store="store"> </m-autocomplete>
         </v-row>
         <v-divider class="ma-10"></v-divider>
       </v-col>

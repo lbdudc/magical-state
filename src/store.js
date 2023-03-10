@@ -103,7 +103,7 @@ export default class Store {
    * @returns The decoded URL.
    */
   _decodeURL(url, spec) {
-    return utils.decodeURL(url, !!spec ? spec : this._store);
+    return utils.decodeURL(url, spec ? spec : this._store);
   }
 
   /**

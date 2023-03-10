@@ -1,8 +1,9 @@
 <template>
-  <v-container class="ma-0 pa-0" v-if="store">
+  <v-container v-if="store" class="ma-0 pa-0">
     <v-row no-gutters>
       <v-col cols="12">
         <v-autocomplete
+          v-model="itemValue"
           :append-icon="appendIcon"
           :append-outer-icon="appendOuterIcon"
           :background-color="backgroundColor"
@@ -29,12 +30,11 @@
           :small-chips="smallChips"
           :solo="solo"
           :error-messages="i18Label(errorMessage)"
-          :hideDetails="hideDetails"
-          v-model="itemValue"
+          :hide-details="hideDetails"
         >
           <template
-            v-for="(_, key) in $scopedSlots"
-            v-slot:[`${key}`]="{ item, index }"
+            v-for="(_, key) in $slots"
+            #[`${key}`]="{ item, index }"
           >
             <slot :item="item" :index="index" :name="key"> </slot>
           </template>
@@ -51,11 +51,6 @@ let selectedPrevPos = {};
 
 export default {
   name: "MagicalSelector",
-  data() {
-    return {
-      errorMessage: null,
-    };
-  },
   props: {
     store: {
       type: Object,
@@ -207,6 +202,11 @@ export default {
       default: false,
     },
   },
+  data() {
+    return {
+      errorMessage: null,
+    };
+  },
   computed: {
     item() {
       return this.store.getSelector(this.id);
@@ -251,7 +251,7 @@ export default {
       document.addEventListener("checkErrors", this.checkForErrors);
     }
   },
-  beforeDestroy() {
+  beforeUnmount() {
     document.removeEventListener("checkErrors", this.checkForErrors);
   },
   methods: {
