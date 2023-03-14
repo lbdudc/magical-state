@@ -2,20 +2,12 @@
   {
     "id": "SPATIAL_AGGREGATION",
     "label": "Spatial Aggregation",
-    "group": "Aggregation",
-    "type": "multiple",
     "setItemsOnMounted": true,
-    "setDefaultItem": "all",
-    "default": [
-      3
-    ],
-    "actions": [
-      "SPATIAL_FILTER"
-    ]
+    "actions": ["SPATIAL_FILTER"]
   },
   {
     "id": "SPATIAL_FILTER",
     "label": "Spatial Filter",
-    "default": 1
+    "triggerCallback": true
   }
 ]

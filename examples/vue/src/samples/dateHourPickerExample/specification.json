@@ -2,13 +2,12 @@
   {
     "id": "DATE_FILTER",
     "label": "Date filter",
-    "type": "date",
+    "setItemsOnMounted": true,
     "actions": []
   },
   {
     "id": "HOUR_PICKER",
     "label": "Hour picker",
-    "type": "date",
-    "redraw": true
+    "triggerCallback": true
   }
 ]

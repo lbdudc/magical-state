@@ -1,20 +1,11 @@
 <template>
   <v-container v-if="store">
     <MTextField
-      type="date"
-      id="DATE_FILTER"
-      :store="store"
-      :overrideStoreChange="true"
-      @change="change"
-      :i18n="this.$t"
-    />
+id="DATE_FILTER" type="date" :store="store" :override-store-change="true" :i18n="$t"
+      @change="change" />
     <MHourPicker
-      id="HOUR_PICKER"
-      :store="store"
-      :disabled="!disableSelector"
-      :rules="[(v) => !!v || 'error.empty']"
-      :i18n="this.$t"
-    />
+id="HOUR_PICKER" :store="store" :disabled="!disableSelector" :rules="[(v) => !!v || 'error.empty']"
+      :i18n="$t" />
     <v-divider></v-divider>
     {{ storeStatus }}
   </v-container>
@@ -23,6 +14,8 @@
 import jsonSpec from "./specification.json";
 import { createStore } from "../../../../../index";
 import { MHourPicker, MTextField } from "../../../../../vue2-components";
+import getValues from "./getters";
+import defaultValuesGetter from "./defaultValuesGetter"
 
 export default {
   name: "DateHourExample",
@@ -36,10 +29,15 @@ export default {
       storeStatus: null,
     };
   },
+  computed: {
+    disableSelector() {
+      return this.store.getSelector("DATE_FILTER").value != null;
+    },
+  },
   async mounted() {
     this.store = await createStore(
       jsonSpec,
-      () => Promise.resolve([]),
+      { getValues: getValues, defaultValuesGetter: defaultValuesGetter },
       null,
       (store) =>
         new Promise((resolve) => {
@@ -47,11 +45,6 @@ export default {
           resolve();
         })
     );
-  },
-  computed: {
-    disableSelector() {
-      return this.store.getSelector("DATE_FILTER").value != null;
-    },
   },
   methods: {
     change(el) {

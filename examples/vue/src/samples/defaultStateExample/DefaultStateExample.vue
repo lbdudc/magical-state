@@ -3,19 +3,15 @@
     <v-row>
       <v-col v-if="store" cols="12">
         <v-row>
-          <m-selector :store="store" id="SPATIAL_AGGREGATION" :i18n="$t">
+          <m-selector id="SPATIAL_AGGREGATION" :store="store" :i18n="$t">
           </m-selector>
           <m-selector
-            :store="store"
-            id="TEMPORAL_AGGREGATION"
-            :i18n="$t"
-            :overrideStoreChange="true"
-            @change="temporalAggChange"
-          >
+id="TEMPORAL_AGGREGATION" :store="store" :i18n="$t" :override-store-change="true"
+            @change="temporalAggChange">
           </m-selector>
-          <m-selector :store="store" id="SPATIAL_FILTER"> </m-selector>
-          <m-selector :store="store" id="TEMPORAL_FILTER"> </m-selector>
-          <m-date-filter :store="store" id="DATE_FILTER"></m-date-filter>
+          <m-selector id="SPATIAL_FILTER" :store="store"> </m-selector>
+          <m-selector id="TEMPORAL_FILTER" :store="store"> </m-selector>
+          <m-date-filter id="DATE_FILTER" :store="store"></m-date-filter>
         </v-row>
         <v-divider class="ma-10"></v-divider>
         <span>{{ storeContent }}</span>
@@ -25,9 +21,7 @@
     <v-btn @click="updateState()">Update</v-btn>
     <v-btn @click="updateCustomState()">Update custom callback</v-btn>
     <br />
-    <span v-if="changeEventDetected"
-      >Last change event detected: {{ changeEventDetected }}</span
-    >
+    <span v-if="changeEventDetected">Last change event detected: {{ changeEventDetected }}</span>
   </v-container>
 </template>
 <script>
@@ -35,6 +29,7 @@ import jsonSpec from "./specification.json";
 import { createStore } from "../../../../../index";
 import { MSelector, MDateFilter } from "../../../../../vue2-components";
 import getValues from "./getters";
+import defaultValuesGetter from "./defaultValuesGetter";
 
 const initialState = {
   SPATIAL_FILTER: 2,
@@ -60,7 +55,7 @@ export default {
   async mounted() {
     this.store = await createStore(
       jsonSpec,
-      getValues,
+      { getValues: getValues, defaultValuesGetter: defaultValuesGetter },
       initialState,
       (storeContent) => {
         return new Promise(async (resolve) => {
@@ -73,6 +68,9 @@ export default {
     this.redirect();
 
     document.addEventListener("change", this.handleChangeEvent);
+  },
+  beforeUnmount() {
+    document.removeEventListener("change", this.handleChangeEvent);
   },
   methods: {
     async updateState() {
@@ -121,9 +119,6 @@ export default {
         this.store.change("TEMPORAL_AGGREGATION", el.val);
       }
     },
-  },
-  beforeDestroy() {
-    document.removeEventListener("change", this.handleChangeEvent);
   },
 };
 </script>

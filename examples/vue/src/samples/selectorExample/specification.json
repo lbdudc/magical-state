@@ -2,25 +2,14 @@
   {
     "id": "SPATIAL_AGGREGATION",
     "label": "Spatial Aggregation",
-    "group": "Aggregation",
     "setItemsOnMounted": true,
-    "setDefaultFirstItem": true,
-    "type": "multiple",
-    "default": [
-      1
-    ],
-    "actions": [
-      "SPATIAL_FILTER"
-    ]
+    "actions": ["SPATIAL_FILTER"]
   },
   {
     "id": "TEMPORAL_AGGREGATION",
     "label": "Temporal Aggregation",
-    "group": "Aggregation",
     "setItemsOnMounted": true,
-    "actions": [
-      "TEMPORAL_FILTER"
-    ]
+    "actions": ["TEMPORAL_FILTER"]
   },
   {
     "id": "SPATIAL_FILTER",
@@ -30,14 +19,13 @@
   {
     "id": "TEMPORAL_FILTER",
     "label": "Temporal Filter",
-    "redraw": true,
+    "triggerCallback": true,
     "actions": []
   },
   {
     "id": "DATE_FILTER",
     "label": "Date Filter",
-    "redraw": true,
-    "type": "date",
+    "triggerCallback": true,
     "actions": []
   }
 ]

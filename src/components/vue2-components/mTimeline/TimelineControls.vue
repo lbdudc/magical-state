@@ -15,23 +15,23 @@
         elevation="0"
         dense
         :label="label"
-        @change="newSpeedSelected"
         :items="availableSpeeds"
         :value="speedSelected"
         item-text="key"
         item-value="value"
         outlined
+        @change="newSpeedSelected"
       ></v-select>
     </v-col>
     <v-col v-if="hasInstantSelectorFunction">
       <v-tooltip top>
-        <template v-slot:activator="{ on, attrs }">
+        <template #activator="{ on, attrs }">
           <v-btn
             class="last-button"
             elevation="0"
-            @click="setValueToNow"
             :disabled="isLoading || !sliderSteps || !isPaused"
             v-bind="attrs"
+            @click="setValueToNow"
             v-on="on"
           >
             <v-icon class="icon">{{instantSelectorButtonIcon}}</v-icon>

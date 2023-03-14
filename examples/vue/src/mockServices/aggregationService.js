@@ -1,6 +1,13 @@
-const spatialItems = [{ label: "AUTONOMOUS_COMMUNITY", value: 1 }, { label: "PROVINCE", value: 2 }, { label: "MOBILITY_AREA", value: 3 }];
+const spatialItems = [
+  { label: "AUTONOMOUS_COMMUNITY", value: 1 },
+  { label: "PROVINCE", value: 2 },
+  { label: "MOBILITY_AREA", value: 3 },
+];
 
-const temporalItems = [{ label: "YEARLY", value: 1 }, { label: "MONTHLY", value: 2 }];
+const temporalItems = [
+  { label: "YEARLY", value: 1 },
+  { label: "MONTHLY", value: 2 },
+];
 
 async function getSpatialItems() {
   const f = () => {
@@ -18,10 +25,6 @@ async function getTemporalItems() {
     });
   };
   return await f();
-}
-
-function sleep(ms) {
-  return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 export default { getSpatialItems, getTemporalItems };
