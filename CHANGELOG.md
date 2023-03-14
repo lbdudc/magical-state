@@ -2,6 +2,14 @@
 
 <!--- next entry here -->
 
+## 0.27.2
+2023-02-28
+
+### Fixes
+
+- Added new props and emits to vue2-components README (001e0b512e2c30828e81860c52ddb29631ff535b)
+- Added disabled prop to slider component and fixed bug with isDisabled computed (8bf026cd00574d7b75c503563137ca90e37d4813)
+
 ## 0.27.1
 2022-11-11
 

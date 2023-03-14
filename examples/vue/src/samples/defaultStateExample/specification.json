@@ -2,42 +2,29 @@
   {
     "id": "SPATIAL_AGGREGATION",
     "label": "Spatial Aggregation",
-    "group": "Aggregation",
     "setItemsOnMounted": true,
-    "actions": [
-      "SPATIAL_FILTER",
-      "TEMPORAL_FILTER"
-    ]
+    "actions": ["SPATIAL_FILTER", "TEMPORAL_FILTER"]
   },
   {
     "id": "TEMPORAL_AGGREGATION",
     "label": "Temporal Aggregation",
-    "setDefaultItem": "last",
-    "group": "Aggregation",
-    "actions": [
-      "TEMPORAL_FILTER",
-      "DATE_FILTER"
-    ]
+    "actions": ["TEMPORAL_FILTER", "DATE_FILTER"]
   },
   {
     "id": "SPATIAL_FILTER",
     "label": "Spatial Filter",
     "setDefaultFirstItem": true,
-    "actions": [
-      "TEMPORAL_FILTER"
-    ]
+    "actions": ["TEMPORAL_FILTER"]
   },
   {
     "id": "TEMPORAL_FILTER",
     "label": "Temporal Filter",
-    "setDefaultItem": "last",
-    "redraw": true,
+    "triggerCallback": true,
     "actions": []
   },
   {
     "id": "DATE_FILTER",
     "label": "Date Filter",
-    "type": "date",
     "actions": []
   }
 ]
