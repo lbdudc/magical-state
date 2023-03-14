@@ -9,6 +9,7 @@
 - [Usage](#usage)
   - [Specification](#define-a-specification-in-json-format)
   - [Implementation of fetching data](#add-the-implementation-of-fetching-data)
+  - [Implementation of default values](#add-the-implementation-of-getting-default-values)
 - [Store methods](#store-methods)
   - [Create the store](#create-the-store)
   - [Change the state of the store](#change-the-state-of-the-store)
@@ -118,6 +119,44 @@ The function always must return a Promise, and the retrieved data accepts the ne
 ```
 
 Field _label_ is only mandatory when using the library's Vue components.
+
+### Add the implementation of getting default values
+
+We must define a method that indicates the store the default values to be set on selectors that are dependent of others (are present in any selectors' actions) or those that are meant to be populated on store creation.
+
+To do this the store will call the method _defaultValuesGetter_ passed on store creation. This method is expected to receive the next parameters in the listed order:
+
+- _propId_: The identifier of the selector that needs its items to be loaded.
+- _items_: A list containing the selector's items.
+- _store_: A key-value object containing all the selectors' values.
+
+##### **IMPORTANT**
+
+The _defaultValuesGetter_ function is expected to retrieve a Promise containing the desired new value.
+
+<details>
+  <summary>Example of a defaultValuesGetter function</summary>
+
+```js
+export default async (propId, items, store) => {
+  return new Promise((resolve) => {
+    switch (propId) {
+      // Will set as value the last item
+      case "TEMPROAL_FILTER":
+        resolve(items[items.length - 1].value);
+        break;
+      case "DATE_FILTER":
+        resolve(formatDateInverse(new Date()));
+        break;
+      default:
+        resolve();
+        break;
+    }
+  });
+};
+```
+
+</details>
 
 ## Store methods
 
