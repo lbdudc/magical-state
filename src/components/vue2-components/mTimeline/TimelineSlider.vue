@@ -22,8 +22,8 @@
     <v-slider
       v-if="sliderTickLabels"
       :class="isDisabled ? 'noClickSlider' : 'slider'"
-      v-bind:value="sliderActualTime"
-      :tickLabels="sliderTickLabels"
+      :value="sliderActualTime"
+      :tick-labels="sliderTickLabels"
       :max="sliderTickLabels.length - 1"
       :min="0"
       :color="sliderColor"

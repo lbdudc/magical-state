@@ -1,4 +1,7 @@
-const comunities = [{ label: "GALICIA", value: 1 }, { label: "EXTREMADURA", value: 2 }];
+const comunities = [
+  { label: "GALICIA", value: 1 },
+  { label: "EXTREMADURA", value: 2 },
+];
 const provinces = [
   { label: "A CORUÑA", value: 3 },
   { label: "LUGO", value: 4 },
@@ -7,7 +10,10 @@ const provinces = [
   { label: "CACERES", value: 7 },
   { label: "BADAJOZ", value: 8 },
 ];
-const mobArea = [{ label: "HOOD", value: 9 }, { label: "STREET", value: 10 }];
+const mobArea = [
+  { label: "HOOD", value: 9 },
+  { label: "STREET", value: 10 },
+];
 
 async function getSpatialFilterItems(filter) {
   let items = [];
@@ -17,7 +23,7 @@ async function getSpatialFilterItems(filter) {
     if (!Array.isArray(params)) {
       params = [params];
     }
-    params.forEach(element => {
+    params.forEach((element) => {
       switch (element) {
         case 1:
           items = items.concat(comunities);

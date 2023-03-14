@@ -1,8 +1,9 @@
 <template>
-  <v-container class="ma-0 pa-0" v-if="store">
+  <v-container v-if="store" class="ma-0 pa-0">
     <v-row no-gutters>
       <v-col cols="12">
         <v-autocomplete
+          v-model="itemValue"
           :append-icon="appendIcon"
           :append-outer-icon="appendOuterIcon"
           :background-color="backgroundColor"
@@ -20,7 +21,7 @@
           :items="item.items"
           :label="i18Label(item.label)"
           :loading="item.loading || store.state.loading"
-          :multiple="item.type === 'multiple'"
+          :multiple="multiple"
           :outlined="outlined"
           :persistent-hint="persistentHint"
           :prepend-icon="prependIcon"
@@ -29,12 +30,11 @@
           :small-chips="smallChips"
           :solo="solo"
           :error-messages="i18Label(errorMessage)"
-          :hideDetails="hideDetails"
-          v-model="itemValue"
+          :hide-details="hideDetails"
         >
           <template
-            v-for="(_, key) in $scopedSlots"
-            v-slot:[`${key}`]="{ item, index }"
+            v-for="(_, key) in $slots"
+            #[`${key}`]="{ item, index }"
           >
             <slot :item="item" :index="index" :name="key"> </slot>
           </template>
@@ -51,11 +51,6 @@ let selectedPrevPos = {};
 
 export default {
   name: "MagicalSelector",
-  data() {
-    return {
-      errorMessage: null,
-    };
-  },
   props: {
     store: {
       type: Object,
@@ -201,6 +196,16 @@ export default {
       default: () => [],
       required: false,
     },
+    multiple: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
+  },
+  data() {
+    return {
+      errorMessage: null,
+    };
   },
   computed: {
     item() {
@@ -228,7 +233,7 @@ export default {
   mounted() {
     if (
       this.pushSelectedValuesUp &&
-      this.item.type === "multiple" &&
+      this.multiple &&
       this.item.value &&
       this.item.value.length > 0
     ) {
@@ -246,7 +251,7 @@ export default {
       document.addEventListener("checkErrors", this.checkForErrors);
     }
   },
-  beforeDestroy() {
+  beforeUnmount() {
     document.removeEventListener("checkErrors", this.checkForErrors);
   },
   methods: {
@@ -262,7 +267,7 @@ export default {
       this.errorMessage = null;
       this.item.hasErrors = false;
       this.item.value = val;
-      if (this.pushSelectedValuesUp && this.item.type === "multiple") {
+      if (this.pushSelectedValuesUp && this.multiple) {
         if (val.length > Object.keys(selectedPrevPos).length) {
           //get the new element and its current position on the items
           const newEl = val.filter((x) => selectedPrevPos[x] == null);

@@ -1,44 +1,25 @@
 <template>
   <v-container v-if="store">
     <v-row>
-      <v-col
-        v-if="store"
-        cols="12"
-      >
+      <v-col v-if="store" cols="12">
         <v-row>
           <MDateFilter
-            id="DATE_FILTER"
-            :store="store"
-            :closeOnContentClick="true"
-            :i18n="$t"
-            :rules="[(v) => v != '2022-08-29' || 'date cant be today']"
-          />
+id="DATE_FILTER" :store="store" :close-on-content-click="true" :i18n="$t"
+            :rules="[(v) => v != '2022-08-29' || 'date cant be today']" />
         </v-row>
         <v-row>
-          <MListSelector
-            id="INSTANT_FILTER"
-            :store="store"
-          />
+          <MListSelector id="INSTANT_FILTER" :store="store" />
         </v-row>
         <v-row>
           <v-col cols="12">
             <MTimeline
-              ref="timeline"
-              id="INSTANT_FILTER"
-              :store="store"
-              :i18n="$t"
-              :instantSelectorFunction="mockSelectorF"
-              :disablePlayButton="disablePlayButton"
-              :disableStopButton="disableStopButton"
-              @reproductionStarted="isPlaying = true"
-              @reproductionStopped="isPlaying = false"
-              @lastItemReached="lastElementReached"
-              @firstItemReached="firstElementReached"
-              @timelineAdvanced="timelineAdvanced"
-              :instantSelectorButtonLabel="
+id="INSTANT_FILTER" ref="timeline" :store="store" :i18n="$t"
+              :instant-selector-function="mockSelectorF" :disable-play-button="disablePlayButton"
+              :disable-stop-button="disableStopButton" :instant-selector-button-label="
                 $t('timeline.instantSelectorButtonLabel')
-              "
-            />
+              " @reproduction-started="isPlaying = true" @reproduction-stopped="isPlaying = false"
+              @last-item-reached="lastElementReached" @first-item-reached="firstElementReached"
+              @timeline-advanced="timelineAdvanced" />
           </v-col>
         </v-row>
         <br />
@@ -65,6 +46,7 @@ import {
   MTimeline,
 } from "../../../../../vue2-components";
 import getValues from "./getters";
+import defaultValuesGetter from "./defaultValuesGetter";
 
 export default {
   name: "InstantsExample",
@@ -102,7 +84,7 @@ export default {
   async mounted() {
     this.store = await createStore(
       jsonSpec,
-      getValues,
+      { getValues: getValues, defaultValuesGetter: defaultValuesGetter },
       null,
       (storeContent) => {
         return new Promise(async (resolve) => {
@@ -114,6 +96,9 @@ export default {
         });
       }
     );
+  },
+  beforeUnmount() {
+    document.removeEventListener("change", this.handleChangeEvent);
   },
   methods: {
     setStoreState() {
@@ -179,9 +164,6 @@ export default {
     timelineAdvanced() {
       this.elementoPintado = this.elementoAPintar;
     },
-  },
-  beforeDestroy() {
-    document.removeEventListener("change", this.handleChangeEvent);
   },
 };
 function delay(ms) {
