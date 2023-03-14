@@ -2,6 +2,13 @@
 
 <!--- next entry here -->
 
+## 0.28.0
+2023-03-14
+
+### Features
+
+- Added defaultValuesGetter option to store (64131af40bb145634c4c7b08db4089952d90181f)
+
 ## 0.27.2
 2023-02-28
 
