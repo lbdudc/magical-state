@@ -7,9 +7,9 @@
         </div>
         <MTimelineSlider v-else :is-paused="isPaused" :is-loading="isLoading" :limit-buttons="limitButtons"
           :slider-steps="tickLabels.length" :slider-tick-labels="tickLabels" :slider-actual-time="index"
-          :slider-color="'secondary'" @change="changeSliderValue" @next-value="changeSliderValue('next')"
-          @prev-value="changeSliderValue('prev')" @go-to-first-item="$emit('goToFirstItem')"
-          @go-to-last-item="$emit('goToLastItem')" />
+          :slider-color="'secondary'" @change="changeSliderValue" @nextValue="changeSliderValue('next')"
+          @prevValue="changeSliderValue('prev')" @goToFirstItem="$emit('goToFirstItem')"
+          @goToLastItem="$emit('goToLastItem')" />
         <span v-if="
           !storeElement.loading &&
           !store.state.loading &&
@@ -22,7 +22,7 @@
           :instant-selector-button-label="instantSelectorButtonLabel" :label="'Speed'"
           :has-instant-selector-function="instantSelectorFunction != null" :i18n="i18n"
           :available-speeds="availableSpeeds" :disable-play-button="disablePlayButton"
-          :disable-stop-button="disableStopButton" @change-speed="updateSpeedSelected" @play="playTimeline"
+          :disable-stop-button="disableStopButton" @changeSpeed="updateSpeedSelected" @play="playTimeline"
           @stop="stopTimeline" @now="setValueToNow" />
       </v-col>
     </v-row>
