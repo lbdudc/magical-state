@@ -1,4 +1,5 @@
 import utils from "./utils";
+import { observable } from "@nx-js/observer-util";
 
 export default class Store {
   constructor(jsonSpec, getValues, defaultValuesGetter, callback) {
@@ -294,7 +295,8 @@ export default class Store {
    * @param {Any} newVal
    * @param {Boolean} needsTriggerCallback
    */
-  async change(propId, newVal, needsTriggerCallback = true) {
+  async change(propId, newVal, needsTriggerCallback = true, isRootEl = true) {
+    this._state.loading = true;
     return new Promise((resolve, reject) => {
       // Get the element of the jsonSpec
       const el = utils.findJsonSpecElement(propId, this._jsonSpec);
@@ -357,6 +359,7 @@ export default class Store {
             hasTriggerCallbackProp = (await this.change(
               obsItem.id,
               newVal,
+              false,
               false
             ))
               ? true
@@ -398,6 +401,9 @@ export default class Store {
                 utils.dispatchCustomEvent("callbackFulfilled", { id: el.id })
               );
             }
+          }
+          if (isRootEl) {
+            this._state.loading = false;
           }
           resolve(hasTriggerCallbackProp);
         })
