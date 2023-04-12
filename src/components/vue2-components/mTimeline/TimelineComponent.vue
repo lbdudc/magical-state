@@ -124,6 +124,7 @@ export default {
       "callbackFulfilled",
       this.callbackFullfilledReceived
     );
+    this.checkIndexMatchesValue(this.storeElement.value);
   },
   beforeUnmount() {
     document.removeEventListener(
