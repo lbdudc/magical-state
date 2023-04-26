@@ -3,39 +3,15 @@
     <v-row no-gutters>
       <v-col cols="12">
         <v-autocomplete
-          v-model="itemValue"
-          :append-icon="appendIcon"
-          :append-outer-icon="appendOuterIcon"
-          :background-color="backgroundColor"
-          :chips="chips"
-          :clearable="clearable"
-          :color="color"
-          :deletable-chips="deletableChips"
-          :dense="dense"
-          :disabled="item.loading || store.state.loading || disabled"
-          :filled="filled"
-          :flat="flat"
-          :hint="hint"
-          :item-color="itemColor"
-          :item-text="(el) => i18Items(el.label)"
-          :items="item.items"
-          :label="i18Label(item.label)"
-          :loading="item.loading || store.state.loading"
-          :multiple="multiple"
-          :outlined="outlined"
-          :persistent-hint="persistentHint"
-          :prepend-icon="prependIcon"
-          :prepend-inner-icon="prependInnerIcon"
-          :reverse="reverse"
-          :small-chips="smallChips"
-          :solo="solo"
-          :error-messages="i18Label(errorMessage)"
-          :hide-details="hideDetails"
-        >
-          <template
-            v-for="(_, key) in $slots"
-            #[`${key}`]="{ item, index }"
-          >
+v-model="itemValue" :append-icon="appendIcon" :append-outer-icon="appendOuterIcon"
+          :background-color="backgroundColor" :chips="chips" :clearable="clearable" :color="color"
+          :deletable-chips="deletableChips" :dense="dense" :disabled="item.loading || store.state.loading || disabled"
+          :filled="filled" :flat="flat" :hint="hint" :item-color="itemColor" :item-text="(el) => i18Items(el.label)"
+          :items="item.items" :label="i18Label(item.label)" :loading="item.loading || store.state.loading"
+          :multiple="multiple" :outlined="outlined" :persistent-hint="persistentHint" :prepend-icon="prependIcon"
+          :prepend-inner-icon="prependInnerIcon" :reverse="reverse" :small-chips="smallChips" :solo="solo"
+          :error-messages="i18Label(errorMessage)" :hide-details="hideDetails">
+          <template v-for="(_, key) in $slots" #[`${key}`]="{ item, index }">
             <slot :item="item" :index="index" :name="key"> </slot>
           </template>
         </v-autocomplete>
@@ -296,7 +272,7 @@ export default {
     },
     checkForErrors() {
       const error = this.rules.find((f) => f(this.itemValue) != true);
-      if (error == null) {
+      if (error == null && this.item.value != this.itemValue) {
         this.change(this.id, this.itemValue);
       }
     },

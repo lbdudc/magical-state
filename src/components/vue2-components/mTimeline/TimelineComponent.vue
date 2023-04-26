@@ -5,19 +5,22 @@
         <div v-if="storeElement.loading || store.state.loading || loading" class="text-center">
           <v-progress-circular indeterminate color="primary"></v-progress-circular>
         </div>
-        <MTimelineSlider v-else :is-paused="isPaused" :is-loading="isLoading" :limit-buttons="limitButtons"
+        <MTimelineSlider
+v-else :is-paused="isPaused" :is-loading="isLoading" :limit-buttons="limitButtons"
           :slider-steps="tickLabels.length" :slider-tick-labels="tickLabels" :slider-actual-time="index"
           :slider-color="'secondary'" @change="changeSliderValue" @nextValue="changeSliderValue('next')"
           @prevValue="changeSliderValue('prev')" @goToFirstItem="$emit('goToFirstItem')"
           @goToLastItem="$emit('goToLastItem')" />
-        <span v-if="
+        <span
+v-if="
           !storeElement.loading &&
           !store.state.loading &&
           storeElement.items.length == 0
         " class="text-center">No data available</span>
       </v-col>
       <v-col cols="12" md="3">
-        <MTimelineControls :is-paused="isPaused" :is-loading="isLoading" :speed-selected="speedSelected"
+        <MTimelineControls
+:is-paused="isPaused" :is-loading="isLoading" :speed-selected="speedSelected"
           :slider-actual-time="index" :slider-steps="tickLabels.length"
           :instant-selector-button-label="instantSelectorButtonLabel" :label="'Speed'"
           :has-instant-selector-function="instantSelectorFunction != null" :i18n="i18n"

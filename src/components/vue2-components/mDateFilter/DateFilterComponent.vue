@@ -171,7 +171,7 @@ export default {
     },
     checkForErrors() {
       const error = this.rules.find((f) => f(this.itemValue) != true);
-      if (error == null) {
+      if (error == null && this.storeElement.value != this.itemValue) {
         this.changeStoreValue(this.itemValue);
       }
     },

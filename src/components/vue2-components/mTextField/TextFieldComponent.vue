@@ -106,7 +106,10 @@ export default {
       }
     },
     checkForErrors() {
-      this.valueChanged(this.itemValue);
+      const error = this.rules.find((f) => f(this.itemValue) != true);
+      if (error == null && this.storeElement.value != this.itemValue) {
+        this.valueChanged(this.itemValue);
+      }
     },
     i18Label(label) {
       if (label) return this.i18n ? this.i18n(label) : label;
