@@ -2,6 +2,13 @@
 
 <!--- next entry here -->
 
+## 0.28.1
+2023-04-13
+
+### Fixes
+
+- bug in TimelineComponent (d12f9d5bae181d17af789a8c1b907ec1953c10fd)
+
 ## 0.28.0
 
 2023-03-14
