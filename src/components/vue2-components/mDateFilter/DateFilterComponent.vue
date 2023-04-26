@@ -1,21 +1,50 @@
 <template>
   <v-menu
-v-model="menu" :close-on-content-click="false" :nudge-right="40" transition="scale-transition" offset-y
-    :disabled="disabled" min-width="auto">
+    v-model="menu"
+    :close-on-content-click="false"
+    :nudge-right="40"
+    transition="scale-transition"
+    offset-y
+    :disabled="disabled"
+    min-width="auto"
+  >
     <template #activator="{ on, attrs }">
       <v-text-field
-v-bind="attrs" v-model="itemValue" :color="color" :dense="dense" :filled="filled" :flat="flat"
-        :disabled="disabled" :label="i18Label(storeElement.label)" :loading="storeElement.loading || store.state.loading"
-        :outlined="outlined" :error-messages="i18Label(errorMessage)" :error="errorMessage != null"
-        :hide-details="hideDetails" append-icon="mdi-calendar" readonly v-on="on"></v-text-field>
+        v-bind="attrs"
+        v-model="itemValue"
+        :color="color"
+        :dense="dense"
+        :filled="filled"
+        :flat="flat"
+        :disabled="disabled"
+        :label="i18Label(storeElement.label)"
+        :loading="storeElement.loading || store.state.loading"
+        :outlined="outlined"
+        :error-messages="i18Label(errorMessage)"
+        :error="errorMessage != null"
+        :hide-details="hideDetails"
+        append-icon="mdi-calendar"
+        readonly
+        v-on="on"
+      ></v-text-field>
     </template>
     <v-date-picker
-v-model="itemValue" :type="type" :locale="$i18n.locale" :max="maxValue" :disabled="disabled"
-      :min="minValue" :allowed-dates="allowedDates" :first-day-of-week="firstDayOfWeek"
+      v-model="itemValue"
+      :type="type"
+      :locale="$i18n.locale"
+      :max="maxValue"
+      :disabled="disabled"
+      :min="minValue"
+      :allowed-dates="allowedDates"
+      :first-day-of-week="firstDayOfWeek"
       :next-month-aria-label="i18Label('datePicker.nextMonthAriaLabel')"
       :next-year-aria-label="i18Label('datePicker.nextYearAriaLabel')"
       :prev-month-aria-label="i18Label('datePicker.prevMonthAriaLabel')"
-      :prev-year-aria-label="i18Label('datePicker.prevYearAriaLabel')" no-title persistent-hint @change="daySelected">
+      :prev-year-aria-label="i18Label('datePicker.prevYearAriaLabel')"
+      no-title
+      persistent-hint
+      @change="daySelected"
+    >
     </v-date-picker>
   </v-menu>
 </template>
@@ -27,7 +56,7 @@ export default {
     store: {
       type: Object,
       required: false,
-      default: null
+      default: null,
     },
     disabled: {
       type: Boolean,
@@ -171,7 +200,7 @@ export default {
     },
     checkForErrors() {
       const error = this.rules.find((f) => f(this.itemValue) != true);
-      if (error == null) {
+      if (error == null && this.storeElement.value != this.itemValue) {
         this.changeStoreValue(this.itemValue);
       }
     },

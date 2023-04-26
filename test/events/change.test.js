@@ -1,23 +1,23 @@
 import { createStore } from "../../index";
 
 describe("change", () => {
-
   const jsonSpecSpatial = [
     {
-      "id": "SPATIAL_AGGREGATION",
-      "label": "Spatial Aggregation",
-      "setItemsOnMounted": true,
-      "actions": [
-        "SPATIAL_FILTER"
-      ]
+      id: "SPATIAL_AGGREGATION",
+      label: "Spatial Aggregation",
+      setItemsOnMounted: true,
+      actions: ["SPATIAL_FILTER"],
     },
     {
-      "id": "SPATIAL_FILTER",
-      "label": "Spatial Filter",
-      "actions": []
+      id: "SPATIAL_FILTER",
+      label: "Spatial Filter",
+      actions: [],
     },
-  ]
-  const spatialItems = [{ label: "AUTONOMOUS_COMMUNITY", value: 1 }, { label: "PROVINCE", value: 2 }];
+  ];
+  const spatialItems = [
+    { label: "AUTONOMOUS_COMMUNITY", value: 1 },
+    { label: "PROVINCE", value: 2 },
+  ];
   const comunities = [{ label: "GALICIA", value: 1 }];
   const provinces = [{ label: "A CORUÑA", value: 1 }];
 
@@ -39,15 +39,15 @@ describe("change", () => {
             });
         }
     }
-  }
+  };
 
   afterEach(() => {
     document.removeEventListener("change", assertChangeEvent);
   });
 
   function assertChangeEvent(store, event) {
-    const filter = store.getSelector('SPATIAL_FILTER');
-    let aggregation = store.getSelector('SPATIAL_AGGREGATION');
+    const filter = store.getSelector("SPATIAL_FILTER");
+    let aggregation = store.getSelector("SPATIAL_AGGREGATION");
 
     //asserting changed element's action has the expected values
     expect(filter.items).toStrictEqual(comunities);
@@ -59,11 +59,11 @@ describe("change", () => {
   }
 
   it("should dispatch 'change' event on value establishment and set properties on element's actions", async () => {
-    const store = await createStore(jsonSpecSpatial, getValues, null, () => { });
-    let aggregation = store.getSelector('SPATIAL_AGGREGATION');
+    const store = await createStore(jsonSpecSpatial, getValues, null, () => {});
+    let aggregation = store.getSelector("SPATIAL_AGGREGATION");
 
     document.addEventListener("change", assertChangeEvent.bind(null, store));
 
-    store.change('SPATIAL_AGGREGATION', aggregation.items[0].value);
+    store.change("SPATIAL_AGGREGATION", aggregation.items[0].value);
   });
-})
+});

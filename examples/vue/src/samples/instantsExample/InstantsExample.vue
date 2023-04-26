@@ -4,8 +4,12 @@
       <v-col v-if="store" cols="12">
         <v-row>
           <MDateFilter
-id="DATE_FILTER" :store="store" :close-on-content-click="true" :i18n="$t"
-            :rules="[(v) => v != '2022-08-29' || 'date cant be today']" />
+            id="DATE_FILTER"
+            :store="store"
+            :close-on-content-click="true"
+            :i18n="$t"
+            :rules="[(v) => v != '2022-08-29' || 'date cant be today']"
+          />
         </v-row>
         <v-row>
           <MListSelector id="INSTANT_FILTER" :store="store" />
@@ -13,13 +17,22 @@ id="DATE_FILTER" :store="store" :close-on-content-click="true" :i18n="$t"
         <v-row>
           <v-col cols="12">
             <MTimeline
-id="INSTANT_FILTER" ref="timeline" :store="store" :i18n="$t"
-              :instant-selector-function="mockSelectorF" :disable-play-button="disablePlayButton"
-              :disable-stop-button="disableStopButton" :instant-selector-button-label="
+              id="INSTANT_FILTER"
+              ref="timeline"
+              :store="store"
+              :i18n="$t"
+              :instant-selector-function="mockSelectorF"
+              :disable-play-button="disablePlayButton"
+              :disable-stop-button="disableStopButton"
+              :instant-selector-button-label="
                 $t('timeline.instantSelectorButtonLabel')
-              " @reproduction-started="isPlaying = true" @reproduction-stopped="isPlaying = false"
-              @last-item-reached="lastElementReached" @first-item-reached="firstElementReached"
-              @timeline-advanced="timelineAdvanced" />
+              "
+              @reproduction-started="isPlaying = true"
+              @reproduction-stopped="isPlaying = false"
+              @last-item-reached="lastElementReached"
+              @first-item-reached="firstElementReached"
+              @timeline-advanced="timelineAdvanced"
+            />
           </v-col>
         </v-row>
         <br />
@@ -30,7 +43,9 @@ id="INSTANT_FILTER" ref="timeline" :store="store" :i18n="$t"
         <br />
         <span>Hora definida como store value: {{ elementoAPintar }}</span>
         <br />
-        <span>Hora con la que se pintaria en pantalla: {{ elementoPintado }}</span>
+        <span
+          >Hora con la que se pintaria en pantalla: {{ elementoPintado }}</span
+        >
         <br />
       </v-col>
     </v-row>

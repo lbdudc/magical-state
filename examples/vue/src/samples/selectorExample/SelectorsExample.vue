@@ -3,9 +3,19 @@
     <v-row>
       <v-col cols="12">
         <v-row>
-          <m-selector v-if="store" id="SPATIAL_AGGREGATION" :store="store" :multiple="true" :push-selected-values-up="true">
+          <m-selector
+            v-if="store"
+            id="SPATIAL_AGGREGATION"
+            :store="store"
+            :multiple="true"
+            :push-selected-values-up="true"
+          >
           </m-selector>
-          <m-selector id="TEMPORAL_AGGREGATION" :store="store" :rules="[(v) => !!v || 'cant be empty']">
+          <m-selector
+            id="TEMPORAL_AGGREGATION"
+            :store="store"
+            :rules="[(v) => !!v || 'cant be empty']"
+          >
           </m-selector>
           <m-selector id="SPATIAL_FILTER" :store="store"> </m-selector>
           <m-selector id="TEMPORAL_FILTER" :store="store"> </m-selector>
@@ -61,7 +71,10 @@ export default {
   },
   async mounted() {
     const decodedUrl = parseUrl(this.importExportValue, jsonSpec);
-    decodedUrl["SPATIAL_AGGREGATION"] = decodedUrl["SPATIAL_AGGREGATION"] != null ? decodedUrl["SPATIAL_AGGREGATION"].split(",").map(el => parseInt(el)) : [];
+    decodedUrl["SPATIAL_AGGREGATION"] =
+      decodedUrl["SPATIAL_AGGREGATION"] != null
+        ? decodedUrl["SPATIAL_AGGREGATION"].split(",").map((el) => parseInt(el))
+        : [];
     this.store = await createStore(
       jsonSpec,
       { getValues: getValues, defaultValuesGetter: defaultValuesGetter },
@@ -83,7 +96,12 @@ export default {
     },
     imported() {
       const decodedUrl = parseUrl(this.importExportValue, jsonSpec);
-      decodedUrl["SPATIAL_AGGREGATION"] = decodedUrl["SPATIAL_AGGREGATION"] != null ? decodedUrl["SPATIAL_AGGREGATION"].split(",").map(el => parseInt(el)) : [];
+      decodedUrl["SPATIAL_AGGREGATION"] =
+        decodedUrl["SPATIAL_AGGREGATION"] != null
+          ? decodedUrl["SPATIAL_AGGREGATION"]
+              .split(",")
+              .map((el) => parseInt(el))
+          : [];
       this.store.setState(decodedUrl);
     },
   },

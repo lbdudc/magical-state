@@ -6,4 +6,12 @@ import MAutocomplete from "./src/components/vue2-components/mAutocomplete/mAutoc
 import MTextField from "./src/components/vue2-components/mTextField/TextFieldComponent";
 import MHourPicker from "./src/components/vue2-components/mHourPicker/HourPickerComponent";
 
-export { MSelector, MTimeline, MDateFilter, MListSelector, MAutocomplete, MTextField, MHourPicker };
+export {
+  MSelector,
+  MTimeline,
+  MDateFilter,
+  MListSelector,
+  MAutocomplete,
+  MTextField,
+  MHourPicker,
+};

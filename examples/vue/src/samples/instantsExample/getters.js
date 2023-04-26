@@ -5,5 +5,4 @@ export default async (propId, params, store) => {
     case "INSTANT_FILTER":
       return instantsService.getInstants(params);
   }
-}
-
+};

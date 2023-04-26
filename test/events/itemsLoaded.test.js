@@ -1,29 +1,32 @@
 import { createStore } from "../../index";
 
 describe("ItemsLoaded", () => {
-  const jsonSpecSimpleAggregation = [{
-    "id": "SPATIAL_AGGREGATION",
-    "label": "Spatial Aggregation",
-    "setItemsOnMounted": true,
-    "unused": "unused"
-  }]
+  const jsonSpecSimpleAggregation = [
+    {
+      id: "SPATIAL_AGGREGATION",
+      label: "Spatial Aggregation",
+      setItemsOnMounted: true,
+      unused: "unused",
+    },
+  ];
 
   const jsonSpecSpatial = [
     {
-      "id": "SPATIAL_AGGREGATION",
-      "label": "Spatial Aggregation",
-      "setItemsOnMounted": true,
-      "actions": [
-        "SPATIAL_FILTER"
-      ]
+      id: "SPATIAL_AGGREGATION",
+      label: "Spatial Aggregation",
+      setItemsOnMounted: true,
+      actions: ["SPATIAL_FILTER"],
     },
     {
-      "id": "SPATIAL_FILTER",
-      "label": "Spatial Filter",
-      "actions": []
+      id: "SPATIAL_FILTER",
+      label: "Spatial Filter",
+      actions: [],
     },
-  ]
-  const spatialItems = [{ label: "AUTONOMOUS_COMMUNITY", value: 1 }, { label: "PROVINCE", value: 2 }];
+  ];
+  const spatialItems = [
+    { label: "AUTONOMOUS_COMMUNITY", value: 1 },
+    { label: "PROVINCE", value: 2 },
+  ];
   const comunities = [{ label: "GALICIA", value: 1 }];
   const provinces = [{ label: "A CORUÑA", value: 1 }];
 
@@ -45,7 +48,7 @@ describe("ItemsLoaded", () => {
             });
         }
     }
-  }
+  };
 
   function assertItemsLoadedEvent(store, event, id, expectedItems) {
     const changedElement = store.getSelector(id);
@@ -66,32 +69,47 @@ describe("ItemsLoaded", () => {
   });
 
   it("should dispatch event 'itemsLoaded' when setting state", async () => {
-    const store = await createStore(jsonSpecSimpleAggregation, getValues, null, () => { });
+    const store = await createStore(
+      jsonSpecSimpleAggregation,
+      getValues,
+      null,
+      () => {}
+    );
     let eventAlreadyReceived = false;
     document.addEventListener("itemsLoaded", (event) => {
       if (!eventAlreadyReceived) {
-        assertItemsLoadedEvent(store, event, "SPATIAL_AGGREGATION", spatialItems);
+        assertItemsLoadedEvent(
+          store,
+          event,
+          "SPATIAL_AGGREGATION",
+          spatialItems
+        );
         eventAlreadyReceived = true;
       }
     });
-    store.setState({ "SPATIAL_AGGREGATION": 3 }, false);
+    store.setState({ SPATIAL_AGGREGATION: 3 }, false);
   });
 
   it("should set items on mounted and dispatch itemsLoaded event", async () => {
-    const store = await createStore(jsonSpecSpatial, getValues, null, () => { });
+    const store = await createStore(jsonSpecSpatial, getValues, null, () => {});
     let eventAlreadyReceived = false;
 
     //wait for items to be loaded before asserting element's properties state
     document.addEventListener("itemsLoaded", (event) => {
       if (!eventAlreadyReceived) {
-        assertItemsLoadedEvent(store, event, "SPATIAL_AGGREGATION", spatialItems);
+        assertItemsLoadedEvent(
+          store,
+          event,
+          "SPATIAL_AGGREGATION",
+          spatialItems
+        );
         eventAlreadyReceived = true;
       }
     });
   });
 
   it("should dispatch itemsLoaded event after loading child's items", async () => {
-    const store = await createStore(jsonSpecSpatial, getValues, null, () => { });
+    const store = await createStore(jsonSpecSpatial, getValues, null, () => {});
     let eventAlreadyReceived = false;
     document.addEventListener("itemsLoaded", (event) => {
       if (!eventAlreadyReceived) {
@@ -100,5 +118,5 @@ describe("ItemsLoaded", () => {
       }
     });
     store.change("SPATIAL_AGGREGATION", 2);
-  })
-})
+  });
+});

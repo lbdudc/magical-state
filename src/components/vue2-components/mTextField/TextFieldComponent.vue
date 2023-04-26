@@ -1,9 +1,18 @@
 <template>
   <v-text-field
-v-model="itemValue" :label="i18n ? i18n(storeElement.label) : ''" :prepend-inner-icon="prependInnerIcon"
-    :append-icon="appendIcon" :dense="dense" :disabled="disabled" :error-messages="i18Label(errorMessage)" :type="type"
-    :loading="storeElement.loading || store.state.loading" :readonly="readonly" clearable
-    @change="valueChanged(itemValue)"></v-text-field>
+    v-model="itemValue"
+    :label="i18n ? i18n(storeElement.label) : ''"
+    :prepend-inner-icon="prependInnerIcon"
+    :append-icon="appendIcon"
+    :dense="dense"
+    :disabled="disabled"
+    :error-messages="i18Label(errorMessage)"
+    :type="type"
+    :loading="storeElement.loading || store.state.loading"
+    :readonly="readonly"
+    clearable
+    @change="valueChanged(itemValue)"
+  ></v-text-field>
 </template>
 <script>
 export default {
@@ -26,13 +35,12 @@ export default {
     prependInnerIcon: {
       type: String,
       required: false,
-      default: null
+      default: null,
     },
     appendIcon: {
       type: String,
       required: false,
-      default: null
-
+      default: null,
     },
     dense: {
       type: Boolean,
@@ -106,7 +114,10 @@ export default {
       }
     },
     checkForErrors() {
-      this.valueChanged(this.itemValue);
+      const error = this.rules.find((f) => f(this.itemValue) != true);
+      if (error == null && this.storeElement.value != this.itemValue) {
+        this.valueChanged(this.itemValue);
+      }
     },
     i18Label(label) {
       if (label) return this.i18n ? this.i18n(label) : label;

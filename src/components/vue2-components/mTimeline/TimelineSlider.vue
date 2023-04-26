@@ -8,7 +8,7 @@
       fab
       @click="$emit('goToFirstItem')"
     >
-      <v-icon class="slider-icon">{{prependLimitIcon}}</v-icon>
+      <v-icon class="slider-icon">{{ prependLimitIcon }}</v-icon>
     </v-btn>
     <v-btn
       class="slider-button first-button-left"
@@ -17,7 +17,7 @@
       fab
       @click="previousValue"
     >
-      <v-icon class="slider-icon">{{prependIcon}}</v-icon>
+      <v-icon class="slider-icon">{{ prependIcon }}</v-icon>
     </v-btn>
     <v-slider
       v-if="sliderTickLabels"
@@ -42,7 +42,7 @@
       fab
       @click="nextValue"
     >
-      <v-icon class="slider-icon">{{appendIcon}}</v-icon>
+      <v-icon class="slider-icon">{{ appendIcon }}</v-icon>
     </v-btn>
     <v-btn
       v-if="limitButtons"
@@ -52,7 +52,7 @@
       fab
       @click="$emit('goToLastItem')"
     >
-      <v-icon class="slider-icon">{{appendLimitIcon}}</v-icon>
+      <v-icon class="slider-icon">{{ appendLimitIcon }}</v-icon>
     </v-btn>
   </v-row>
 </template>
@@ -78,11 +78,11 @@ export default {
     },
     sliderTrackColor: {
       type: String,
-      default: "#898a8b"
+      default: "#898a8b",
     },
     sliderThumbColor: {
       type: String,
-      default: "#282829"
+      default: "#282829",
     },
     step: {
       type: Number,
@@ -127,7 +127,7 @@ export default {
     limitButtons: {
       type: Boolean,
       default: false,
-    }
+    },
   },
   computed: {
     isDisabled() {

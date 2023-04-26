@@ -1,15 +1,15 @@
-import Vue from 'vue'
-import App from './App.vue'
-import Vuetify from 'vuetify/lib/framework';
+import Vue from "vue";
+import App from "./App.vue";
+import Vuetify from "vuetify/lib/framework";
 import VueI18n from "vue-i18n";
 
-Vue.config.productionTip = false
+Vue.config.productionTip = false;
 Vue.use(Vuetify);
 Vue.use(VueI18n);
 
 const messages = {
   ES: {},
-  EN: {}
+  EN: {},
 };
 
 const localeEn = require.context("./locale/en", true, /\.json$/);
@@ -32,7 +32,7 @@ const i18n = new VueI18n({
   locale: "ES",
   fallbackLocale: "ES",
   silentTranslationWarn: true,
-  messages
+  messages,
 });
 
 const vuetify = new Vuetify({
@@ -47,5 +47,7 @@ const vuetify = new Vuetify({
 new Vue({
   vuetify: vuetify,
   i18n: i18n,
-  render: function (h) { return h(App) }
-}).$mount('#app')
+  render: function (h) {
+    return h(App);
+  },
+}).$mount("#app");

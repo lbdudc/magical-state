@@ -32,10 +32,7 @@
           :error-messages="i18Label(errorMessage)"
           :hide-details="hideDetails"
         >
-          <template
-            v-for="(_, key) in $slots"
-            #[`${key}`]="{ item, index }"
-          >
+          <template v-for="(_, key) in $slots" #[`${key}`]="{ item, index }">
             <slot :item="item" :index="index" :name="key"> </slot>
           </template>
         </v-autocomplete>
@@ -296,7 +293,7 @@ export default {
     },
     checkForErrors() {
       const error = this.rules.find((f) => f(this.itemValue) != true);
-      if (error == null) {
+      if (error == null && this.item.value != this.itemValue) {
         this.change(this.id, this.itemValue);
       }
     },

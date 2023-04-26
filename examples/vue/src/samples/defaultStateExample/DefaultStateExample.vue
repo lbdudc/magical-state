@@ -6,8 +6,12 @@
           <m-selector id="SPATIAL_AGGREGATION" :store="store" :i18n="$t">
           </m-selector>
           <m-selector
-id="TEMPORAL_AGGREGATION" :store="store" :i18n="$t" :override-store-change="true"
-            @change="temporalAggChange">
+            id="TEMPORAL_AGGREGATION"
+            :store="store"
+            :i18n="$t"
+            :override-store-change="true"
+            @change="temporalAggChange"
+          >
           </m-selector>
           <m-selector id="SPATIAL_FILTER" :store="store"> </m-selector>
           <m-selector id="TEMPORAL_FILTER" :store="store"> </m-selector>
@@ -21,7 +25,9 @@ id="TEMPORAL_AGGREGATION" :store="store" :i18n="$t" :override-store-change="true
     <v-btn @click="updateState()">Update</v-btn>
     <v-btn @click="updateCustomState()">Update custom callback</v-btn>
     <br />
-    <span v-if="changeEventDetected">Last change event detected: {{ changeEventDetected }}</span>
+    <span v-if="changeEventDetected"
+      >Last change event detected: {{ changeEventDetected }}</span
+    >
   </v-container>
 </template>
 <script>
