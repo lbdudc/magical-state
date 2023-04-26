@@ -7,9 +7,7 @@ function itemSelection(newEl, items, positions) {
   let aux = null;
   while (notOnInitPos) {
     const deeper = Object.keys(positions).filter(
-      (el) =>
-        positions[el] >= pos &&
-        (!aux || aux > positions[el])
+      (el) => positions[el] >= pos && (!aux || aux > positions[el])
     );
     if (deeper.length == 0) {
       notOnInitPos = false;
@@ -43,18 +41,15 @@ function itemDeselection(values, items, positions) {
   //count the elements that should be positioned after the deselected element
   let toAdd = 0;
   values.forEach(
-    (el) =>
-    (toAdd =
-      positions[el] > positions[key] ? toAdd + 1 : toAdd)
+    (el) => (toAdd = positions[el] > positions[key] ? toAdd + 1 : toAdd)
   );
   items.splice(positions[key] + toAdd, 0, el);
   delete positions[key];
 
   return { items, positions };
-
 }
 
 export default {
   itemSelection,
-  itemDeselection
-}
+  itemDeselection,
+};

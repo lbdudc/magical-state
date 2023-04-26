@@ -12,5 +12,4 @@ export default async (propId, params, store) => {
     case "SPATIAL_FILTER":
       return filterService.getSpatialFilterItems(params);
   }
-}
-
+};

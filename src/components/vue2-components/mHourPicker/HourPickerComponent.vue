@@ -1,9 +1,20 @@
 <template>
   <magical-text-field
-:id="id" :store="store" :i18n="i18n" type="time" :prepend-inner-icon="prependInnerIcon"
-    :append-icon="appendIcon" :dense="dense" :disabled="disabled" :readonly="readonly" :rules="rules"
-    :override-store-change="overrideStoreChange" :hide-details="hideDetails" @change="change"
-    @on-input-error="onInputError" />
+    :id="id"
+    :store="store"
+    :i18n="i18n"
+    type="time"
+    :prepend-inner-icon="prependInnerIcon"
+    :append-icon="appendIcon"
+    :dense="dense"
+    :disabled="disabled"
+    :readonly="readonly"
+    :rules="rules"
+    :override-store-change="overrideStoreChange"
+    :hide-details="hideDetails"
+    @change="change"
+    @on-input-error="onInputError"
+  />
 </template>
 <script>
 import MagicalTextField from "../mTextField/TextFieldComponent.vue";
@@ -31,12 +42,12 @@ export default {
     prependInnerIcon: {
       type: String,
       required: false,
-      default: null
+      default: null,
     },
     appendIcon: {
       type: String,
       required: false,
-      default: null
+      default: null,
     },
     dense: {
       type: Boolean,

@@ -2,31 +2,59 @@
   <v-container class="ma-0 pa-2" fluid>
     <v-row justify="start" align="center">
       <v-col cols="12" md="9">
-        <div v-if="storeElement.loading || store.state.loading || loading" class="text-center">
-          <v-progress-circular indeterminate color="primary"></v-progress-circular>
+        <div
+          v-if="storeElement.loading || store.state.loading || loading"
+          class="text-center"
+        >
+          <v-progress-circular
+            indeterminate
+            color="primary"
+          ></v-progress-circular>
         </div>
         <MTimelineSlider
-v-else :is-paused="isPaused" :is-loading="isLoading" :limit-buttons="limitButtons"
-          :slider-steps="tickLabels.length" :slider-tick-labels="tickLabels" :slider-actual-time="index"
-          :slider-color="'secondary'" @change="changeSliderValue" @nextValue="changeSliderValue('next')"
-          @prevValue="changeSliderValue('prev')" @goToFirstItem="$emit('goToFirstItem')"
-          @goToLastItem="$emit('goToLastItem')" />
+          v-else
+          :is-paused="isPaused"
+          :is-loading="isLoading"
+          :limit-buttons="limitButtons"
+          :slider-steps="tickLabels.length"
+          :slider-tick-labels="tickLabels"
+          :slider-actual-time="index"
+          :slider-color="'secondary'"
+          @change="changeSliderValue"
+          @nextValue="changeSliderValue('next')"
+          @prevValue="changeSliderValue('prev')"
+          @goToFirstItem="$emit('goToFirstItem')"
+          @goToLastItem="$emit('goToLastItem')"
+        />
         <span
-v-if="
-          !storeElement.loading &&
-          !store.state.loading &&
-          storeElement.items.length == 0
-        " class="text-center">No data available</span>
+          v-if="
+            !storeElement.loading &&
+            !store.state.loading &&
+            storeElement.items.length == 0
+          "
+          class="text-center"
+          >No data available</span
+        >
       </v-col>
       <v-col cols="12" md="3">
         <MTimelineControls
-:is-paused="isPaused" :is-loading="isLoading" :speed-selected="speedSelected"
-          :slider-actual-time="index" :slider-steps="tickLabels.length"
-          :instant-selector-button-label="instantSelectorButtonLabel" :label="'Speed'"
-          :has-instant-selector-function="instantSelectorFunction != null" :i18n="i18n"
-          :available-speeds="availableSpeeds" :disable-play-button="disablePlayButton"
-          :disable-stop-button="disableStopButton" @changeSpeed="updateSpeedSelected" @play="playTimeline"
-          @stop="stopTimeline" @now="setValueToNow" />
+          :is-paused="isPaused"
+          :is-loading="isLoading"
+          :speed-selected="speedSelected"
+          :slider-actual-time="index"
+          :slider-steps="tickLabels.length"
+          :instant-selector-button-label="instantSelectorButtonLabel"
+          :label="'Speed'"
+          :has-instant-selector-function="instantSelectorFunction != null"
+          :i18n="i18n"
+          :available-speeds="availableSpeeds"
+          :disable-play-button="disablePlayButton"
+          :disable-stop-button="disableStopButton"
+          @changeSpeed="updateSpeedSelected"
+          @play="playTimeline"
+          @stop="stopTimeline"
+          @now="setValueToNow"
+        />
       </v-col>
     </v-row>
   </v-container>
@@ -67,7 +95,7 @@ export default {
     instantSelectorButtonLabel: {
       type: String,
       required: false,
-      default: null
+      default: null,
     },
     availableSpeeds: {
       type: Array,
@@ -93,7 +121,7 @@ export default {
       type: Boolean,
       required: false,
       default: false,
-    }
+    },
   },
   data() {
     return {
@@ -257,11 +285,11 @@ export default {
       if (this.isPaused) {
         const idx = Array.isArray(newVal)
           ? this.storeElement.items.findIndex((item) => {
-            for (var i = 0; i < item.value.length; ++i) {
-              if (item.value[i] !== newVal[i]) return false;
-            }
-            return true;
-          })
+              for (var i = 0; i < item.value.length; ++i) {
+                if (item.value[i] !== newVal[i]) return false;
+              }
+              return true;
+            })
           : this.storeElement.items.findIndex((it) => it.value == newVal);
         this.index = idx == -1 ? null : idx;
       }

@@ -2,60 +2,85 @@ import { createStore } from "../index";
 
 const jsonSpecAggregation = [
   {
-    "id": "SPATIAL_AGGREGATION",
-    "label": "Spatial Aggregation",
-    "setItemsOnMounted": true,
-    "setDefaultFirstItem": true,
-    "default": 2,
+    id: "SPATIAL_AGGREGATION",
+    label: "Spatial Aggregation",
+    setItemsOnMounted: true,
+    setDefaultFirstItem: true,
+    default: 2,
   },
-]
+];
 
 const jsonSpecAggregationFilter = [
   {
-    "id": "SPATIAL_AGGREGATION",
-    "label": "Spatial Aggregation",
-    "setItemsOnMounted": true,
-    "actions": ["SPATIAL_FILTER"]
+    id: "SPATIAL_AGGREGATION",
+    label: "Spatial Aggregation",
+    setItemsOnMounted: true,
+    actions: ["SPATIAL_FILTER"],
   },
   {
-    "id": "SPATIAL_FILTER",
-    "label": "Spatial Filter",
-    "setDefaultFirstItem": true,
-    "actions": []
+    id: "SPATIAL_FILTER",
+    label: "Spatial Filter",
+    setDefaultFirstItem: true,
+    actions: [],
   },
-]
+];
 
-const simpleJsonSpec = [{
-  "id": "SPATIAL_AGGREGATION",
-  "label": "Spatial Aggregation",
-  "setDefaultFirstItem": true,
-}]
+const simpleJsonSpec = [
+  {
+    id: "SPATIAL_AGGREGATION",
+    label: "Spatial Aggregation",
+    setDefaultFirstItem: true,
+  },
+];
 
-const getSpecDefaultItem = (id, label, setDefaultFirstItem, setItemsOnMounted, setDefaultItem, defaultV, actions, type) => {
-  return [{
-    "id": id,
-    "label": label,
-    "setItemsOnMounted": setItemsOnMounted,
-    "setDefaultItem": setDefaultItem,
-    "setDefaultFirstItem": setDefaultFirstItem,
-    "actions": actions,
-    "default": defaultV,
-    "type": type,
-  }];
-}
+const getSpecDefaultItem = (
+  id,
+  label,
+  setDefaultFirstItem,
+  setItemsOnMounted,
+  setDefaultItem,
+  defaultV,
+  actions,
+  type
+) => {
+  return [
+    {
+      id: id,
+      label: label,
+      setItemsOnMounted: setItemsOnMounted,
+      setDefaultItem: setDefaultItem,
+      setDefaultFirstItem: setDefaultFirstItem,
+      actions: actions,
+      default: defaultV,
+      type: type,
+    },
+  ];
+};
 
-const spatialItems = [{ label: "AUTONOMOUS_COMMUNITY", value: 1 }, { label: "PROVINCE", value: 2 }, { label: "MOCK", value: 3 }];
+const spatialItems = [
+  { label: "AUTONOMOUS_COMMUNITY", value: 1 },
+  { label: "PROVINCE", value: 2 },
+  { label: "MOCK", value: 3 },
+];
 
 const getValues = (id, params, store) => {
   return new Promise((resolve) => {
     resolve(spatialItems);
   });
-}
+};
 
 describe("storeState", () => {
   describe("store population", () => {
     it("should set items and value on mounted", async () => {
-      const spec = getSpecDefaultItem("SPATIAL_AGGREGATION", "Spatial Aggregation", true, true, null, 2, []);
+      const spec = getSpecDefaultItem(
+        "SPATIAL_AGGREGATION",
+        "Spatial Aggregation",
+        true,
+        true,
+        null,
+        2,
+        []
+      );
       const store = await createStore(spec, getValues, null, () => { });
       const aggregation = store.getSelector("SPATIAL_AGGREGATION");
       expect(aggregation.items).toStrictEqual(spatialItems);
@@ -63,7 +88,15 @@ describe("storeState", () => {
     });
 
     it("should set value to default", async () => {
-      const spec = getSpecDefaultItem("SPATIAL_AGGREGATION", "Spatial Aggregation", false, true, null, 2, []);
+      const spec = getSpecDefaultItem(
+        "SPATIAL_AGGREGATION",
+        "Spatial Aggregation",
+        false,
+        true,
+        null,
+        2,
+        []
+      );
       const store = await createStore(spec, getValues, null, () => { });
       const aggregation = store.getSelector("SPATIAL_AGGREGATION");
       expect(aggregation.value).toBe(spatialItems[1].value);
@@ -71,7 +104,12 @@ describe("storeState", () => {
   });
   describe("setState", () => {
     it("should set the state to the one passed on store creation", async () => {
-      const store = await createStore(jsonSpecAggregationFilter, getValues, { "SPATIAL_AGGREGATION": 3, "SPATIAL_FILTER": 1 }, () => { });
+      const store = await createStore(
+        jsonSpecAggregationFilter,
+        getValues,
+        { SPATIAL_AGGREGATION: 3, SPATIAL_FILTER: 1 },
+        () => { }
+      );
       const aggregation = store.getSelector("SPATIAL_AGGREGATION");
       const filter = store.getSelector("SPATIAL_FILTER");
       expect(aggregation.value).toBe(spatialItems[2].value);
@@ -79,41 +117,64 @@ describe("storeState", () => {
     });
 
     it("should set the state to default if setState value is null", async () => {
-      const store = await createStore(jsonSpecAggregation, getValues, { "SPATIAL_AGGREGATION": null }, () => { });
+      const store = await createStore(
+        jsonSpecAggregation,
+        getValues,
+        { SPATIAL_AGGREGATION: null },
+        () => { }
+      );
       const aggregation = store.getSelector("SPATIAL_AGGREGATION");
       expect(aggregation.value).toBe(spatialItems[1].value);
     });
 
     it("should set the state to null if setState value is not found in items", async () => {
-      const store = await createStore(jsonSpecAggregation, getValues, { "SPATIAL_AGGREGATION": 6 }, () => { });
+      const store = await createStore(
+        jsonSpecAggregation,
+        getValues,
+        { SPATIAL_AGGREGATION: 6 },
+        () => { }
+      );
       const aggregation = store.getSelector("SPATIAL_AGGREGATION");
       expect(aggregation.value).toBeNull();
     });
 
     it("should set value to null on setState if the selector has no items", async () => {
-      const store = await createStore(jsonSpecAggregation, () => new Promise(resolve => resolve([])), { "SPATIAL_AGGREGATION": 3 }, () => { });
+      const store = await createStore(
+        jsonSpecAggregation,
+        () => new Promise((resolve) => resolve([])),
+        { SPATIAL_AGGREGATION: 3 },
+        () => { }
+      );
       const aggregation = store.getSelector("SPATIAL_AGGREGATION");
       expect(aggregation.value).toBeNull();
     });
 
     it("should set state using an URL", async () => {
-      const store = await createStore(jsonSpecAggregation, getValues, "MD0x", () => { });
+      const store = await createStore(
+        jsonSpecAggregation,
+        getValues,
+        "MD0x",
+        () => { }
+      );
       const aggregation = store.getSelector("SPATIAL_AGGREGATION");
       expect(aggregation.value).toBe(spatialItems[0].value);
     });
-
 
     it("should not set state using empty string URL", async () => {
       const store = await createStore(simpleJsonSpec, getValues, "", () => { });
       const aggregation = store.getSelector("SPATIAL_AGGREGATION");
       expect(aggregation.value).toBeNull();
     });
-
-  })
+  });
 
   describe("setItems", () => {
     it("should not set items until setItems is called", async () => {
-      const store = await createStore(simpleJsonSpec, getValues, null, () => { });
+      const store = await createStore(
+        simpleJsonSpec,
+        getValues,
+        null,
+        () => { }
+      );
       const aggregation = store.getSelector("SPATIAL_AGGREGATION");
 
       expect(aggregation.items.length).toEqual(0);
@@ -126,7 +187,15 @@ describe("storeState", () => {
     });
 
     it("should set items and default value based on the spec when calling setItems", async () => {
-      const spec = getSpecDefaultItem("SPATIAL_AGGREGATION", "Spatial Aggregation", false, false, null, 2, []);
+      const spec = getSpecDefaultItem(
+        "SPATIAL_AGGREGATION",
+        "Spatial Aggregation",
+        false,
+        false,
+        null,
+        2,
+        []
+      );
       const store = await createStore(spec, getValues, null, () => { });
       const aggregation = store.getSelector("SPATIAL_AGGREGATION");
 
@@ -136,7 +205,15 @@ describe("storeState", () => {
     });
 
     it("should set items and value based on the spec when calling setItems", async () => {
-      const spec = getSpecDefaultItem("SPATIAL_AGGREGATION", "Spatial Aggregation", true, false, null, null, []);
+      const spec = getSpecDefaultItem(
+        "SPATIAL_AGGREGATION",
+        "Spatial Aggregation",
+        true,
+        false,
+        null,
+        null,
+        []
+      );
       const store = await createStore(spec, getValues, null, () => { });
       const aggregation = store.getSelector("SPATIAL_AGGREGATION");
 
@@ -146,10 +223,14 @@ describe("storeState", () => {
     });
   });
 
-
   describe("setSelector", () => {
     it("should set the value of the selector and set its items", async () => {
-      const store = await createStore(simpleJsonSpec, getValues, null, () => { });
+      const store = await createStore(
+        simpleJsonSpec,
+        getValues,
+        null,
+        () => { }
+      );
       await store.setSelector("SPATIAL_AGGREGATION", 1);
       const aggregation = store.getSelector("SPATIAL_AGGREGATION");
       expect(aggregation.items.sort()).toEqual(spatialItems.sort());
@@ -157,8 +238,15 @@ describe("storeState", () => {
     });
 
     it("should set value from the actual selector items", async () => {
-      const mockGetValues = jest.fn(() => { return Promise.resolve(spatialItems) });
-      const store = await createStore(jsonSpecAggregation, mockGetValues, null, () => { });
+      const mockGetValues = jest.fn(() => {
+        return Promise.resolve(spatialItems);
+      });
+      const store = await createStore(
+        jsonSpecAggregation,
+        mockGetValues,
+        null,
+        () => { }
+      );
       const aggregation = store.getSelector("SPATIAL_AGGREGATION");
       await store.setSelector("SPATIAL_AGGREGATION", 3);
 
@@ -169,8 +257,15 @@ describe("storeState", () => {
     });
 
     it("should getValues on setSelector if is deep even if selector already has items", async () => {
-      const mockGetValues = jest.fn(() => { return Promise.resolve(spatialItems) });
-      const store = await createStore(jsonSpecAggregation, mockGetValues, null, () => { });
+      const mockGetValues = jest.fn(() => {
+        return Promise.resolve(spatialItems);
+      });
+      const store = await createStore(
+        jsonSpecAggregation,
+        mockGetValues,
+        null,
+        () => { }
+      );
       const aggregation = store.getSelector("SPATIAL_AGGREGATION");
 
       expect(aggregation.items.sort()).toEqual(spatialItems.sort());
@@ -183,32 +278,54 @@ describe("storeState", () => {
 
   describe("change", () => {
     it("should change store's value to the selected one", async () => {
-      const spec = getSpecDefaultItem("SPATIAL_AGGREGATION", "Spatial Aggregation", false, true, null, 2, []);
+      const spec = getSpecDefaultItem(
+        "SPATIAL_AGGREGATION",
+        "Spatial Aggregation",
+        false,
+        true,
+        null,
+        2,
+        []
+      );
       const store = await createStore(spec, getValues, null, () => { });
       const aggregation = store.getSelector("SPATIAL_AGGREGATION");
 
       store.change("SPATIAL_AGGREGATION", 1);
       expect(aggregation.value).toBe(spatialItems[0].value);
-    })
+    });
 
     it("should set value to null when the selector is of type date and it has not items", async () => {
       const getValuesEmpty = () => Promise.resolve([]);
-      const spec = getSpecDefaultItem("SPATIAL_AGGREGATION", "Spatial Aggregation", true, true, null, null, [], 'date');
+      const spec = getSpecDefaultItem(
+        "SPATIAL_AGGREGATION",
+        "Spatial Aggregation",
+        true,
+        true,
+        null,
+        null,
+        [],
+        "date"
+      );
       const store = await createStore(spec, getValuesEmpty, null, () => { });
       const aggregation = store.getSelector("SPATIAL_AGGREGATION");
 
       expect(aggregation.value).toBe(null);
-    })
+    });
 
     it("should update childs items", async () => {
       const mockGetValues = jest.fn(() => {
         return new Promise((resolve) => {
           setTimeout(() => {
-            resolve(spatialItems)
+            resolve(spatialItems);
           }, 1500);
-        })
+        });
       });
-      const store = await createStore(jsonSpecAggregationFilter, mockGetValues, null, () => { });
+      const store = await createStore(
+        jsonSpecAggregationFilter,
+        mockGetValues,
+        null,
+        () => { }
+      );
       const filter = store.getSelector("SPATIAL_FILTER");
       expect(filter.items.length).toBe(0);
 
@@ -217,12 +334,20 @@ describe("storeState", () => {
       expect(mockGetValues).toHaveBeenCalledTimes(2);
       expect(filter.items.sort()).toEqual(spatialItems.sort());
       expect(filter.value).toBe(spatialItems[0].value);
-    })
+    });
   });
 
   describe("setDefaultItem", () => {
     it("should set value to first item", async () => {
-      const spec = getSpecDefaultItem("SPATIAL_AGGREGATION", "Spatial Aggregation", false, true, "first", null, []);
+      const spec = getSpecDefaultItem(
+        "SPATIAL_AGGREGATION",
+        "Spatial Aggregation",
+        false,
+        true,
+        "first",
+        null,
+        []
+      );
       const store = await createStore(spec, getValues, null, () => { });
       const filter = store.getSelector("SPATIAL_AGGREGATION");
 
@@ -230,7 +355,15 @@ describe("storeState", () => {
     });
 
     it("should set value to last item", async () => {
-      const spec = getSpecDefaultItem("SPATIAL_AGGREGATION", "Spatial Aggregation", false, true, "last", null, []);
+      const spec = getSpecDefaultItem(
+        "SPATIAL_AGGREGATION",
+        "Spatial Aggregation",
+        false,
+        true,
+        "last",
+        null,
+        []
+      );
       const store = await createStore(spec, getValues, null, () => { });
       const filter = store.getSelector("SPATIAL_AGGREGATION");
 
@@ -238,7 +371,15 @@ describe("storeState", () => {
     });
 
     it("should set value to item at index of value setDefaultItem", async () => {
-      const spec = getSpecDefaultItem("SPATIAL_AGGREGATION", "Spatial Aggregation", false, true, 1, null, []);
+      const spec = getSpecDefaultItem(
+        "SPATIAL_AGGREGATION",
+        "Spatial Aggregation",
+        false,
+        true,
+        1,
+        null,
+        []
+      );
       const store = await createStore(spec, getValues, null, () => { });
       const filter = store.getSelector("SPATIAL_AGGREGATION");
 
@@ -246,9 +387,20 @@ describe("storeState", () => {
     });
 
     it("should reject change when setDefaultItem has value 'all' but selector is not multiple", async () => {
-      const spec = getSpecDefaultItem("SPATIAL_AGGREGATION", "Spatial Aggregation", false, true, "all", null, []);
-      return expect(createStore(spec, getValues, null, () => { })).
-        rejects.toEqual("Cannot set value of type array on a selector that is not multiple");
+      const spec = getSpecDefaultItem(
+        "SPATIAL_AGGREGATION",
+        "Spatial Aggregation",
+        false,
+        true,
+        "all",
+        null,
+        []
+      );
+      return expect(
+        createStore(spec, getValues, null, () => { })
+      ).rejects.toEqual(
+        "Cannot set value of type array on a selector that is not multiple"
+      );
     });
-  })
-})
+  });
+});

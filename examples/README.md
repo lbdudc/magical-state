@@ -6,5 +6,5 @@
 - npm install
 
 ### Run Examples
-  
-  -npm run serve
+
+-npm run serve

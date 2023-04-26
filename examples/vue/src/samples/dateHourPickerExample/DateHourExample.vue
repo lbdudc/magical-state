@@ -1,11 +1,20 @@
 <template>
   <v-container v-if="store">
     <MTextField
-id="DATE_FILTER" type="date" :store="store" :override-store-change="true" :i18n="$t"
-      @change="change" />
+      id="DATE_FILTER"
+      type="date"
+      :store="store"
+      :override-store-change="true"
+      :i18n="$t"
+      @change="change"
+    />
     <MHourPicker
-id="HOUR_PICKER" :store="store" :disabled="!disableSelector" :rules="[(v) => !!v || 'error.empty']"
-      :i18n="$t" />
+      id="HOUR_PICKER"
+      :store="store"
+      :disabled="!disableSelector"
+      :rules="[(v) => !!v || 'error.empty']"
+      :i18n="$t"
+    />
     <v-divider></v-divider>
     {{ storeStatus }}
   </v-container>
@@ -15,7 +24,7 @@ import jsonSpec from "./specification.json";
 import { createStore } from "../../../../../index";
 import { MHourPicker, MTextField } from "../../../../../vue2-components";
 import getValues from "./getters";
-import defaultValuesGetter from "./defaultValuesGetter"
+import defaultValuesGetter from "./defaultValuesGetter";
 
 export default {
   name: "DateHourExample",

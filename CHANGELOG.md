@@ -3,6 +3,7 @@
 <!--- next entry here -->
 
 ## 0.28.0
+
 2023-03-14
 
 ### Features
@@ -10,6 +11,7 @@
 - Added defaultValuesGetter option to store (64131af40bb145634c4c7b08db4089952d90181f)
 
 ## 0.27.2
+
 2023-02-28
 
 ### Fixes
@@ -18,6 +20,7 @@
 - Added disabled prop to slider component and fixed bug with isDisabled computed (8bf026cd00574d7b75c503563137ca90e37d4813)
 
 ## 0.27.1
+
 2022-11-11
 
 ### Fixes
@@ -26,6 +29,7 @@
 - Added limit buttons prop (02f4aab382ecdd352e141c8d3e57e964dd2d2d97)
 
 ## 0.27.0
+
 2022-11-10
 
 ### Features
@@ -33,6 +37,7 @@
 - Added hideDetails prop on vue2-components (23d50b3120b836d478d8b2b8d0f14bf5fc9a1870)
 
 ## 0.26.2
+
 2022-11-10
 
 ### Fixes
@@ -40,6 +45,7 @@
 - Fixed not setting previous selected value when rule applies again on another depending selector (e6608daff6ed939977d8358ae2d15ce262369fd0)
 
 ## 0.26.1
+
 2022-11-09
 
 ### Fixes
@@ -47,6 +53,7 @@
 - Fixed bug with mAucomplete templates (46aee821b200ebca6d674076d1a1d5c3d8996c72)
 
 ## 0.26.0
+
 2022-11-08
 
 ### Features
@@ -54,6 +61,7 @@
 - Added support for modifying the selection slot in mAutoComplete (8ad726557ebe73b1a1906c6f61e6ef93be27cb82)
 
 ## 0.25.1
+
 2022-10-26
 
 ### Fixes
@@ -62,6 +70,7 @@
 - Fixed bug with labels (220cc892309f6cf0e4ba67d613e55fd045693374)
 
 ## 0.25.0
+
 2022-10-24
 
 ### Features
@@ -69,6 +78,7 @@
 - Changes on rules so that they are completely managed from the store (5655adaec2f4b8f46be9486dccdbeb44dde3bf59)
 
 ## 0.24.1
+
 2022-10-19
 
 ### Fixes
@@ -76,6 +86,7 @@
 - Fixed dates validation (2d99f6bf9c1b423065c97898229f6537274d15cd)
 
 ## 0.24.0
+
 2022-09-22
 
 ### Features
@@ -83,6 +94,7 @@
 - Added type prop (77e776f39813a4f94f9e67cde01147da50be0439)
 
 ## 0.23.0
+
 2022-09-08
 
 ### Features
@@ -90,6 +102,7 @@
 - added prop to close date picker component after a selection is made (df3ca24711e9c2474bab04a050950d045d6a5332)
 
 ## 0.22.0
+
 2022-09-02
 
 ### Features
@@ -97,6 +110,7 @@
 - preventing callback from triggering where there are erros on the selectors (0fe3620cc6b1867e33bc409214dce72aca339914)
 
 ## 0.21.0
+
 2022-08-31
 
 ### Features
@@ -104,6 +118,7 @@
 - implemented internacionalization (7582570c946dc845fd11cca8e203fb61f14b504f)
 
 ## 0.20.0
+
 2022-08-31
 
 ### Features
@@ -116,6 +131,7 @@
 - error on const assigntment (df56de6138a5f909ce20d7b4312277370bed11c6)
 
 ## 0.19.0
+
 2022-08-30
 
 ### Features
@@ -123,6 +139,7 @@
 - Added check to prevent setting default boolean values to strings (815d18c0712cb864312fe5bcb4c3918a20787f83)
 
 ## 0.18.0
+
 2022-08-24
 
 ### Features
@@ -130,6 +147,7 @@
 - Retrieving the deselected elements to their original positions when the selectors are multiple and expected to push selected items up (80318530ce68b99d2790e07ef70224c40200625e)
 
 ## 0.17.0
+
 2022-07-14
 
 ### Features
@@ -137,6 +155,7 @@
 - showing first the selected elements on selectors that accept multiple values (0fe8a514de8bd9ce9ec773a24242da083832f67a)
 
 ## 0.16.0
+
 2022-07-11
 
 ### Features
@@ -149,6 +168,7 @@
 - added execution of change method when the child element is setting its newValue to null and has actions (08b4bd137dbd6be2f85c7d86d0862d66b16c9ee9)
 
 ## 0.15.0
+
 2022-06-29
 
 ### Features
@@ -162,6 +182,7 @@
 - setting selectos value to null when it has no items (3429043030af45925ec06aad9a98ee152dac17f6)
 
 ## 0.14.0
+
 2022-06-28
 
 ### Features
@@ -178,6 +199,7 @@
 - fixed conditions to trigger the callback (d690f4a9a63cd0d2fa15c912536dff06edfd5490)
 
 ## 0.13.1
+
 2022-06-15
 
 ### Fixes
@@ -185,6 +207,7 @@
 - setting instantSelectorButtonLabel required to false (d5543020ac2799cf990837fba382485326452917)
 
 ## 0.13.0
+
 2022-06-15
 
 ### Breaking changes
@@ -203,6 +226,7 @@ the method parseUrl is now independent from the store class
 - fixed setState's and setSelector's conditionals used to check if the new value is part of the selector items (178a661849ba4d58c260831d4bf2d91df2cae8fb)
 
 ## 0.12.0
+
 2022-06-08
 
 ### Features
@@ -210,6 +234,7 @@ the method parseUrl is now independent from the store class
 - Added testing for store dispatched events (785f6e24cf807d8514f900e03e8aaec2f6068787)
 
 ## 0.11.0
+
 2022-06-08
 
 ### Features
@@ -217,6 +242,7 @@ the method parseUrl is now independent from the store class
 - Added new async constructor "createStore" (f81ba5318c7ed3152153cfe8d8c9016ff0e200c1)
 
 ## 0.10.0
+
 2022-06-03
 
 ### Features
@@ -229,6 +255,7 @@ the method parseUrl is now independent from the store class
 - Added @change event to the components (a2f1cf6472415522f7c419628cbaf61e0518ea04)
 
 ## 0.9.0
+
 2022-05-27
 
 ### Features
@@ -241,6 +268,7 @@ the method parseUrl is now independent from the store class
 - Fixed store setSelector method (242e321309b1f10f387edebdfdfd110220252570)
 
 ## 0.8.0
+
 2022-05-24
 
 ### Features
@@ -250,6 +278,7 @@ the method parseUrl is now independent from the store class
 - Added disabled property to mSelector and mAutocomplete (f893d5830e5285c28a70e3460d10ec690a0c6d4e)
 
 ## 0.7.0
+
 2022-05-24
 
 ### Features
@@ -267,6 +296,7 @@ the method parseUrl is now independent from the store class
 - Updated parse/encodeURL methods, now returning proper object / fixed import object when creating the store (7c769369388d4326165a361e9a4c93d3952338c4)
 
 ## 0.6.0
+
 2022-05-13
 
 ### Breaking changes
@@ -281,6 +311,7 @@ changed the way import the vue components
 - Added import/export URL methods encoded/decoded in base64 (5efcb8e47706aed64956ca5067fd2a7ed654f388)
 
 ## 0.5.1
+
 2022-05-09
 
 ### Fixes
@@ -288,6 +319,7 @@ changed the way import the vue components
 - Added onchange event only when all the children are finished (f89ee02792b5841390eb6a737e3dbdfe925db3d4)
 
 ## 0.5.0
+
 2022-04-29
 
 ### Features
@@ -295,6 +327,7 @@ changed the way import the vue components
 - Added more visual customization on mSelect and mAutocomplete components (16c0df249890889132640691f6e9aea6293a686d)
 
 ## 0.4.1
+
 2022-04-28
 
 ### Fixes
@@ -302,6 +335,7 @@ changed the way import the vue components
 - Await for items on parent selector to check if we can vhange the value (1e01adf1186729f76c7931259e32dae845be3f9d)
 
 ## 0.4.0
+
 2022-04-28
 
 ### Features
@@ -314,6 +348,7 @@ changed the way import the vue components
 - Check if its a date in setState method (e3e87fd098de93906f112b37c200a08be054e67a)
 
 ## 0.3.0
+
 2022-04-28
 
 ### Features
@@ -321,6 +356,7 @@ changed the way import the vue components
 - Created getSelector function to retrieve obsrvable with a given id (0f691ee3fe087a452e7fac7b537d8725607ac94d)
 
 ## 0.2.1
+
 2022-04-28
 
 ### Fixes
@@ -328,6 +364,7 @@ changed the way import the vue components
 - Error on index import of mAutocomplete component (32a6bb77c5bb92a22cdb9f3a4241f82f22a5efcd)
 
 ## 0.2.0
+
 2022-04-28
 
 ### Features
@@ -335,6 +372,7 @@ changed the way import the vue components
 - Added new component: mAutocomplete (820c3f603c96659dca4973b45aa29bb2c1843438)
 
 ## 0.1.0
+
 2022-04-21
 
 ### Features
@@ -346,6 +384,7 @@ changed the way import the vue components
 - Updated README with group property deleted and change event added (f8a7c1eb4195a8e2e7482553841fbcb8b2a671c7)
 
 ## 0.1.0
+
 2022-04-21
 
 ### Features
