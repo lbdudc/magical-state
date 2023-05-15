@@ -70,6 +70,7 @@ export default {
       required: false,
     },
   },
+  emits: ["onInputError", "change"],
   data() {
     return {
       itemValue: null,

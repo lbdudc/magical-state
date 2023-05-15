@@ -1,5 +1,4 @@
 import utils from "./utils";
-import { observable } from "@nx-js/observer-util";
 
 export default class Store {
   constructor(jsonSpec, getValues, defaultValuesGetter, callback) {
@@ -329,7 +328,7 @@ export default class Store {
         const obsItem = utils.findElementInObservable(el, this._observable);
 
         act.push(
-          new Promise(async (resolve, reject) => {
+          new Promise(async (resolve) => {
             // Set the loading state of the child to true
             // Await for the implementation to get the items
             obsItem.loading = true;
@@ -342,7 +341,6 @@ export default class Store {
               ),
               utils.getStoreKeyValues(this._observable)
             );
-            const prevVal = obsItem.value;
             obsItem.items = res;
             const newVal = await this._defaultValuesGetter(
               obsItem.id,
@@ -377,7 +375,7 @@ export default class Store {
 
       // Await for all the promises in the children to be resolved
       Promise.all(act)
-        .then((res) => {
+        .then(() => {
           // Emitting event selector changed
           utils.dispatchCustomEvent("change", {
             id: el.id,
@@ -429,9 +427,8 @@ export default class Store {
    * Sets the items of the specified store element to the parameter 'values'
    * @param {String} id
    * @param {Array} values new values to set
-   * @param {Boolean} useSpecConfig flag that indicates if the store should check the spec to set a value or not
    */
-  async setItems(id, values, useSpecConfig) {
+  async setItems(id, values) {
     const el = utils.findElementInObservable(id, this._observable);
     el.items = values;
     const newVal = await this._defaultValuesGetter(

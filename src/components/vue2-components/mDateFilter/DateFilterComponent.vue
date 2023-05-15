@@ -93,7 +93,7 @@ export default {
       default: false,
     },
     firstDayOfWeek: {
-      type: String | Number,
+      type: [String, Number],
       required: false,
       default: 0,
     },
@@ -108,7 +108,7 @@ export default {
       default: null,
     },
     hideDetails: {
-      type: Boolean | String,
+      type: [Boolean, String],
       required: false,
       default: false,
     },
@@ -148,6 +148,7 @@ export default {
       default: "date",
     },
   },
+  emits: ["onInputError", "change"],
   data() {
     return {
       menu: false,

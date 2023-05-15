@@ -21,10 +21,10 @@
           :slider-actual-time="index"
           :slider-color="'secondary'"
           @change="changeSliderValue"
-          @nextValue="changeSliderValue('next')"
-          @prevValue="changeSliderValue('prev')"
-          @goToFirstItem="$emit('goToFirstItem')"
-          @goToLastItem="$emit('goToLastItem')"
+          @next-value="changeSliderValue('next')"
+          @prev-value="changeSliderValue('prev')"
+          @go-to-first-item="$emit('goToFirstItem')"
+          @go-to-last-item="$emit('goToLastItem')"
         />
         <span
           v-if="
@@ -50,7 +50,7 @@
           :available-speeds="availableSpeeds"
           :disable-play-button="disablePlayButton"
           :disable-stop-button="disableStopButton"
-          @changeSpeed="updateSpeedSelected"
+          @change-speed="updateSpeedSelected"
           @play="playTimeline"
           @stop="stopTimeline"
           @now="setValueToNow"
@@ -123,6 +123,18 @@ export default {
       default: false,
     },
   },
+  emits: [
+    "goToFirstItem",
+    "goToLastItem",
+    "reproductionStarted",
+    "reproductionStopped",
+    "lastItemReached",
+    "timelineAdvanced",
+    "firstItemReached",
+    "prev",
+    "next",
+    "change",
+  ],
   data() {
     return {
       // Controls

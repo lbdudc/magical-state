@@ -120,7 +120,7 @@ export default {
       default: null,
     },
     hideDetails: {
-      type: Boolean | String,
+      type: [Boolean, String],
       required: false,
       default: false,
     },
@@ -195,6 +195,7 @@ export default {
       default: false,
     },
   },
+  emits: ["onInputError", "change"],
   data() {
     return {
       errorMessage: null,

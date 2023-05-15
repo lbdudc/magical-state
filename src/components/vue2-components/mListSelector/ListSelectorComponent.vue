@@ -8,7 +8,7 @@
         :mandatory="mandatory"
         @change="selectedValChanged"
       >
-        <v-list-item v-for="(item, index) in storeElement.items" :key="index">
+        <v-list-item v-for="(item, idx) in storeElement.items" :key="idx">
           <v-list-item-title>{{ item.label }}</v-list-item-title>
         </v-list-item>
       </v-list-item-group>
@@ -56,6 +56,7 @@ export default {
       required: false,
     },
   },
+  emits: ["change"],
   data() {
     return {
       index: null,

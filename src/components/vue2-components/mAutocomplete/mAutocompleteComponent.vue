@@ -32,7 +32,7 @@
           :error-messages="i18Label(errorMessage)"
           :hide-details="hideDetails"
         >
-          <template v-for="(_, key) in $slots" #[`${key}`]="{ item, index }">
+          <template v-for="(_, key) in $slots">
             <slot :item="item" :index="index" :name="key"> </slot>
           </template>
         </v-autocomplete>
@@ -124,7 +124,7 @@ export default {
       default: null,
     },
     hideDetails: {
-      type: Boolean | String,
+      type: [Boolean, String],
       required: false,
       default: false,
     },
@@ -199,6 +199,7 @@ export default {
       default: false,
     },
   },
+  emits: ["onInputError", "change"],
   data() {
     return {
       errorMessage: null,

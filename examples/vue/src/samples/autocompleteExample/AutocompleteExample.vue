@@ -8,7 +8,7 @@
             id="SPATIAL_AGGREGATION"
             :store="store"
             :multiple="true"
-            :push-selected-values-up="true"
+            :push-selected-values-up="false"
             :rules="[
               (v) => v.length > 0 || 'no puede estar vacío',
               (v) => v != 1 || 'no puede tomar valor 1',

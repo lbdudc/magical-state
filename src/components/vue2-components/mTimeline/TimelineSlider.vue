@@ -129,6 +129,7 @@ export default {
       default: false,
     },
   },
+  emits: ["change", "nextValue", "prevValue", "goToLastItem", "goToFirstItem"],
   computed: {
     isDisabled() {
       return !this.isPaused || this.isLoading;
