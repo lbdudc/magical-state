@@ -151,7 +151,7 @@ const getActionsValues = (id, newState, getValues, obs, jsonSpec) => {
   if (specActions != null) {
     specActions.forEach(async (action) => {
       act.push(
-        new Promise(async (resolve, reject) => {
+        new Promise(async (resolve) => {
           // Get the element of the observable child
           // const obsItem = utils.findElementInObservable(el, this._observable);
           const res = await getValues(

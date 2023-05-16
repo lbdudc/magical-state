@@ -54,7 +54,7 @@ export default {
       required: false,
     },
     hideDetails: {
-      type: Boolean | String,
+      type: [Boolean, String],
       required: false,
       default: false,
     },
@@ -77,6 +77,7 @@ export default {
       required: false,
     },
   },
+  emits: ["onInputError", "change"],
   methods: {
     change(changedEl) {
       this.$emit("change", changedEl);

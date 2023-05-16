@@ -219,7 +219,7 @@ this.store = createStore(
 
 - `change(propId: String, newVal: Any, needsRedraw: Boolean): Promise<>`: Changes the value of the selector with the given id. _needsRedraw_ prop defaults to true and specifies if the change on the selector's value should trigger the callback, in case the selector has the _triggerCallback_ property set to true in the specification.
 - `setSelector(selectorId: String, newVal: Any, deep: Boolean, triggerCallbak: Boolean): Promise<>`: Changes the value of the selector with the given id. If _deep_ is true, or the selector doesn't have items, _setSelector_ will call _getValues_ to populate the selector's items.
-- `setItems(id: String, values: Array, useSpecConfig: Boolean): void`: Sets the items of the specified store element to the parameter _values_.
+- `setItems(id: String, values: Array): void`: Sets the items of the specified store element to the parameter _values_.
 - `setHasErrors(selectorId: String, value: Boolean, useSpecConfig: Boolean): Boolean`: Sets the property 'hasErrors' of the specified selector to the value provided. If it's set to true this will prevent the store from firing the callback when an element changes value.
 
 ##### Important when setting a new value on a selector:
