@@ -21,10 +21,10 @@
           :slider-actual-time="index"
           :slider-color="'secondary'"
           @change="changeSliderValue"
-          @next-value="changeSliderValue('next')"
-          @prev-value="changeSliderValue('prev')"
-          @go-to-first-item="$emit('goToFirstItem')"
-          @go-to-last-item="$emit('goToLastItem')"
+          @nextValue="changeSliderValue('next')"
+          @prevValue="changeSliderValue('prev')"
+          @goToFirstItem="$emit('goToFirstItem')"
+          @goToLastItem="$emit('goToLastItem')"
         />
         <span
           v-if="
