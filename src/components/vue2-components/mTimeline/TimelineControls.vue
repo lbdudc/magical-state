@@ -134,10 +134,10 @@ export default {
       default: false,
     },
   },
-  emits: ["changeSpeed", "play", "stop", "now"],
+  emits: ["change-speed", "play", "stop", "now"],
   methods: {
     newSpeedSelected(val) {
-      this.$emit("changeSpeed", val);
+      this.$emit("change-speed", val);
     },
     play() {
       this.$emit("play");
