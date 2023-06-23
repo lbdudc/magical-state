@@ -206,11 +206,13 @@ export default {
       // If value reaches end, we probably have to recover new data (API Fetch)
       while (!this.isPaused) {
         if (this.storeElement.items.length == 0) {
+          this.isPaused = true;
           return;
         }
         if (this.index == this.storeElement.items.length - 1) {
           await this.delay();
           this.$emit("lastItemReached", true);
+          this.isPaused = true;
           return;
         } else {
           //Wait for the current time interval (based on the selected speed) and the reception of the "callbackFulfilled" event
@@ -227,6 +229,7 @@ export default {
       }
       //set the element value to the one pointed by the index
       await this.callStoreChange();
+      this.isPaused = true;
       this.isLoading = false;
     },
     async changeSliderValue(val) {
