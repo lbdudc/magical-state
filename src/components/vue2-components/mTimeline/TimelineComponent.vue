@@ -3,7 +3,7 @@
     <v-row justify="start" align="center">
       <v-col cols="12" md="9">
         <MTimelineSlider
-          v-if="!storeElement.loading && !store.state.loading && !loading"
+           v-if="!storeElement.loading && !store.state.loading"
           :is-paused="isPaused"
           :is-loading="isLoading"
           :limit-buttons="limitButtons"
@@ -104,11 +104,6 @@ export default {
       default: false,
     },
     limitButtons: {
-      type: Boolean,
-      required: false,
-      default: false,
-    },
-    loading: {
       type: Boolean,
       required: false,
       default: false,
