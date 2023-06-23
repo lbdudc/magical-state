@@ -2,17 +2,8 @@
   <v-container class="ma-0 pa-2" fluid>
     <v-row justify="start" align="center">
       <v-col cols="12" md="9">
-        <div
-          v-if="storeElement.loading || store.state.loading || loading"
-          class="text-center"
-        >
-          <v-progress-circular
-            indeterminate
-            color="primary"
-          ></v-progress-circular>
-        </div>
         <MTimelineSlider
-          v-else
+          v-if="!storeElement.loading && !store.state.loading && !loading"
           :is-paused="isPaused"
           :is-loading="isLoading"
           :limit-buttons="limitButtons"
