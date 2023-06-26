@@ -33,6 +33,7 @@
       :ticks="ticks"
       :dense="dense"
       :discrete="discrete"
+      :disabled="isDisabled"
       @change="changeValue"
     ></v-slider>
     <v-btn
