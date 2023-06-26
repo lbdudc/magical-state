@@ -135,6 +135,13 @@ export default {
     },
   },
   emits: ["change-speed", "play", "stop", "now"],
+  watch: {
+    isPaused: function (newVal) {
+      if (newVal) {
+        this.$emit("stop");
+      }
+    },
+  },
   methods: {
     newSpeedSelected(val) {
       this.$emit("change-speed", val);
