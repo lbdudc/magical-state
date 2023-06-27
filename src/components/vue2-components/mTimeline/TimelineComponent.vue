@@ -196,7 +196,6 @@ export default {
           return;
         }
         if (this.index == this.storeElement.items.length - 1) {
-          //await this.delay();
           this.$emit("lastItemReached", true);
           this.isPaused = true;
           return;
