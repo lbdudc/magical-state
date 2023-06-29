@@ -108,6 +108,11 @@ export default {
       required: false,
       default: false,
     },
+    endOfDayReached: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
   },
   emits: [
     "goToFirstItem",
@@ -146,6 +151,7 @@ export default {
       this.checkIndexMatchesValue(newVal);
     },
   },
+
   mounted() {
     this.selector = this.store.getSelector(this.id);
     //This event will trigger after the store has called the callback function specified on its instantiation
@@ -190,20 +196,16 @@ export default {
     async startInterval() {
       // TODO, esta funcion tendrá que elegir un nuevo rango para mostrar
       // If value reaches end, we probably have to recover new data (API Fetch)
-      while (!this.isPaused) {
+      while (!this.isPaused && !this.endOfDayReached) {
         if (this.storeElement.items.length == 0) {
           this.isPaused = true;
           return;
         }
         if (this.index == this.storeElement.items.length - 1) {
-          await this.delay();
           this.$emit("lastItemReached", true);
-          this.isPaused = true;
-          return;
         } else {
           //Wait for the current time interval (based on the selected speed) and the reception of the "callbackFulfilled" event
           await Promise.all([
-            this.delay(),
             this.changeStoreElementValuePromise(),
           ]);
           this.fullfillPromise = null;
@@ -212,9 +214,8 @@ export default {
             this.$emit("timelineAdvanced");
           }
         }
+        await this.delay();
       }
-      //set the element value to the one pointed by the index
-      await this.callStoreChange();
       this.isPaused = true;
       this.isLoading = false;
     },
@@ -243,7 +244,6 @@ export default {
         const { id, value } = this.storeElement;
         this.$emit("change", { id, val: value });
       }
-
       this.isLoading = false;
     },
     changeStoreElementValuePromise() {
@@ -296,7 +296,7 @@ export default {
       }
     },
     delay() {
-      return new Promise((resolve) =>
+        return new Promise((resolve) =>
         setTimeout(resolve, BASE_SPEED / this.speedSelected)
       );
     },
