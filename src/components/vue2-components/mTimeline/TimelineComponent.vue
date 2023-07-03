@@ -3,7 +3,7 @@
     <v-row justify="start" align="center">
       <v-col cols="12" md="9">
         <MTimelineSlider
-           v-if="!storeElement.loading && !store.state.loading"
+          v-if="!storeElement.loading && !store.state.loading"
           :is-paused="isPaused"
           :is-loading="isLoading"
           :limit-buttons="limitButtons"
@@ -196,22 +196,18 @@ export default {
           return;
         }
         if (this.index == this.storeElement.items.length - 1) {
-          await this.delay();
           this.$emit("lastItemReached", true);
           this.isPaused = true;
           return;
         } else {
-          //Wait for the current time interval (based on the selected speed) and the reception of the "callbackFulfilled" event
-          await Promise.all([
-            this.delay(),
-            this.changeStoreElementValuePromise(),
-          ]);
+          await this.changeStoreElementValuePromise(),
           this.fullfillPromise = null;
           if (!this.isPaused) {
             ++this.index;
             this.$emit("timelineAdvanced");
           }
         }
+        await this.delay();
       }
       //set the element value to the one pointed by the index
       await this.callStoreChange();
@@ -243,7 +239,6 @@ export default {
         const { id, value } = this.storeElement;
         this.$emit("change", { id, val: value });
       }
-
       this.isLoading = false;
     },
     changeStoreElementValuePromise() {
