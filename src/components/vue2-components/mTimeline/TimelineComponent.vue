@@ -3,7 +3,7 @@
     <v-row justify="start" align="center">
       <v-col cols="12" md="9">
         <MTimelineSlider
-           v-if="!storeElement.loading && !store.state.loading"
+          v-if="!storeElement.loading && !store.state.loading"
           :is-paused="isPaused"
           :is-loading="isLoading"
           :limit-buttons="limitButtons"
@@ -108,7 +108,7 @@ export default {
       required: false,
       default: false,
     },
-    endOfDayReached: {
+    currentMomentReached: {
       type: Boolean,
       required: false,
       default: false,
@@ -196,7 +196,7 @@ export default {
     async startInterval() {
       // TODO, esta funcion tendrá que elegir un nuevo rango para mostrar
       // If value reaches end, we probably have to recover new data (API Fetch)
-      while (!this.isPaused && !this.endOfDayReached) {
+      while (!this.isPaused && !this.currentMomentReached) {
         if (this.storeElement.items.length == 0) {
           this.isPaused = true;
           return;
@@ -205,9 +205,7 @@ export default {
           this.$emit("lastItemReached", true);
         } else {
           //Wait for the current time interval (based on the selected speed) and the reception of the "callbackFulfilled" event
-          await Promise.all([
-            this.changeStoreElementValuePromise(),
-          ]);
+          await Promise.all([this.changeStoreElementValuePromise()]);
           this.fullfillPromise = null;
           if (!this.isPaused) {
             ++this.index;
@@ -280,7 +278,7 @@ export default {
     },
     checkIndexMatchesValue(newVal) {
       if (newVal == null) {
-        this.index = null;
+        this.index = 0;
         return;
       }
       if (this.isPaused) {
@@ -296,7 +294,7 @@ export default {
       }
     },
     delay() {
-        return new Promise((resolve) =>
+      return new Promise((resolve) =>
         setTimeout(resolve, BASE_SPEED / this.speedSelected)
       );
     },
