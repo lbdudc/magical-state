@@ -108,6 +108,11 @@ export default {
       required: false,
       default: false,
     },
+    currentMomentReached: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
   },
   emits: [
     "goToFirstItem",
@@ -146,6 +151,7 @@ export default {
       this.checkIndexMatchesValue(newVal);
     },
   },
+
   mounted() {
     this.selector = this.store.getSelector(this.id);
     //This event will trigger after the store has called the callback function specified on its instantiation
@@ -190,15 +196,13 @@ export default {
     async startInterval() {
       // TODO, esta funcion tendrá que elegir un nuevo rango para mostrar
       // If value reaches end, we probably have to recover new data (API Fetch)
-      while (!this.isPaused) {
+      while (!this.isPaused && !this.currentMomentReached) {
         if (this.storeElement.items.length == 0) {
           this.isPaused = true;
           return;
         }
         if (this.index == this.storeElement.items.length - 1) {
           this.$emit("lastItemReached", true);
-          this.isPaused = true;
-          return;
         } else {
           await this.changeStoreElementValuePromise(),
           this.fullfillPromise = null;
@@ -209,8 +213,6 @@ export default {
         }
         await this.delay();
       }
-      //set the element value to the one pointed by the index
-      await this.callStoreChange();
       this.isPaused = true;
       this.isLoading = false;
     },
@@ -275,7 +277,7 @@ export default {
     },
     checkIndexMatchesValue(newVal) {
       if (newVal == null) {
-        this.index = null;
+        this.index = 0;
         return;
       }
       if (this.isPaused) {
