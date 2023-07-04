@@ -204,8 +204,7 @@ export default {
         if (this.index == this.storeElement.items.length - 1) {
           this.$emit("lastItemReached", true);
         } else {
-          //Wait for the current time interval (based on the selected speed) and the reception of the "callbackFulfilled" event
-          await Promise.all([this.changeStoreElementValuePromise()]);
+          await this.changeStoreElementValuePromise(),
           this.fullfillPromise = null;
           if (!this.isPaused) {
             ++this.index;
