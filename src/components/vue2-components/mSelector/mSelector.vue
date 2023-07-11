@@ -17,7 +17,7 @@
           :flat="flat"
           :hint="hint"
           :item-color="itemColor"
-          :item-text="(el) => i18Items(el.label)"
+          :item-text="(el) => i18Items(el)"
           :items="item.items"
           :label="i18Label(item.label)"
           :loading="item.loading || store.state.loading"
@@ -261,10 +261,11 @@ export default {
       if (label) return this.i18nLabel ? this.i18nLabel(label) : label;
       return "";
     },
-    i18Items(text) {
-      if (text) return this.i18nItems ? this.i18nItems(text) : text;
-      return "";
+
+    i18Items(el) {
+      if (el.label) return this.i18nItems ? this.i18nItems(el) : el.label;
     },
+
     async change(id, val) {
       this.errorMessage = null;
       this.item.hasErrors = false;
