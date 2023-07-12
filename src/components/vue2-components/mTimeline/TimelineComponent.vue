@@ -5,7 +5,7 @@
         <MTimelineSlider
           v-if="!storeElement.loading && !store.state.loading"
           :is-paused="isPaused"
-          :is-loading="isLoading"
+          :is-loading="isLoading || isDisabled"
           :limit-buttons="limitButtons"
           :slider-steps="tickLabels.length"
           :slider-tick-labels="tickLabels"
@@ -109,6 +109,11 @@ export default {
       default: false,
     },
     currentMomentReached: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
+    isDisabled: {
       type: Boolean,
       required: false,
       default: false,
