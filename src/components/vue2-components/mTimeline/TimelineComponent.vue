@@ -147,7 +147,7 @@ export default {
     },
     tickLabels() {
       return this.storeElement.items.map((el) =>
-        this.i18n ? this.i18n(el) : el.label
+        this.i18n ? this.i18n(el.label, el.params) : el.label
       );
     },
   },
