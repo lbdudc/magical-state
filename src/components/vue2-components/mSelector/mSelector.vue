@@ -263,7 +263,7 @@ export default {
     },
 
     i18Items(el) {
-      if (el.label) return this.i18nItems ? this.i18nItems(el) : el.label;
+      if (el.label) return this.i18nItems ? this.i18nItems(el.label) : el.label;
     },
 
     async change(id, val) {
