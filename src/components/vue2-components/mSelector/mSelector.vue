@@ -262,8 +262,8 @@ export default {
       return "";
     },
 
-    i18Items(el) {
-      if (el.label) return this.i18nItems ? this.i18nItems(el.label) : el.label;
+    i18Items(el){
+      if(el.label) return this.i18nItems ? this.i18nItems(el.label, el.params) : el.label
     },
 
     async change(id, val) {
