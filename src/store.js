@@ -1,7 +1,7 @@
 import utils from "./utils";
 
 export default class Store {
-  constructor(jsonSpec, getValues, defaultValuesGetter, callback) {
+  constructor(jsonSpec, getValues, defaultValuesGetter, callback, onError) {
     this._jsonSpec = jsonSpec;
     this._store = {};
     this._observable = null;
@@ -9,6 +9,7 @@ export default class Store {
       loading: true,
     };
     this._isWaitingForCallback = false;
+    this._onError = onError;
 
     if (typeof callback !== "function")
       throw new Error("callback is not a function");
@@ -30,12 +31,12 @@ export default class Store {
         if (utils.isValidState(initialState)) {
           if (typeof initialState === "string") {
             // If the new state is a string, we have to decode it first
-            await this.setState(
+            await this._setState(
               this._decodeURL(initialState, this.jsonSpec),
               false
             );
           } else {
-            await this.setState(initialState, false);
+            await this._setState(initialState, false);
           }
           // If not, we populate the store with the default values
         } else {
@@ -43,6 +44,7 @@ export default class Store {
         }
         resolve(this);
       } catch (err) {
+        this._onError(err);
         reject(err);
       }
     });
@@ -94,7 +96,7 @@ export default class Store {
    */
   async importStoreEncodedURL(url) {
     const decodedUrl = utils.decodeURL(url, this._observable);
-    await this.setState(decodedUrl);
+    await this._setState(decodedUrl);
   }
 
   /**
@@ -125,8 +127,7 @@ export default class Store {
     try {
       return await this._getValues(id, params);
     } catch (err) {
-      console.error(`Error on getValues method: ${err}`);
-      throw err;
+      this._onError(err);
     }
   }
 
@@ -141,21 +142,26 @@ export default class Store {
       const obs = utils.findElementInObservable(id, this._observable);
       obs.loading = true;
       let newItems = [];
-
-      // If there are no items in the selector or is deep, we force getValues
-      if (deep || obs.items == null || obs.items.length == 0) {
-        newItems = await this._getValues(
-          id,
-          utils.getKeyValueRootElements(id, this._jsonSpec, this._observable)
-        );
-        //If there are new items we set them in the observable
-        if (newItems != null && newItems.length != 0) obs.items = newItems;
+      try {
+        // If there are no items in the selector or is deep, we force getValues
+        if (deep || obs.items == null || obs.items.length == 0) {
+          newItems = await this._getValues(
+            id,
+            utils.getKeyValueRootElements(id, this._jsonSpec, this._observable)
+          );
+          //If there are new items we set them in the observable
+          if (newItems != null && newItems.length != 0) obs.items = newItems;
+        }
+      } catch (err) {
+        this._onError(err);
+        reject(err);
       }
 
       try {
         obs.loading = false;
-        await this.change(obs.id, value, triggerCallback);
+        await this._change(obs.id, value, triggerCallback);
       } catch (err) {
+        this._onError(err);
         reject(err);
       }
       resolve();
@@ -186,10 +192,10 @@ export default class Store {
       });
       Promise.all(promises)
         .then((res) => {
-          this._state.loading = false;
           resolve(res);
         })
-        .catch((err) => reject(err));
+        .catch((err) => reject(err))
+        .finally(() => (this._state.loading = false));
     });
   }
 
@@ -201,24 +207,27 @@ export default class Store {
     // Get the element of the observable and sets to loading state
     const el = utils.findElementInObservable(propId, this._observable);
     el.loading = true;
-
-    // Await for the implementation to get the items
-    const res = await this._getValues(
-      el.id,
-      utils.getKeyValueRootElements(el.id, this._jsonSpec, this._observable)
-    );
-
-    // Check if the element needs to set a default value
+    let newVal;
+    let res;
     try {
-      const newVal = await this._defaultValuesGetter(
+      // Await for the implementation to get the items
+      res = await this._getValues(
+        el.id,
+        utils.getKeyValueRootElements(el.id, this._jsonSpec, this._observable)
+      );
+
+      // Check if the element needs to set a default value
+      newVal = await this._defaultValuesGetter(
         propId,
         res,
         this.objFromObservable
       );
-      await this.change(propId, newVal, false);
     } catch (err) {
+      this._onError(err);
+      el.loading = false;
       throw err;
     }
+    await this._change(propId, newVal, false);
 
     // Set the items into the selector and ends the loading state
     el.items = res;
@@ -228,62 +237,86 @@ export default class Store {
     return el;
   }
 
+  async setState(newState, executeCallback, customCallback) {
+    return this._setState(newState, executeCallback, customCallback).catch(
+      (err) => this._onError(err)
+    );
+  }
+
   /**
    * Changes the general state of all the selectors passed
    * @param {Array} newState {selectorId: newValue}
    * @param {Boolean} executeCallback
    * @param {Function} customCallback
    */
-  async setState(newState, executeCallback, customCallback) {
+  async _setState(newState, executeCallback, customCallback) {
     this._state.loading = true;
     let set = [];
     this._observable.forEach(async (el) => {
       // first check if we can change de value (appears in the items)
       const selector = utils.findElementInObservable(el.id, this._observable);
       set.push(
-        new Promise(async (resolve) => {
-          const res = await this._getValues(
-            el.id,
-            JSON.parse(JSON.stringify(newState))
-          );
-          selector.items = res;
+        new Promise(async (resolve, reject) => {
+          try {
+            const res = await this._getValues(
+              el.id,
+              JSON.parse(JSON.stringify(newState))
+            );
+            selector.items = res;
 
-          // Value is in the new State, or is default
-          const newStateObjValue = newState[el.id];
-          let newVal = newStateObjValue != null ? newStateObjValue : null;
+            // Value is in the new State, or is default
+            const newStateObjValue = newState[el.id];
+            let newVal = newStateObjValue != null ? newStateObjValue : null;
 
-          if (newVal === "true") newVal = true;
-          if (newVal === "false") newVal = false;
+            if (newVal === "true") newVal = true;
+            if (newVal === "false") newVal = false;
 
-          selector.value = newVal;
+            selector.value = newVal;
 
-          utils.dispatchCustomEvent(
-            "itemsLoaded",
-            utils.createUIObject(selector)
-          );
-          resolve();
+            utils.dispatchCustomEvent(
+              "itemsLoaded",
+              utils.createUIObject(selector)
+            );
+            resolve();
+          } catch (err) {
+            reject(err);
+          }
         })
       );
     });
 
-    return new Promise((resolve) => {
-      Promise.all(set).then(() => {
-        this._state.loading = false;
-        if (executeCallback) {
-          const fn = customCallback || this._callback;
-          const dataObj = {};
-          this._observable
-            .filter((el) => el.value != null)
-            .forEach((el) => (dataObj[el.id] = el.value));
-          fn(dataObj).then(() => {
-            utils.dispatchCustomEvent("callbackFulfilled", { id: null });
+    return new Promise((resolve, reject) => {
+      Promise.all(set)
+        .then(() => {
+          this._state.loading = false;
+          if (executeCallback) {
+            const fn = customCallback || this._callback;
+            const dataObj = {};
+            this._observable
+              .filter((el) => el.value != null)
+              .forEach((el) => (dataObj[el.id] = el.value));
+            fn(dataObj).then(() => {
+              utils.dispatchCustomEvent("callbackFulfilled", { id: null });
+              resolve();
+            });
+          } else {
             resolve();
-          });
-        } else {
-          resolve();
-        }
-      });
+          }
+        })
+        .catch((err) => {
+          this._state.loading = false;
+          this._onError(err);
+          reject(err);
+        });
     });
+  }
+
+  async change(propId, newVal, needsTriggerCallback = true, isRootEl = true) {
+    return this._change(propId, newVal, needsTriggerCallback, isRootEl).catch(
+      (err) => {
+        this._onError(err);
+      }
+    );
   }
 
   /**
@@ -294,7 +327,7 @@ export default class Store {
    * @param {Any} newVal
    * @param {Boolean} needsTriggerCallback
    */
-  async change(propId, newVal, needsTriggerCallback = true, isRootEl = true) {
+  async _change(propId, newVal, needsTriggerCallback = true, isRootEl = true) {
     this._state.loading = true;
     return new Promise((resolve, reject) => {
       // Get the element of the jsonSpec
@@ -328,47 +361,52 @@ export default class Store {
         const obsItem = utils.findElementInObservable(el, this._observable);
 
         act.push(
-          new Promise(async (resolve) => {
-            // Set the loading state of the child to true
-            // Await for the implementation to get the items
-            obsItem.loading = true;
-            const res = await this._getValues(
-              el,
-              utils.getKeyValueRootElements(
+          new Promise(async (resolve, reject) => {
+            try {
+              // Set the loading state of the child to true
+              // Await for the implementation to get the items
+              obsItem.loading = true;
+              const res = await this._getValues(
                 el,
-                this._jsonSpec,
-                this._observable
-              ),
-              utils.getStoreKeyValues(this._observable)
-            );
-            obsItem.items = res;
-            const newVal = await this._defaultValuesGetter(
-              obsItem.id,
-              obsItem.items,
-              this.objFromObservable
-            );
+                utils.getKeyValueRootElements(
+                  el,
+                  this._jsonSpec,
+                  this._observable
+                ),
+                utils.getStoreKeyValues(this._observable)
+              );
+              obsItem.items = res;
+              const newVal = await this._defaultValuesGetter(
+                obsItem.id,
+                obsItem.items,
+                this.objFromObservable
+              );
 
-            // If a child needs to trigger the callback and is setting a new value, we set the hasTriggerCallbackProp property to true for later
-            if (obsItem.triggerCallback && !!newVal) {
-              hasTriggerCallbackProp = true;
+              // If a child needs to trigger the callback and is setting a new value, we set the hasTriggerCallbackProp property to true for later
+              if (obsItem.triggerCallback && !!newVal) {
+                hasTriggerCallbackProp = true;
+              }
+
+              // set hasTriggerCallbackProp according to the promise returned when executing change() on its children
+              hasTriggerCallbackProp = (await this._change(
+                obsItem.id,
+                newVal,
+                false,
+                false
+              ))
+                ? true
+                : hasTriggerCallbackProp;
+
+              obsItem.loading = false;
+              utils.dispatchCustomEvent(
+                "itemsLoaded",
+                utils.createUIObject(obsItem)
+              );
+              resolve(res);
+            } catch (err) {
+              obsItem.loading = false;
+              reject(err);
             }
-
-            // set hasTriggerCallbackProp according to the promise returned when executing change() on its children
-            hasTriggerCallbackProp = (await this.change(
-              obsItem.id,
-              newVal,
-              false,
-              false
-            ))
-              ? true
-              : hasTriggerCallbackProp;
-
-            obsItem.loading = false;
-            utils.dispatchCustomEvent(
-              "itemsLoaded",
-              utils.createUIObject(obsItem)
-            );
-            resolve(res);
           })
         );
       });
@@ -400,14 +438,15 @@ export default class Store {
               );
             }
           }
-          if (isRootEl) {
-            this._state.loading = false;
-          }
           resolve(hasTriggerCallbackProp);
         })
         .catch((err) => {
-          console.error(err);
           reject(err);
+        })
+        .finally(() => {
+          if (isRootEl) {
+            this._state.loading = false;
+          }
         });
     });
   }
@@ -431,11 +470,17 @@ export default class Store {
   async setItems(id, values) {
     const el = utils.findElementInObservable(id, this._observable);
     el.items = values;
-    const newVal = await this._defaultValuesGetter(
-      id,
-      el.items,
-      this.objFromObservable
-    );
-    await this.change(id, newVal, false);
+    let newVal;
+    try {
+      newVal = await this._defaultValuesGetter(
+        id,
+        el.items,
+        this.objFromObservable
+      );
+    } catch (err) {
+      this._onError(err);
+      return;
+    }
+    await this._change(id, newVal, false);
   }
 }

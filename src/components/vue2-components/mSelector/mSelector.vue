@@ -285,8 +285,9 @@ export default {
       if (label) return this.i18nLabel ? this.i18nLabel(label) : label;
       return "";
     },
-    i18Items(el){
-      if(el.label) return this.i18nItems ? this.i18nItems(el.label, el.params) : el.label
+    i18Items(el) {
+      if (el.label)
+        return this.i18nItems ? this.i18nItems(el.label, el.params) : el.label;
     },
     async change(id, val) {
       this.errorMessage = null;

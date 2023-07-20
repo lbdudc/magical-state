@@ -209,7 +209,7 @@ export default {
         if (this.index == this.storeElement.items.length - 1) {
           this.$emit("lastItemReached", true);
         } else {
-          await this.changeStoreElementValuePromise(),
+          await this.changeStoreElementValuePromise();
           this.fullfillPromise = null;
           if (!this.isPaused) {
             ++this.index;
