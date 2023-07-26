@@ -31,7 +31,26 @@
           :solo="solo"
           :error-messages="i18Label(errorMessage)"
           :hide-details="hideDetails"
-        ></v-select>
+          :menu-props="{
+             closeOnContentClick: true,
+          }"
+        >
+          <template v-slot:item="{ item }" v-if="superdense">
+            <v-list-item style="height: 24px;min-height: 24px; padding: 0px">
+              <button
+                @click="superdenseSelected(item)"
+                @mouseover="handleMouseOver(item)"
+                @mouseout="handleMouseOut(item)"
+                :style="{
+                  backgroundColor: item.hovered ? 'lightgray' : '',
+                  width: '100%',
+                  height: '100%'
+                }">
+                {{ translate(item.label, item.params) }}
+              </button>
+            </v-list-item>
+          </template>
+        </v-select>
       </v-col>
     </v-row>
   </v-container>
@@ -85,6 +104,11 @@ export default {
       default: false,
     },
     dense: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
+    superdense: {
       type: Boolean,
       required: false,
       default: false,
@@ -261,11 +285,9 @@ export default {
       if (label) return this.i18nLabel ? this.i18nLabel(label) : label;
       return "";
     },
-
     i18Items(el){
       if(el.label) return this.i18nItems ? this.i18nItems(el.label, el.params) : el.label
     },
-
     async change(id, val) {
       this.errorMessage = null;
       this.item.hasErrors = false;
@@ -295,6 +317,18 @@ export default {
         await this.store.change(id, val);
       }
       this.$emit("change", { id, val });
+    },
+    superdenseSelected(item){
+      this.change("INSTANT_SELECTOR", item.value);
+    },
+    handleMouseOver(item) {
+      this.$set(item, 'hovered', true);
+    },
+    handleMouseOut(item) {
+      this.$set(item, 'hovered', false);
+    },
+    translate(label, params) {
+      return isNaN(parseInt(label)) ? this.$t(label, params) : label;
     },
     checkForErrors() {
       const error = this.rules.find((f) => f(this.itemValue) != true);
