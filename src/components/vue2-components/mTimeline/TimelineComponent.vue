@@ -259,6 +259,7 @@ export default {
       });
     },
     async callStoreChange() {
+      if (!this.storeElement.items[this.index]?.value) return;
       this.isLoading = true;
       return this.store.change(
         this.id,
