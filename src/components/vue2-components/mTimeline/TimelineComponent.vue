@@ -3,7 +3,7 @@
     <v-row justify="start" align="center">
       <v-col cols="12" md="9">
         <MTimelineSlider
-          v-if="!storeElement.loading && !store.state.loading"
+          v-if="(!storeElement.loading && !store.state.loading) || ignoreRenderCondition"
           :is-paused="isPaused"
           :is-loading="isLoading || isDisabled"
           :limit-buttons="limitButtons"
@@ -19,8 +19,6 @@
         />
         <span
           v-if="
-            !storeElement.loading &&
-            !store.state.loading &&
             storeElement.items.length == 0
           "
           class="text-center"
@@ -118,6 +116,11 @@ export default {
       required: false,
       default: false,
     },
+    ignoreRenderCondition:{
+      type: Boolean,
+      required: false,
+      default: false,
+    }
   },
   emits: [
     "goToFirstItem",
