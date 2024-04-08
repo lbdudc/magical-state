@@ -20,7 +20,7 @@
           :item-text="(el) => i18Items(el)"
           :items="item.items"
           :label="i18Label(item.label)"
-          :loading="item.loading || store.state.loading"
+          :loading="(item.loading || store.state.loading) && !hideLoading"
           :multiple="multiple"
           :outlined="outlined"
           :persistent-hint="persistentHint"
@@ -207,6 +207,11 @@ export default {
       type: Boolean,
       default: false,
       required: false,
+    },
+    hideLoading:{
+      type: Boolean,
+      required: false,
+      default: false,
     },
     rules: {
       type: Array,
