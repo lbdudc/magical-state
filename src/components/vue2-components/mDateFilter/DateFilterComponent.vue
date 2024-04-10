@@ -18,7 +18,7 @@
         :flat="flat"
         :disabled="disabled"
         :label="i18Label(storeElement.label)"
-        :loading="storeElement.loading || store.state.loading"
+        :loading="(storeElement.loading || store.state.loading) && !hideLoading"
         :outlined="outlined"
         :error-messages="i18Label(errorMessage)"
         :error="errorMessage != null"
@@ -136,6 +136,11 @@ export default {
       type: Boolean,
       default: true,
       required: false,
+    },
+    hideLoading: {
+      type: Boolean,
+      required: false,
+      default: false,
     },
     rules: {
       type: Array,

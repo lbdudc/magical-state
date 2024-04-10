@@ -111,9 +111,9 @@ The date filter component lets users select a date.
 |        rules        |       Array       |  false   | []      | Accepts a mixed array of types function, boolean and string. Functions pass an input value as an argument and must return either true / false or a string containing an error message. The input field will enter an error state if a function returns (or any value in the array contains) false or is a string |
 | closeOnContentClick |      Boolean      |  false   | true    | Designates if the date picker should be closed when a value is selected                                                                                                                                                                                                                                          |
 |        type         |      string       |  false   | 'date'  | Determines the type of the picker - date for date picker, month for month picker                                                                                                                                                                                                                                 |
-|     hideDetails     | String OR Boolean |  false   | false   | Hides hint and validation errors. When set to auto messages will be rendered only if there’s a message (hint, error message, counter value etc) to display                                                                                                                                                       |
+|     hideDetails     | String OR Boolean |  false   | false   | Hides hint and validation errors. When set to auto messages will be rendered only if there’s a message (hint, error message, counter value etc) to display
+|     hideLoading     | String OR Boolean |  false   | false   | Avoids showing the component as loading                                                                                                                                                                      |
 
-|
 
 </details>
 
@@ -214,6 +214,7 @@ Select fields components are used for collecting user provided information from 
 | overrideStoreChange  |      Boolean      |  false   | false       | When true the component will not trigger the store reactivity, only the value of the selector will change, but the @change emit will still be dispatched. This way the parent component using the vue2-component will be able to define its own store reactivity after a selector value change.                   |
 | pushSelectedValuesUp |      Boolean      |  false   | false       | When the selector is multiple and this prop is true the selected elements will be pushed up the item's array so they are displayed in the first positions                                                                                                                                                         |
 |        rules         |       Array       |  false   | []          | Accepts a mixed array of types function, boolean and string. Functions pass an input value as an argument and must return either true / false or a string containing an error message. The input field will enter an error state if a function returns (or any value in the array contains) false or is a string. |
+|     hideLoading     | String OR Boolean |  false   | false   | Avoids showing the component as loading       
 
 </details>
 
@@ -280,7 +281,7 @@ This component is composed of a slider with dots that represent each item of a s
 |     disablePlayButton      | Boolean  |  false   |  false  |              When set to true the play button will be disabled.               |
 |     disableStopButton      | Boolean  |  false   |  false  |              When set to true the stop button will be disabled.               |
 |        limitButons         | Boolean  |  false   |  false  |                When set to true two limit buttons will appear.                |
-
+|     ignoreRenderCondition     | String OR Boolean |  false   | false   | Ignores reder contition to prevent component from flickering every time new data is reloaded
 <details>
   <summary>Example of availableSpeeds array</summary>
 

@@ -3,7 +3,10 @@
     <v-row justify="start" align="center">
       <v-col cols="12" md="9">
         <MTimelineSlider
-          v-if="!storeElement.loading && !store.state.loading"
+          v-if="
+            (!storeElement.loading && !store.state.loading) ||
+            ignoreRenderCondition
+          "
           :is-paused="isPaused"
           :is-loading="isLoading || isDisabled"
           :limit-buttons="limitButtons"
@@ -17,13 +20,7 @@
           @goToFirstItem="$emit('goToFirstItem')"
           @goToLastItem="$emit('goToLastItem')"
         />
-        <span
-          v-if="
-            !storeElement.loading &&
-            !store.state.loading &&
-            storeElement.items.length == 0
-          "
-          class="text-center"
+        <span v-if="storeElement.items.length == 0" class="text-center"
           >No data available</span
         >
       </v-col>
@@ -114,6 +111,11 @@ export default {
       default: false,
     },
     isDisabled: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
+    ignoreRenderCondition: {
       type: Boolean,
       required: false,
       default: false,
