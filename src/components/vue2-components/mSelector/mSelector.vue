@@ -32,20 +32,21 @@
           :error-messages="i18Label(errorMessage)"
           :hide-details="hideDetails"
           :menu-props="{
-             closeOnContentClick: true,
+            closeOnContentClick: true,
           }"
         >
-          <template v-slot:item="{ item }" v-if="superdense">
-            <v-list-item style="height: 24px;min-height: 24px; padding: 0px">
+          <template v-if="superdense" #item="{ item }">
+            <v-list-item style="height: 24px; min-height: 24px; padding: 0px">
               <button
-                @click="superdenseSelected(item)"
-                @mouseover="handleMouseOver(item)"
-                @mouseout="handleMouseOut(item)"
                 :style="{
                   backgroundColor: item.hovered ? 'lightgray' : '',
                   width: '100%',
-                  height: '100%'
-                }">
+                  height: '100%',
+                }"
+                @click="superdenseSelected(item)"
+                @mouseover="handleMouseOver(item)"
+                @mouseout="handleMouseOut(item)"
+              >
                 {{ translate(item.label, item.params) }}
               </button>
             </v-list-item>
@@ -208,7 +209,7 @@ export default {
       default: false,
       required: false,
     },
-    hideLoading:{
+    hideLoading: {
       type: Boolean,
       required: false,
       default: false,
@@ -324,14 +325,14 @@ export default {
       }
       this.$emit("change", { id, val });
     },
-    superdenseSelected(item){
+    superdenseSelected(item) {
       this.change("INSTANT_SELECTOR", item.value);
     },
     handleMouseOver(item) {
-      this.$set(item, 'hovered', true);
+      this.$set(item, "hovered", true);
     },
     handleMouseOut(item) {
-      this.$set(item, 'hovered', false);
+      this.$set(item, "hovered", false);
     },
     translate(label, params) {
       return isNaN(parseInt(label)) ? this.$t(label, params) : label;

@@ -137,7 +137,7 @@ export default {
       default: true,
       required: false,
     },
-    hideLoading:{
+    hideLoading: {
       type: Boolean,
       required: false,
       default: false,
