@@ -1,0 +1,22 @@
+[
+  {
+    "id": "DATE_FILTER",
+    "label": "Date filter",
+    "actions": ["CURRENT_PAGE"]
+  },
+  {
+    "id": "CURRENT_PAGE",
+    "label": "Current Page",
+    "default": 0,
+    "type": "date",
+    "actions": ["INSTANT_FILTER"]
+  },
+  {
+    "id": "INSTANT_FILTER",
+    "setItemsOnMounted": false,
+    "type": "date",
+    "setDefaultItem": "last",
+    "actions": [],
+    "triggerCallback": true
+  }
+]

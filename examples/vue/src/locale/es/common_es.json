@@ -1,0 +1,66 @@
+{
+  "$vuetify": {
+    "calendar": {
+      "moreEvents": "{0} más"
+    },
+    "dataFooter": {
+      "firstPage": "Primera página",
+      "itemsPerPageAll": "Todos",
+      "itemsPerPageText": "Filas por página:",
+      "lastPage": "Última página",
+      "nextPage": "Siguiente página",
+      "pageText": "{0}-{1} de {2}",
+      "prevPage": "Página anterior"
+    },
+    "dataTable": {
+      "ariaLabel": {
+        "activateAscending": "Activar para ordenar en ascendente",
+        "activateDescending": "Activar para ordenar en descendente.",
+        "activateNone": "Activar para no ordenar",
+        "sortAscending": ": Orden ascendente.",
+        "sortDescending": ": Orden descendente.",
+        "sortNone": ": No ordenado."
+      },
+      "itemsPerPageText": "Filas por página:",
+      "sortBy": "Ordenado por"
+    },
+    "noDataText": "No hay datos disponibles.",
+    "timePicker": {
+      "am": "AM",
+      "pm": "PM"
+    },
+    "dataIterator": {
+      "loadingText": "Cargando datos",
+      "noResultsText": "Sin resultados."
+    },
+    "pagination": {
+      "ariaLabel": {
+        "currentPage": "Página actual",
+        "next": "Siguiente",
+        "page": "Página",
+        "previous": "Anterior",
+        "wrapper": "Envoltorio"
+      }
+    }
+  },
+  "datePicker": {
+    "firstDayOfTheWeek": "0",
+    "prevMonthAriaLabel": "Previous month",
+    "nextMonthAriaLabel": "Next month",
+    "nextYearAriaLabel": "Next year",
+    "prevYearAriaLabel": "Previous year",
+    "noDataAvaliable": "No hay datillo"
+  },
+  "mockLabels": {
+    "year": "YEARLY",
+    "month": "MONTHLY"
+  },
+  "timeline": {
+    "instantSelectorButtonLabel": "print-console"
+  },
+  "error": {
+    "empty": "no puede ser vacio",
+    "initDate": "Fecha ini > fecha fin",
+    "endDate": "Fecha fin < fecha ini"
+  }
+}

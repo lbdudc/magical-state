@@ -1,0 +1,25 @@
+[
+  {
+    "id": "START_DATE",
+    "label": "Date filter"
+  },
+  {
+    "id": "END_DATE",
+    "label": "Date filter"
+  },
+  {
+    "id": "SELECTOR",
+    "setItemsOnMounted": true,
+    "actions": [],
+    "triggerCallback": true
+  },
+  {
+    "id": "AUTOCOMPLETE",
+    "actions": [],
+    "triggerCallback": true,
+    "setItemsOnMounted": true
+  },
+  {
+    "id": "TEXT"
+  }
+]
