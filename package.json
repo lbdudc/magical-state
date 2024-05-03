@@ -1,6 +1,6 @@
 {
   "name": "magical-state",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Library that manages the global state of a series of defined selectors",
   "main": "index.js",
   "scripts": {
@@ -10,7 +10,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://gitlab.lbd.org.es/proyectos-sig/magical-state.git"
+    "url": "https://github.com/lbdudc/magical-state.git"
   },
   "dependencies": {
     "@nx-js/observer-util": "4.2.2",
