@@ -1,0 +1,61 @@
+{
+  "name": "magical-state",
+  "version": "1.0.2",
+  "description": "Library that manages the global state of a series of defined selectors",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest",
+    "prepare": "husky install",
+    "lint": "eslint --fix --ext .js,.vue src/ && prettier --write \"src/**/*.js\" \"src/**/*.vue\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lbdudc/magical-state.git"
+  },
+  "dependencies": {
+    "@nx-js/observer-util": "4.2.2",
+    "eslint-config-prettier": "^8.7.0",
+    "eslint-plugin-vue": "^9.9.0",
+    "prettier": "^2.8.4"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.17.12",
+    "@babel/preset-env": "^7.17.12",
+    "babel-jest": "^28.1.0",
+    "eslint": "^7.26.0",
+    "husky": "^8.0.0",
+    "jest": "^28.1.0",
+    "jest-environment-jsdom": "^28.1.0",
+    "vite": "^2.9.8"
+  },
+  "eslintConfig": {
+    "root": true,
+    "env": {
+      "node": true
+    },
+    "extends": [
+      "plugin:vue/essential",
+      "@vue/prettier"
+    ],
+    "rules": {},
+    "parserOptions": {
+      "parser": "babel-eslint"
+    },
+    "globals": {
+      "L": false,
+      "MV": false
+    }
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions"
+  ],
+  "keywords": [
+    "selector",
+    "state",
+    "observable",
+    "vue"
+  ],
+  "author": "Victor Lamas",
+  "license": "MIT"
+}

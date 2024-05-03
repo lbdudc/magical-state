@@ -1,0 +1,13 @@
+[
+  {
+    "id": "DATE_FILTER",
+    "label": "Date filter",
+    "setItemsOnMounted": true,
+    "actions": []
+  },
+  {
+    "id": "HOUR_PICKER",
+    "label": "Hour picker",
+    "triggerCallback": true
+  }
+]

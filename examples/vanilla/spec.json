@@ -1,0 +1,29 @@
+[
+  {
+    "id": "SPATIAL_AGGREGATION",
+    "label": "Spatial Aggregation",
+    "triggerCallback": true,
+    "setItemsOnMounted": true,
+    "actions": ["SPATIAL_FILTER"]
+  },
+  {
+    "id": "SPATIAL_FILTER",
+    "label": "Spatial Filter",
+    "setDefaultFirstItem": true,
+    "actions": [],
+    "triggerCallback": true
+  },
+  {
+    "id": "DATE_FILTER",
+    "label": "Date Filter",
+    "type": "date",
+    "actions": ["INSTANT_FILTER"]
+  },
+  {
+    "id": "INSTANT_FILTER",
+    "setItemsOnMounted": false,
+    "setDefaultFirstItem": true,
+    "actions": [],
+    "triggerCallback": true
+  }
+]
